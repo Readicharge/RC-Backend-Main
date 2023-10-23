@@ -1,4 +1,4 @@
-const Admin = require("../../RC-UNIQUE_ID-CORE/admins/adminIdGenerator")
+const Admin = require("../../RC-CONFIG-CORE/models/RC-ADMIN/rc-admin-modelr")
 
 // Function to find the most recent admin
 exports.findMostRecentAdmin = async (req, res) => {
