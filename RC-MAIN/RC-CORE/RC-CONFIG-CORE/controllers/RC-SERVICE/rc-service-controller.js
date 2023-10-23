@@ -2,10 +2,11 @@
 const Service = require('../../models/RC-SERVICE/rc-service-model');
 
 // Create a new service
-const createService = async (req, res) => {
+const createService = async (data) => {
   try {
-    const { name, description,service_code, yearsOfExperience,notes } = req.body;
-    console.log(req.body)
+    // const { name, description,service_code, yearsOfExperience,notes } = req.body;
+    const { name, description, service_code, yearsOfExperience, notes } = data;
+
     const newService = new Service({
       name,
       description,
@@ -14,52 +15,98 @@ const createService = async (req, res) => {
       yearsOfExperience
     });
     await newService.save();
-    res.status(201).json(newService);
+    // res.status(201).json(newService);
+    return {
+      status: 201,
+      data: "New Service Created"
+    }
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    // res.status(400).json({ error: err.message });
+    return {
+      status: 400,
+      data: err.message
+    }
   }
 };
+
+
+
  // Delete a service by id
-const deleteService = async (req, res) => {
+const deleteService = async (data) => {
   try {
     await Service.findByIdAndDelete(req.params.id);
-    res.sendStatus(204);
+    // res.sendStatus(204);
+    return { 
+      status: 204,
+      data: "Service Deleted"
+    }
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    // res.status(400).json({ error: err.message });
+    return {
+      status: 400,
+      data: err.message
+    }
   }
 };
+
+
+
 // Update a service by id
-const updateService = async (req, res) => {
+const updateService = async (data) => {
   try {
-    const { name, description,  certification, yearsOfExperience, notes } = req.body;
-    const service = await Service.findByIdAndUpdate(req.params.id, {
+    const { name, description,  certification, yearsOfExperience, notes } = data;
+    await Service.findByIdAndUpdate(req.params.id, {
       name,
       description,
       certification,
       notes,
       yearsOfExperience
     }, { new: true });
-    res.status(200).json(service);
+
+    // res.status(200).json(service);
+    return {
+      status: 200,
+      data: "Service Updated"
+    }
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    // res.status(400).json({ error: err.message });
+    return {
+      status: 400,
+      data: err.message
+    }
   }
 };
+
+
  // Get a list of all services
-const getServices = async (req, res) => {
+const getServices = async () => {
   try {
     const services = await Service.find();
-    res.status(200).json(services);
+    // res.status(200).json(services);
+    return {
+      status: 200,
+      data: services
+    }
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    // res.status(400).json({ error: err.message });
+    return {
+      status: 400,
+      data: err.message
+    }
   }
 };
+
+
+
  // Get a specific service by id
-const getServiceById = async (req, res) => {
+const getServiceById = async (serviceId) => {
   try {
-    const service = await Service.findById(req.params.id);
+    const service = await Service.findById(serviceId);
     res.status(200).json(service);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
+
+
  module.exports = {createService,deleteService,updateService,getServiceById,getServices};

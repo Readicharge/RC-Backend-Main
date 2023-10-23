@@ -6,22 +6,31 @@ const router = express.Router();
 
 // Defining the Business Routes for the RC-Customer
 
-// Zip Code based installer Search
-const {zipCode_based_search} = require('../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/ZIPCODE-SEARCH/zipCode_Based_Installers_Determiner');
-const {register_customer} = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_regiter");
-const {update_address} = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_address");
 
 
 
-// Using the Routes here
-
-
-// Zip Code based installer search 
+// *************************************************************************************************************************************//
+//                                              MODULE 1 : ONBOARDING THE CUSTOMER : START
+// *************************************************************************************************************************************//
+const { zipCode_based_search } = require('../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/ZIPCODE-SEARCH/zipCode_Based_Installers_Determiner');
+const { register_customer } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_regiter");
+const { update_address } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_address");
+// *************************************************************************************************************************************//
 router.get('/zipcode', zipCode_based_search);
-// Register the Customer 
-router.post("/register",register_customer);
-// Address Enrollment for the registeration process
-router.put("/address/:id",update_address);
+router.post("/register", register_customer);
+router.put("/address/:id", update_address);
+// *************************************************************************************************************************************//
+//                                             MODULE 1 : ONBOARDING THE CUSTOMER :END
+// *************************************************************************************************************************************//
+
+
+
+// *************************************************************************************************************************************//
+//                                              MODULE 2 : BOOKING THE JOB : START
+// *************************************************************************************************************************************//
+
+
+
 
 
 
