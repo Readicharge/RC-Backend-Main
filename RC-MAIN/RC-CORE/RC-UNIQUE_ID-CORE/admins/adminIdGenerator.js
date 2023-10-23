@@ -1,7 +1,7 @@
-const Admin = require("../../RC-CONFIG-CORE/models/RC-ADMIN/rc-admin-modelr")
+const Admin = require("../../RC-CONFIG-CORE/models/RC-ADMIN/rc-admin-model")
 
 // Function to find the most recent admin
-exports.findMostRecentAdmin = async (req, res) => {
+exports.findMostRecentAdmin = async () => {
     try {
       // Find the most recent admin based on the createdAt field in descending order
       const mostRecentAdmin = await Admin.findOne().sort({ sequence_number: -1 });

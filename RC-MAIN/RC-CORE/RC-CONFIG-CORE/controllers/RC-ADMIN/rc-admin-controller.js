@@ -1,5 +1,5 @@
 const Admin = require('../../models/RC-ADMIN/rc-admin-model');
-const { findMostRecentAdmin } = require('../../../RC-UNIQUE_ID-CORE/installer/installeridGenerator');
+const { findMostRecentAdmin } = require('../../../RC-UNIQUE_ID-CORE/admins/adminIdGenerator');
 
 // CRUD operations
 
