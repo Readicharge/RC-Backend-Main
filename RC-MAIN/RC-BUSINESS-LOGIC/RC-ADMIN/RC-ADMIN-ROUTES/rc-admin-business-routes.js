@@ -58,5 +58,63 @@ router.put("/service-price-update/:id",updateCustomerRateServer);
 
 
 
+
+// *************************************************************************************************************************************//
+//                                              MODULE 2 : LABOR RATES - ADMIN
+// *************************************************************************************************************************************//
+
+
+const {createLaborRateServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-LABOR-RATE/rc-admin-labor-rate-create");
+router.post("/labor-rate-create",createLaborRateServer);
+
+const {getAllLaborRateServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-LABOR-RATE/rc-admin-labor-rate-get-all");
+router.get("/labor-rate-get-all",getAllLaborRateServer);
+
+const {deleteLaborRateServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-LABOR-RATE/rc-admin-labor-rate-delete");
+router.delete("/labor-rate-delete/:id",deleteLaborRateServer);
+
+const {getSpecificLaborRateServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-LABOR-RATE/rc-admin-labor-rate-get-specific");
+router.get("/labor-rate-get-specific/:id",getSpecificLaborRateServer);
+
+const {updateLaborRateServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-LABOR-RATE/rc-admin-labor-rate-update");
+router.put("/labor-rate-update/:id",updateLaborRateServer);
+
+
+const {getServiceLaborRateServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-LABOR-RATE/rc-admin-labor-rate-get-service-id");
+router.get("/labor-rate-get-service-id/:id",getServiceLaborRateServer);
+
+
+
+// *************************************************************************************************************************************//
+//                                              MODULE 3 : MATERIALS - ADMIN
+// *************************************************************************************************************************************//
+
+
+const {createMaterialServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-MATERIAL/rc-create-material");
+router.post("/material-create",createMaterialServer);
+
+
+const {getAllMaterialsServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-MATERIAL/rc-get-material-list");
+router.get("/material-get-all",getAllMaterialsServer);
+
+
+const {deleteMaterialServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-MATERIAL/rc-delete-material");
+router.delete("/material-delete/:id",deleteMaterialServer);
+
+
+const {getSpecficMaterialsServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-MATERIAL/rc-get-specfic-material");
+router.get("/material-get-specific/:id",getSpecficMaterialsServer);
+
+
+const {updateMaterialServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-MATERIAL/rc-update-material");
+router.put("/material-update/:id",updateMaterialServer);
+
+
+const {getMaterialName} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-MATERIAL/rc-get-material-name");
+router.get("/material-get-name/:id",getMaterialName);
+
+
+
+
 // Exporting the app routes for using this in our main routes folder
 module.exports = router;

@@ -2,13 +2,13 @@
 const {getMaterialById} = require("../../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-MATERIAL/rc-material-controller");
 
 
-const getMaterialName = async (req,res) =>
+const getSpecficMaterialsServer = async (req,res) =>
 {
-   const data = req.body;
-   const response_from_core = await getMaterialById(data);
+   const id = req.params.id;
+   const response_from_core = await getMaterialById(id);
    if(response_from_core.status===200)
    {
-    res.status(200).json(response_from_core.data.material_name)
+    res.status(200).json(response_from_core.data)
    }
    else
    {
@@ -18,5 +18,5 @@ const getMaterialName = async (req,res) =>
 
 
 module.exports = {
-    getMaterialName
+    getSpecficMaterialsServer
 }

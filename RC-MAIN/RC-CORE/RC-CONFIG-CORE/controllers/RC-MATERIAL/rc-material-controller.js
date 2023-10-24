@@ -7,9 +7,9 @@ const createMaterial = async (data) => {
   try {
     const material = new Materials(data);
     await material.save();
-    // res.status(201).json(material);
+    // res.status(200).json(material);
     return {
-      status : 201,
+      status : 200,
       data : "Material create Successfully"
     }
   } catch (error) {
@@ -94,9 +94,9 @@ const getAllMaterials = async () => {
   }
 };
  // Get a specific material
-const  getMaterialById = async (req, res) => {
+const  getMaterialById = async (id) => {
   try {
-    const material = await Materials.findById(req.params.id);
+    const material = await Materials.findById(id);
     if (!material) {
       // return res.status(404).json({ error: 'Material not found' });
       return {

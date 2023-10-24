@@ -66,7 +66,7 @@ const getLabourRateById = async (id) => {
   };
 
 
-  const updateLabourRateById = async (id) => {
+  const updateLabourRateById = async (id,data) => {
     try {
       const labourRate = await LabourRates.findById(id);
       if (labourRate == null) {
@@ -76,14 +76,14 @@ const getLabourRateById = async (id) => {
           data: "Labour rate not found"
         }
       }
-      if (req.body.service_id != null) {
-        labourRate.service_id = req.body.service_id;
+      if (data.service_id != null) {
+        labourRate.service_id = data.service_id;
       }
-      if (req.body.number_of_installs != null) {
-        labourRate.number_of_installs = req.body.number_of_installs;
+      if (data.number_of_installs != null) {
+        labourRate.number_of_installs = data.number_of_installs;
       }
-      if (req.body.price_statewise != null) {
-        labourRate.price_statewise = req.body.price_statewise;
+      if (data.price_statewise != null) {
+        labourRate.price_statewise = data.price_statewise;
       }
       const updatedLabourRate = await labourRate.save();
       // res.status(200).json(updatedLabourRate);
@@ -93,6 +93,7 @@ const getLabourRateById = async (id) => {
       }
     } catch (err) {
       // res.status(400).json({ message: err.message });
+      console.log(err)
       return {
         status:500,
         data: "Not able to update labour rate"
