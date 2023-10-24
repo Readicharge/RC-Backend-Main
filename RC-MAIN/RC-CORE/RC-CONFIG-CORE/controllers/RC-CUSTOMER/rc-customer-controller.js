@@ -94,7 +94,12 @@ const createCustomer = async (data) => {
       ...rest, readicharge_unique_id,
       sequence_number: current_sequence_number,
       isRegisteration_completed: true,
-      isLogged_in: true
+      isLogged_in: true,
+      address_line1: addressLine1,
+      address_line2: addressLine2,  
+      city: city,
+      state: state,
+      zip_code: zip,
     });
 
 
