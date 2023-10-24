@@ -17,7 +17,7 @@ const createService = async (data) => {
     await newService.save();
     // res.status(201).json(newService);
     return {
-      status: 201,
+      status: 200,
       data: "New Service Created"
     }
   } catch (err) {
@@ -102,9 +102,17 @@ const getServices = async () => {
 const getServiceById = async (serviceId) => {
   try {
     const service = await Service.findById(serviceId);
-    res.status(200).json(service);
+    // res.status(200).json(service);
+    return {
+      status : 200, 
+      data : service
+    }
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    // res.status(400).json({ error: err.message });
+    return {
+      status : 500,
+      data : "Not able to get the specific Service"
+    }
   }
 };
 

@@ -9,7 +9,7 @@ exports.createTime = async (data) => {
     await time.save();
     // res.status(201).json(time);
     return {
-      status: 201,
+      status: 200,
       data: "New Time Created"
     }
   } catch (error) {
