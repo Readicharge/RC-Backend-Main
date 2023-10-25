@@ -19,6 +19,7 @@ const { update_address } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-
 router.get('/zipcode', zipCode_based_search);
 router.post("/register", register_customer);
 router.put("/address/:id", update_address);
+
 // *************************************************************************************************************************************//
 //                                             MODULE 1 : ONBOARDING THE CUSTOMER :END
 // *************************************************************************************************************************************//
@@ -28,7 +29,8 @@ router.put("/address/:id", update_address);
 // *************************************************************************************************************************************//
 //                                              MODULE 2 : BOOKING THE JOB : START
 // *************************************************************************************************************************************//
-
+const {determine_quotation} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTATION/RC-QUOTE-MAIN/rc-service-determiner-from-question");
+router.get("/get-quotation",determine_quotation);
 
 
 

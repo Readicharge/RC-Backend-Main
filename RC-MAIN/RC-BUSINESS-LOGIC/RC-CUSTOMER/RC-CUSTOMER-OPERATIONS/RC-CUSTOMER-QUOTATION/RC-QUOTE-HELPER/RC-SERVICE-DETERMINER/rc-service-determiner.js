@@ -1,7 +1,5 @@
 // Importing the Dependent Modules
-const LabourRate = require("../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-LABOR_RATE/rc-labor_rate-model");
-const Service = require("../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-SERVICE/rc-service-model");
-const CustomerRates = require("../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-CUSTOMER-RATE/rc-customer_rate-model");
+const Service = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-SERVICE/rc-service-model");
 
 
 // The format of the question will be like this 
@@ -58,8 +56,9 @@ const service_determiner = async (question_list) => {
     }
 
     const service = await Service.findOne({service_code:service_selected})
+    console.log(service)
     
-    return service.id;
+    return service;
 
 }
 
