@@ -13,6 +13,7 @@ const createMaterial = async (data) => {
       data : "Material create Successfully"
     }
   } catch (error) {
+    console.log(error);
     // res.status(400).json({ error: error.message });
     return {
       status:400,
@@ -41,6 +42,7 @@ const deleteMaterial = async (id) => {
       data : "Material successfully Deleted"
     }
   } catch (error) {
+    console.log(error)
     // res.status(500).json({ error: error.message });
     return {
       status : 500 , 

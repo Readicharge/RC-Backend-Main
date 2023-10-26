@@ -1,7 +1,7 @@
 // Importing the Dependent Modules
-const LabourRate = require("../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-LABOR_RATE/rc-labor_rate-model");
-const Service = require("../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-SERVICE/rc-service-model");
-const CustomerRates = require("../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-CUSTOMER-RATE/rc-customer_rate-model");
+const LabourRate = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-LABOR_RATE/rc-labor_rate-model");
+const Service = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-SERVICE/rc-service-model");
+const CustomerRates = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-CUSTOMER-RATE/rc-customer_rate-model");
 
 
 // This will also get the list as material code and their value respectively 
@@ -31,6 +31,13 @@ const material_and_additional_price_determiner = async (question_list, available
     const labourRatesObj = await LabourRate.findOne({ service_id: service_id, number_of_installs: number_of_installs });
     const labourRates = labourRatesObj.price_statewise.find((priceObj) => priceObj.state === state).price;
 
+    // Adding the Missilaneous material into it 
+    materials_added.push(available_materials[`Misc_Material_I_${number_of_installs - 1}`].id);
+    material_cost += number_of_installs * available_materials[`Misc_Material_I_${number_of_installs - 1}`].price;
+
+    // Adding the Breaker into it 
+    materials_added.push(available_materials[`Breaker_I_${number_of_installs - 1}`].id);
+    material_cost += number_of_installs * available_materials[`Breaker_I_${number_of_installs - 1}`].price;
 
     if ((question_list.r2_a === "true" && service !== "AI80") || (question_list.cd2_2a === "true")) {
         materials_added.push(available_materials[`NMEA_14_15_outlet_I_${number_of_installs - 1}`].id);

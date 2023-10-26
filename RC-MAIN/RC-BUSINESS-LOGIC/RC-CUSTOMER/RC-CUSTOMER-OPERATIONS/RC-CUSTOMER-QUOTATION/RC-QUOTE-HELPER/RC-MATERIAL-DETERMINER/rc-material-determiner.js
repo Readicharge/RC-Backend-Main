@@ -1,49 +1,42 @@
-const { service_determiner } = require("../RC-SERVICE-DETERMINER/rc-service-determiner");
 const { material_and_additional_price_determiner } = require("./rc-material-price");
 
 const Materials = require("../../../RC-CORE/RC-CONFIG-CORE/models/RC-MATERIAL/rc-material-model");
-const Service = require("../../../RC-CORE/RC-CONFIG-CORE/models/RC-SERVICE/rc-service-model");
 
 // Sample Question Format 
-const question_set = {
-    cd2_1:'false',
-    cd2_2:'',
-    cd2_2a:'',
-    cd2_3:'Hardwired',
-    cd2_3a:'50A - 12kw',
-    cd2_4:'Outside wall of home',
-    cd2_5:'',
-    cd2_5a:'',
-    cd2_5b:'',
-    cd2_5c:'',
-    cd2_5d:'',
-    cd2_5e:'',
-    cd2_6:'Brick',
-    cd2_6a:'',
-    cd2_7:'Brick',
-    cd2_8:'Inside my home',
-    cd2_8a:'true',
-    cd2_8b:'',
-    cd2_9:'true',
-    cd2_10:'Breaker panel',
-    cd2_11:'true',
-    cd2_12:'Eaton',
-    cd2_13:'125A',
-    cd2_13a:'',
-    cd2_13b:'',
-    cd2_14:'51-75 feet'
-}
+// const question_set = {
+//     cd2_1:'false',
+//     cd2_2:'',
+//     cd2_2a:'',
+//     cd2_3:'Hardwired',
+//     cd2_3a:'50A - 12kw',
+//     cd2_4:'Outside wall of home',
+//     cd2_5:'',
+//     cd2_5a:'',
+//     cd2_5b:'',
+//     cd2_5c:'',
+//     cd2_5d:'',
+//     cd2_5e:'',
+//     cd2_6:'Brick',
+//     cd2_6a:'',
+//     cd2_7:'Brick',
+//     cd2_8:'Inside my home',
+//     cd2_8a:'true',
+//     cd2_8b:'',
+//     cd2_9:'true',
+//     cd2_10:'Breaker panel',
+//     cd2_11:'true',
+//     cd2_12:'Eaton',
+//     cd2_13:'125A',
+//     cd2_13a:'',
+//     cd2_13b:'',
+//     cd2_14:'51-75 feet'
+// }
 
-const material_cost_determinatoin_from_questions = async (req,res) => {
+const material_cost_determinatoin_from_questions = async (data) => {
 
-    const {number_of_installs,state} = req.body;
+    const {number_of_installs,state,service_id,question_set} = data;
     try {
-        const service_id = await service_determiner(question_set);
-        const service = await Service.findById(service_id);
-        const service_data = {
-            id: service_id,
-            code: service.service_code
-        }
+
         // Retrieve all materials from the database
         const allMaterials = await Materials.find({});
 

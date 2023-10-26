@@ -4,7 +4,7 @@ const {deleteMaterial} = require("../../../../RC-CORE/RC-CONFIG-CORE/controllers
 
 const deleteMaterialServer = async (req,res) =>
 {
-   const data = req.body;
+   const data = req.params.id;
    const response_from_core = await deleteMaterial(data);
    if(response_from_core.status===200)
    {

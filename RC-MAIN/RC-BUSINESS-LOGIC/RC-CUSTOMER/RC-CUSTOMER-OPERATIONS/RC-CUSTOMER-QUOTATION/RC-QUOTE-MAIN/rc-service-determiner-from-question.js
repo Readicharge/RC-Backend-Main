@@ -14,7 +14,7 @@ const determine_quotation = async (req,res) => {
       determined_service.push(service);
     }
     
-    const priority_list = ['BI', 'II', 'AI', 'AI80'];
+    const priority_list = ['AI80','AI','II','BI']
     
     // Create a mapping of service_code to their priority
     const priorityMapping = {};
