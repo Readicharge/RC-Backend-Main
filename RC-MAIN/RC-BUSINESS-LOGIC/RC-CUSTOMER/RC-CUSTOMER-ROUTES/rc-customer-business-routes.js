@@ -30,7 +30,7 @@ router.put("/address/:id", update_address);
 //                                              MODULE 2 : BOOKING THE JOB : START
 // *************************************************************************************************************************************//
 const {determine_quotation} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTATION/RC-QUOTE-MAIN/rc-service-determiner-from-question");
-router.get("/get-quotation",determine_quotation);
+router.post("/get-quotation",determine_quotation);
 
 
 
