@@ -47,7 +47,7 @@ const admin_web_app = require("../../RC-BUSINESS-LOGIC/RC-ADMIN/RC-ADMIN-ROUTES/
 
 
 
-app.use('/customer_app',customer_app);
+app.use('/customerApp',customer_app);
 app.use('/admin_web_app',admin_web_app);
 
 
