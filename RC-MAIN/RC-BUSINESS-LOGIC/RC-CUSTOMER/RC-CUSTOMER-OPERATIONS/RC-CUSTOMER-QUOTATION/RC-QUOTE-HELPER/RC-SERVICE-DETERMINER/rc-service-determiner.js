@@ -18,6 +18,10 @@ const service_determiner = async (question_list) => {
     if (question_list.cd2_3 === "Hardwired" && question_list.cd2_3a === null ) 
     {
         service_selected = available_service_tiers[3];
+        const service = await Service.findOne({service_code:service_selected})
+        console.log(service)
+        
+        return service;
     }
     else if (
         (question_list.cd2_5b === "Outside" && question_list.cd2_14 === "0-25 feet")
@@ -27,6 +31,10 @@ const service_determiner = async (question_list) => {
     ) 
     {
         service_selected = available_service_tiers[0];
+        const service = await Service.findOne({service_code:service_selected})
+        console.log(service)
+        
+        return service;
     }
     else if (
         (question_list.cd2_5c === "true" && question_list.cd2_14 === "26-50 feet")
@@ -40,6 +48,10 @@ const service_determiner = async (question_list) => {
     ) 
     {
         service_selected = available_service_tiers[1];
+        const service = await Service.findOne({service_code:service_selected})
+        console.log(service)
+        
+        return service;
     }
     else if (
         
@@ -54,12 +66,13 @@ const service_determiner = async (question_list) => {
     ) 
     {
         service_selected = available_service_tiers[2];
+        const service = await Service.findOne({service_code:service_selected})
+        console.log(service)
+        
+        return service;
     }
 
-    const service = await Service.findOne({service_code:service_selected})
-    console.log(service)
-    
-    return service;
+
 
 }
 
