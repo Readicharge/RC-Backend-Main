@@ -1,6 +1,6 @@
 const { material_and_additional_price_determiner } = require("./rc-material-price");
 
-const Materials = require("../../../RC-CORE/RC-CONFIG-CORE/models/RC-MATERIAL/rc-material-model");
+const Materials = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-MATERIAL/rc-material-model");
 
 // Sample Question Format 
 // const question_set = {
@@ -34,26 +34,30 @@ const Materials = require("../../../RC-CORE/RC-CONFIG-CORE/models/RC-MATERIAL/rc
 
 const material_cost_determinatoin_from_questions = async (data) => {
 
-    const {number_of_installs,state,service_id,question_set} = data;
+    const {question_list, service_code, number_of_installs,state} = data;
     try {
 
-        // Retrieve all materials from the database
-        const allMaterials = await Materials.find({});
 
+        console.log(service_code)
+
+        // Retrieve all materials from the database
+        const allMaterials = await Materials.find({service_code:service_code,number_of_chargers:1});
+        
+        console.log(allMaterials);
         // Initialize the object to store the materials
         var materialsObject = {};
 
         // Loop through each material and construct the key-value pair in the specified format
         allMaterials.forEach((material) => {
-            const { material_code, _id, price, number_of_chargers } = material;
+            const { material_code, _id, price, number_of_chargers, material_name,service_code } = material;
             const key = `${material_code}_I_${number_of_chargers}`;
-            const value = {id: _id, price:price };
+            const value = {id: _id, price:price,name:material_name,service:service_code};
             materialsObject[key] = value;
         });
 
 
         // passing these all data to find the list of materials needed as per the question 
-        // also determine the price for this 
+        // also determine the price for this c
 
         const {
             total_cost ,
@@ -61,7 +65,7 @@ const material_cost_determinatoin_from_questions = async (data) => {
             service_rate  ,
             material_cost ,
             materials
-        } = await material_and_additional_price_determiner(question_set,materialsObject,service_id,number_of_installs,state);
+        } = await material_and_additional_price_determiner(question_list,materialsObject,service_code,number_of_installs,state);
         
 
 
@@ -73,11 +77,13 @@ const material_cost_determinatoin_from_questions = async (data) => {
             materials:materials
         }
 
-        res.json(data);
+        // res.json(data);
+        return data;
 
     } catch (error) {
         console.log(error);
-        res.json(error)
+        // res.json(error)
+        return error;
     }
 }
 

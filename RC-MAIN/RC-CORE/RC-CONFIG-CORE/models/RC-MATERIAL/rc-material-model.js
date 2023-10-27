@@ -24,7 +24,7 @@ const materialsSchema = new mongoose.Schema({
             "Wire_3_4_100",
             "Panel_Load_Center_60A",
             "Panel_Load_Central_80_100_A",
-            "NMEA_14_15_outlet"
+            "NMEA_14_50_outlet"
         ]
 
     },
