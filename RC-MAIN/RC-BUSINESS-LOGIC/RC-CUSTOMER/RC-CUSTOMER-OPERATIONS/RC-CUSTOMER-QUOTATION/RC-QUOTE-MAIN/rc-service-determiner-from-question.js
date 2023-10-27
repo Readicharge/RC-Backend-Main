@@ -38,6 +38,8 @@ const determine_quotation = async (req,res) => {
       }
     });
 
+    console.log(highestPriorityService)
+
     // res.json(highestPriorityService)
 
 
