@@ -43,12 +43,13 @@ app.use("/seeder",seederDataMain);
 
 const customer_app = require('../../RC-BUSINESS-LOGIC/RC-CUSTOMER/RC-CUSTOMER-ROUTES/rc-customer-business-routes');
 const admin_web_app = require("../../RC-BUSINESS-LOGIC/RC-ADMIN/RC-ADMIN-ROUTES/rc-admin-business-routes");
-
+const installer_app = require("../../RC-BUSINESS-LOGIC/RC-INSTALLER/RC-INSTALLER-ROUTES/rc-installer-main-routes");
 
 
 
 app.use('/customerApp',customer_app);
 app.use('/admin_web_app',admin_web_app);
+app.use('/installerApp',installer_app);
 
 
 

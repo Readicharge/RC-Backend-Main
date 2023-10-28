@@ -48,6 +48,15 @@ const {get_material_list} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTA
 router.get("/get-material-list",get_material_list);
 
 
+// *************************************************************************************************************************************//
+//                                              MODULE 5 : INSTALLER AVAILABILITY - DETERMINATION 
+// *************************************************************************************************************************************//
+
+
+const {get_installer_avail_in_month_days} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTATION/RC-QUOTE-MAIN/rc-installer-daywise-determiner");
+router.get("/get-installer-avail-in-month-days",get_installer_avail_in_month_days);
+
+
 
 
 

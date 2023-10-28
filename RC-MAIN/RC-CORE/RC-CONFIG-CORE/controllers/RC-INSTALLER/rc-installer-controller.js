@@ -2,6 +2,7 @@ require('dotenv').config();
 const axios = require('axios');
 const Installer = require('../../models/RC-INSTALLER/rc-installer-model');
 
+
 const { findMostRecentInstaller } = require('../../../RC-UNIQUE_ID-CORE/installer/installeridGenerator');
 
 
@@ -9,9 +10,9 @@ const { findMostRecentInstaller } = require('../../../RC-UNIQUE_ID-CORE/installe
 // This function is used to calculate the installer location ( latitude and longitude ) based out of the address
 // This will take the addressLine1 , state and the zip 
 
-async function getCoordinates(addressLine1, addressLine2, zip, state) {
+async function getCoordinates(addressLine1, addressLine2,city,zip, state) {
   try {
-    const address = `${addressLine1} ${state} ${zip}`;
+    const address = `${addressLine1} ${city} ${state} ${zip}`;
     const response = await axios.get('http://api.positionstack.com/v1/forward', {
       params: {
         access_key: process.env.GEO_API_KEY,
@@ -83,25 +84,37 @@ async function getCoordinates(addressLine1, addressLine2, zip, state) {
 
   
    // Create a new installer
-   const createInstaller = async (req, res) => {
+   const createInstaller = async (data) => {
     try {
-      const { addressLine1, addressLine2, state, zip, city, ...rest } = req.body;
+      const { addressLine1, addressLine2, state, zip, city, ...rest } = data;
       const last_sequence_number = await findMostRecentInstaller();
       const current_sequence_number = last_sequence_number + 1;
       const readicharge_unique_id = `RC-I-US-${current_sequence_number}`;
 
-        const { latitude, longitude } = await getCoordinates(addressLine1, addressLine2, zip, state);
+        const { latitude, longitude } = await getCoordinates(addressLine1, addressLine2, city, zip, state);
         console.log(latitude, longitude);
    
       
       const installer = await Installer.create({ ...rest,readicharge_unique_id,sequence_number:current_sequence_number, addressLine1, addressLine2, state, zip, city, latitude, longitude
       });
       console.log(installer)
-      res.status(201).json(installer);
+      // res.status(201).json(installer);
+      return {
+        status : 200,
+        data: "Installer Created Successfully"
+      }
     } catch (err) {
-      res.status(400).json({ error: err });
+      // res.status(400).json({ error: err });
+      return {
+        status : 500,
+        data : "Not able to create the Installer"
+      }
     }
   };
+
+  // ********************************************************************************************************
+
+
    // Delete an installer by id
   const deleteInstaller = async (req, res) => {
     try {
@@ -113,10 +126,9 @@ async function getCoordinates(addressLine1, addressLine2, zip, state) {
   };
   
 //   Update the installer by id
-  const updateInstaller = async (req, res) => {
+  const updateInstaller = async (data,installerId) => {
     try {
-      const installerId = req.params.id;
-      const { addressLine1, addressLine2, state, zip, city, ...rest } = req.body;
+      const { addressLine1, addressLine2, state, zip, city, ...rest } = data;
   
       // Get the current installer object
       const currentInstaller = await Installer.findById(installerId);
@@ -141,9 +153,17 @@ async function getCoordinates(addressLine1, addressLine2, zip, state) {
         { new: true }
       );
   
-      res.status(200).json(updatedInstaller);
+      // res.status(200).json(updatedInstaller);
+      return {
+        status:200,
+        data:"Installer Successfully Updated"
+      }
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      // res.status(400).json({ error: err.message });
+      return {
+        status:500,
+        data:"Installer Not Upadated :/"
+      }
     }
   };
 
