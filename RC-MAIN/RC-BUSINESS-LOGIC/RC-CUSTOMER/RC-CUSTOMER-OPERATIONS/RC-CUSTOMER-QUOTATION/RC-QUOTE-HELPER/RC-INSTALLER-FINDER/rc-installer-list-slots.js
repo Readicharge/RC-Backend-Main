@@ -209,8 +209,7 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
 
         }
 
-        console.log(freeInstallers_timeSlots); // This array represents the availability for each time slot
-
+        console.log(freeInstallers_timeSlots); 
         res.status(200).json(freeInstallers_timeSlots)
 
 
