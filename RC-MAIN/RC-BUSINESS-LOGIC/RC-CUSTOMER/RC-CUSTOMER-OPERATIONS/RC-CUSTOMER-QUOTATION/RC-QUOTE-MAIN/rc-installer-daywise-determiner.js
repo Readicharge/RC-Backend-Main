@@ -10,7 +10,8 @@ const get_installer_avail_in_month_days = async (req,res) => {
 
 
 
-    const response = await installerAvailability_for_Service_and_Location(data)
+    const response = await installerAvailability_for_Service_and_Location(data);
+    
 
 
     res.json(response);

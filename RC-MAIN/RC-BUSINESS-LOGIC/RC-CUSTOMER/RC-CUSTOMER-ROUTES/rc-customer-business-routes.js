@@ -58,8 +58,8 @@ router.get("/get-installer-avail-in-month-days",get_installer_avail_in_month_day
 
 
 
-
-
+const {installerSlots_Availability_for_Service_and_Location_and_date} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTATION/RC-QUOTE-HELPER/RC-INSTALLER-FINDER/rc-installer-list-slots")
+router.get("/get-installer-slots-availability",installerSlots_Availability_for_Service_and_Location_and_date);
 
 
 
