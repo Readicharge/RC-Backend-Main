@@ -75,10 +75,9 @@ const getInactiveDatesForInstaller = async (installerId) => {
     // Get dates that are present in all subarrays
     const commonDates = Array.from(dateCounts.keys()).filter(date => dateCounts.get(date) === datesArray.length);
 
-    // Convert the common dates to an array of objects
-    const commonDatesAsObjects = commonDates.map(date => ({ date }));
 
-    return commonDatesAsObjects;
+
+    return commonDates;
 }
 
 
