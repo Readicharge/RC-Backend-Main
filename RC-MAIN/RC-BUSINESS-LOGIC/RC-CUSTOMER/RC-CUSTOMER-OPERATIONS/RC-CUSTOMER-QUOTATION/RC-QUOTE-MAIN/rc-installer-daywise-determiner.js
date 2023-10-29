@@ -99,7 +99,7 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
         // Stage 1 : Filtering the Installers based out of service and state combination
         const installers = await Installer.find({
             state: state,
-            services: { $in: serviceId } // Using $in to find installers with all services in the array
+            services: { $all: serviceId } // Using $in to find installers with all services in the array
         }).exec();
 
         const nearestInstaller = [];
