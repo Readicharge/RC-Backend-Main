@@ -54,12 +54,12 @@ router.get("/get-material-list",get_material_list);
 
 
 const {get_those_days_which_are_not_fully_available} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTATION/RC-QUOTE-MAIN/rc-installer-daywise-determiner");
-router.get("/get-installer-avail-in-month-days",get_those_days_which_are_not_fully_available);
+router.post("/get-installer-avail-in-month-days",get_those_days_which_are_not_fully_available);
 
 
 
 const {installerSlots_Availability_for_Service_and_Location_and_date} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTATION/RC-QUOTE-HELPER/RC-INSTALLER-FINDER/rc-installer-list-slots")
-router.get("/get-installer-slots-availability",installerSlots_Availability_for_Service_and_Location_and_date);
+router.post("/get-installer-slots-availability",installerSlots_Availability_for_Service_and_Location_and_date);
 
 
 
