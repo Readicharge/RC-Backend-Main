@@ -92,6 +92,8 @@ const days_fully_blocked = async (installers) => {
     var dataWeekly = [];
     var dataDaily = [];
 
+    console.log(installers.length);
+
     for(const installer of installers)
     {
         const installerDetail = installer.installer;
