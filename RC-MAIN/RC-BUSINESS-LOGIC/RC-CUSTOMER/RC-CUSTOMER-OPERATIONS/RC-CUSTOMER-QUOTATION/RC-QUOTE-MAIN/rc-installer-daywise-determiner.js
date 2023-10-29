@@ -165,6 +165,7 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
 
     }
     catch (err) {
+        console.log(err)
         res.status(500).json(err)
     }
 }
