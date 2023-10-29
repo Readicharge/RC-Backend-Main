@@ -103,6 +103,7 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
         }).exec();
 
         const nearestInstaller = [];
+        console.log(nearestInstaller.length)
 
         // Finding those installers which are avaiable under the area of the customer address
         installers.forEach((installer) => {
