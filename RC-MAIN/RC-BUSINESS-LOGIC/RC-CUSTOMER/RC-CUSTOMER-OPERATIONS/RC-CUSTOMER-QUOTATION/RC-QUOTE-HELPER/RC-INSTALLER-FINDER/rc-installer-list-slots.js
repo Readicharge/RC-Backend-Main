@@ -83,7 +83,7 @@ function toRadians(degrees) {
 // Get coordinates for the given address using OpenStreetMap
 const installerSlots_Availability_for_Service_and_Location_and_date = async (req, res) => {
     try {
-        const { addressLine1, addressLine2, zip, state, city, serviceId, date, number_of_installs } = req.body;
+        const { addressLine1, addressLine2, zip, state, city, serviceId, date } = req.body;
 
         const geo = await getCoordinates(addressLine1, addressLine2, zip, city, state);
         const userLatitude = geo.latitude;
@@ -160,7 +160,9 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
             // If no schedules or availability are found, mark all time slots as available
             if (schedules.length === 0 && availableInstallers_onSpecific_Date.length === 0) {
                 console.log("Inside IF")
-                freeInstallers_timeSlots.fill(1); // Mark all slots as available (e.g., 1 indicates available)
+                for (const timeSlot in freeInstallers_timeSlots) {
+                    freeInstallers_timeSlots[timeSlot] = 1; 
+                } // Mark all slots as available (e.g., 1 indicates available)
             } else {
                 console.log("Here")
                 // Logic to handle schedules and availability for this installer
