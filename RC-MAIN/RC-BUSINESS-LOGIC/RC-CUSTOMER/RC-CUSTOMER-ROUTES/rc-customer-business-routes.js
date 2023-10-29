@@ -53,8 +53,8 @@ router.get("/get-material-list",get_material_list);
 // *************************************************************************************************************************************//
 
 
-const {get_installer_avail_in_month_days} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTATION/RC-QUOTE-MAIN/rc-installer-daywise-determiner");
-router.get("/get-installer-avail-in-month-days",get_installer_avail_in_month_days);
+const {get_those_days_which_are_not_fully_available} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTATION/RC-QUOTE-MAIN/rc-installer-daywise-determiner");
+router.get("/get-installer-avail-in-month-days",get_those_days_which_are_not_fully_available);
 
 
 
