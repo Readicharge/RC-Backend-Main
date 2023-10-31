@@ -16,7 +16,7 @@ const { zipCode_based_search } = require('../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-
 const { register_customer } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_regiter");
 const { update_address } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_address");
 // *************************************************************************************************************************************//
-router.get('/zipcode', zipCode_based_search);
+router.post('/zipcode', zipCode_based_search);
 router.post("/register", register_customer);
 router.put("/address/:id", update_address);
 
