@@ -36,6 +36,16 @@ router.get('/inactive-dates/:installerId', scheduleController.getInactiveDates);
 
 
 
+// ********************************************************************************************************************************
+//                                               MODULE 3 : INSTALLER DIRECT CALLS
+// ********************************************************************************************************************************
+
+const {getInstallers,getInstallerById} = require("../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-INSTALLER/rc-installer-controller");
+router.get("/getInstallersList",getInstallers);
+router.get("/getSpecificIsntaller",getInstallerById)
+
+
+
 
 // Exporting the app routes for using this in our main routes folder
 module.exports = router;
