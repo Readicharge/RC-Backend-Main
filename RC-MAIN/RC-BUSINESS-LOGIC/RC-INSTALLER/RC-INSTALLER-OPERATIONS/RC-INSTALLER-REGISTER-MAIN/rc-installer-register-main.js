@@ -15,7 +15,7 @@ const Register_the_Installer = async (req,res) => {
         const data = req.body;
         const response = await createInstaller(data);
 
-        if(response.status ===200) res.status(200).json({data:"Installer Successfully Created"})
+        if(response.status ===200) res.status(200).json({data:response.data})
         else res.status(500).json({data: "Not able to create the installer"});
     }
     catch(err)
