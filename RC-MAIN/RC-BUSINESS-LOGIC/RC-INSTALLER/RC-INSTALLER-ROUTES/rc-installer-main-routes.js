@@ -42,7 +42,7 @@ router.get('/inactive-dates/:installerId', scheduleController.getInactiveDates);
 
 const {getInstallers,getInstallerById} = require("../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-INSTALLER/rc-installer-controller");
 router.get("/getInstallersList",getInstallers);
-router.get("/getSpecificIsntaller",getInstallerById)
+router.get("/getSpecificIsntaller/:id",getInstallerById)
 
 
 
