@@ -101,7 +101,7 @@ async function getCoordinates(addressLine1, addressLine2,city,zip, state) {
       // res.status(201).json(installer);
       return {
         status : 200,
-        data: "Installer Created Successfully"
+        data: installer
       }
     } catch (err) {
       // res.status(400).json({ error: err });
