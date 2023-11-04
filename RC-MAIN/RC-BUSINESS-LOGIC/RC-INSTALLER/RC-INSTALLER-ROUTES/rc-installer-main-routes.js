@@ -46,6 +46,11 @@ router.get("/getSpecificIsntaller/:id",getInstallerById)
 
 
 
+const {getTimeperInstaller} = require("../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-TIME/rc-time-controller");
+router.get("/getTimePerInstaller/:id",getTimeperInstaller);
+
+
+
 
 // Exporting the app routes for using this in our main routes folder
 module.exports = router;
