@@ -46,8 +46,8 @@ router.get("/getSpecificIsntaller/:id",getInstallerById)
 
 
 
-const {getTimeperInstaller} = require("../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-TIME/rc-time-controller");
-router.get("/getTimePerInstaller/:id",getTimeperInstaller);
+const {getTimePerInstaller} = require("../RC-INSTALLER-OPERATIONS/RC-INSTALLER-HELPER-MAIN/getTimePerInstaller");
+router.get("/getTimePerInstaller/:id",getTimePerInstaller);
 
 
 
