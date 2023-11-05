@@ -37,7 +37,10 @@ const getInactiveDatesForInstaller = async (installerId) => {
   const getDailyModifiedDates = async (installerId) => {
     try {
       const availabilities = await Availability.find({ installer_id: installerId , type : {$ne : "DISABLED"} , installer_parked: {$ne : true} });
-      console.log(availabilities);
+      var inactiveDates = [];
+      for(const dailyDates in availabilities){
+        inactiveDates.push(dailyDates.date.toISOString().substring(0, 10));
+      }
       return availabilities;
     } catch (error) {
       console.error(error);
