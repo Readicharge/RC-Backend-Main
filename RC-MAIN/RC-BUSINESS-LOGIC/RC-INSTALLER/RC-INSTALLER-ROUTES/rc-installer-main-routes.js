@@ -19,6 +19,10 @@ router.post("/register",Register_the_Installer);
 const {Update_Registration_User} = require("../RC-INSTALLER-OPERATIONS/RC-INSTALLER-REGISTER-MAIN/rc-installer-update-register-main");
 router.put("/update/:installerId",Update_Registration_User);
 
+
+const {getSpecificInstaller} = require("../RC-INSTALLER-OPERATIONS/RC-INSTALLER-HELPER-MAIN/getInstallerById");
+router.get("/get-installer-by-id/:installerId",getSpecificInstaller);
+
 // ********************************************************************************************************************************
 //                                               MODULE 2 : INSTALLER SCHEDULE
 // ********************************************************************************************************************************

@@ -85,8 +85,7 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
         // Get input data from the request body
         const { addressLine1, serviceId, addressLine2, city, state, zip, ...rest } = req.body;
 
-        // Initialize an array to store availability for the next three months
-        const availabilityData = [];
+
 
 
         // Get the current date
@@ -103,7 +102,6 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
         }).exec();
 
         const nearestInstaller = [];
-        console.log(nearestInstaller.length)
 
         // Finding those installers which are avaiable under the area of the customer address
         installers.forEach((installer) => {
@@ -117,6 +115,8 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
 
             }
         });
+        console.log(nearestInstaller.length)
+
 
         // userLongitude, userLatitude  , date  , installers
 

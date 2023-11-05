@@ -180,13 +180,12 @@ const getInstallers = async (req, res) => {
 };
 
    // Get installer by Id
-const getInstallerById = async (req, res) => {
+const getInstallerById = async (installerId) => {
   try {
-    const installerId = req.params.id;
     const installers = await Installer.findById(installerId);
-    res.status(200).json(installers);
+    return installers;
   } catch (err) {
-    res.status(400).json({ error: err });
+    return err;
   }
 };
 
