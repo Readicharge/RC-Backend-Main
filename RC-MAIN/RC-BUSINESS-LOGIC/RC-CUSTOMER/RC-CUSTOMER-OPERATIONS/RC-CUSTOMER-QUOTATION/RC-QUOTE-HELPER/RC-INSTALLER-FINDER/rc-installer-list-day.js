@@ -108,11 +108,6 @@ const days_fully_blocked = async (installers) => {
     const weekly_non_available_dates =  extractUniqueDatesFromArray(dataWeekly);
     const daily_non_available_dates =  extractUniqueDatesFromArray(dataDaily);
 
-    
-
-   
-
-
 
     const data_output = {
         weekly_non_available_dates: weekly_non_available_dates,
