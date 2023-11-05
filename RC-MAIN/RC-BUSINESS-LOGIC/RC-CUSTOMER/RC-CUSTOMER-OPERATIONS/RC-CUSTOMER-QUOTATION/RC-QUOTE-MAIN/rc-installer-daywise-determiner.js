@@ -20,25 +20,13 @@ const { days_fully_blocked } = require('../RC-QUOTE-HELPER/RC-INSTALLER-FINDER/r
 // FUNCTION TO GET THE COORDINATES BASED ON THE ADDRESS FROM THE THIRD PARTY API 
 async function getCoordinates(addressLine1, addressLine2, zip, city, state) {
     try {
-        const address = `${addressLine1} ${addressLine2} ${city} ${state} ${zip}`;
-        const response = await axios.get('http://api.positionstack.com/v1/forward', {
-            params: {
-                access_key: process.env.GEO_API_KEY,
-                query: address,
-                limit: 1,
-            },
-        });
+        const response = await axios.get(`https://nominatim.openstreetmap.org/search?postalcode=${zip}&format=json`);
         const { data } = response;
-        if (data.data.length === 0) {
-            throw new Error('Address not found');
+        console.log(response)
+        return {
+            latitude: data[0]?.lat,
+            longitude: data[0]?.lon
         }
-        const location = data.data[0];
-        const geo = {
-            latitude: location.latitude,
-            longitude: location.longitude,
-        };
-        console.log(geo);
-        return geo;
     } catch (error) {
         console.log(error);
         throw new Error('Error getting coordinates');
@@ -115,15 +103,18 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
 
             }
         });
-        console.log(nearestInstaller.length)
+        console.log(nearestInstaller)
 
 
         // userLongitude, userLatitude  , date  , installers
 
 
 
-        const days_not_valid = [];
         const response = await days_fully_blocked(nearestInstaller);
+
+        // ############################################################################################################
+        // Old Logic : Kept for Reference 
+        // ############################################################################################################
         // for (let month = 0; month < 1; month++) {
         //     const year = parseInt(currentDate.slice(0, 4));
         //     const nextMonth = parseInt(currentDate.slice(5, 7)) + month;

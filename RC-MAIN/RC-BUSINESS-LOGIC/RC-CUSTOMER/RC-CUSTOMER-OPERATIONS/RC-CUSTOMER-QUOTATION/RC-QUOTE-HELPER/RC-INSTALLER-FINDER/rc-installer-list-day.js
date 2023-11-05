@@ -8,29 +8,25 @@ const { getInactiveDates } = require("../../../../../RC-INSTALLER/RC-INSTALLER-O
 
 // Declaring the Helper functions
 const getInactiveDatesForInstaller = async (installerId) => {
+
+  // console.log(installerId,"Installer")
     try {
       const year = new Date().getFullYear();
       const startDate = new Date(`${year}-01-01`);
       const endDate = new Date(`${year}-12-31`);
-      const schedules = await Schedule.find({ installer_id:installerId, $or: [{ active: false }, { startTime: { $ne: 7 } }, { endTime: { $ne: 22 } }] });
-      const inactiveDates = [];
+      
+      const schedules = await Schedule.find({ installer_id:installerId, active: false  });
+      // console.log(schedules.length)
+      var inactiveDates = [];
       for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
-        const day = date.toLocaleString('default', { weekday: 'long' });
-        const schedule = schedules.find(s => s.day === day);
-        const isActive = schedule ? schedule.active : true;
-        const startTime = schedule ? schedule.startTime : 7;
-        const endTime = schedule ? schedule.endTime : 22;
-        if (!isActive || startTime !== 7 || endTime !== 22) {
-          inactiveDates.push({
-            installerId:schedule.installer_id,
-            date: date.toISOString().substring(0, 10),
-            day,
-            startTime,
-            endTime,
-            active: isActive,
-          });
+        var day = date.toLocaleString('default', { weekday: 'long' });
+        var schedule = schedules.find(s => s.day === day);
+        var isDisabled = schedule ? true : false;
+        if (isDisabled) {
+          inactiveDates.push(date.toISOString().substring(0, 10));
         }
       }
+      
       return inactiveDates;
     } catch (err) {
       return []
@@ -40,7 +36,8 @@ const getInactiveDatesForInstaller = async (installerId) => {
 
   const getDailyModifiedDates = async (installerId) => {
     try {
-      const availabilities = await Availability.find({ installer_id: installerId });
+      const availabilities = await Availability.find({ installer_id: installerId , type : {$ne : "DISABLED"} , installer_parked: {$ne : true} });
+      console.log(availabilities);
       return availabilities;
     } catch (error) {
       console.error(error);
@@ -56,9 +53,9 @@ const getInactiveDatesForInstaller = async (installerId) => {
     // Count the occurrence of each date in each subarray
     datesArray.forEach(dateArray => {
         const uniqueDatesInArray = new Set();
-        dateArray.forEach(dateObj => {
-            if (dateObj.date) {
-                uniqueDatesInArray.add(dateObj.date);
+        dateArray.forEach(date => {
+            if (date) {
+                uniqueDatesInArray.add(date);
             }
         });
 
@@ -111,13 +108,15 @@ const days_fully_blocked = async (installers) => {
     const weekly_non_available_dates =  extractUniqueDatesFromArray(dataWeekly);
     const daily_non_available_dates =  extractUniqueDatesFromArray(dataDaily);
 
-    console.log(weekly_non_available_dates.length,daily_non_available_dates.length);
+    
+
+   
 
 
 
     const data_output = {
-        weekly_dates : weekly_non_available_dates,
-        daily_dates : daily_non_available_dates
+        weekly_non_available_dates: weekly_non_available_dates,
+        daily_non_available_dates: daily_non_available_dates
     }
 
 
