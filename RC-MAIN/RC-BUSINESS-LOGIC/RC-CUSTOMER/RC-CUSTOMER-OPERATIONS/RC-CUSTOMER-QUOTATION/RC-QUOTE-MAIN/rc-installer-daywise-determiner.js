@@ -20,7 +20,12 @@ const { days_fully_blocked } = require('../RC-QUOTE-HELPER/RC-INSTALLER-FINDER/r
 // FUNCTION TO GET THE COORDINATES BASED ON THE ADDRESS FROM THE THIRD PARTY API 
 async function getCoordinates(addressLine1, addressLine2, zip, city, state) {
     try {
-        const response = await axios.get(`https://nominatim.openstreetmap.org/search?state=${state}+?postalcode=${zip}&format=json`);
+        const encodedAddressLine1 = encodeURIComponent(addressLine1);
+        const encodedAddressLine2 = encodeURIComponent(addressLine2);
+        const encodedCity = encodeURIComponent(city);
+        const encodedState = encodeURIComponent(state);
+        const encodedZip = encodeURIComponent(zip);
+        const response = await axios.get(`https://nominatim.openstreetmap.org/search?street=${encodedAddressLine1}&city=${encodedCity}&state=${encodedState}&postalcode=${encodedZip}&format=json`);
         const { data } = response;
         console.log(response)
         return {
