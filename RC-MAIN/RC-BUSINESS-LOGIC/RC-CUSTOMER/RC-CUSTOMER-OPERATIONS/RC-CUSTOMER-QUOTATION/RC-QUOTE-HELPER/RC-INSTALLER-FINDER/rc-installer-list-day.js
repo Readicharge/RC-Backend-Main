@@ -41,7 +41,7 @@ const getInactiveDatesForInstaller = async (installerId) => {
       for(const dailyDates in availabilities){
         inactiveDates.push(dailyDates.date.toISOString().substring(0, 10));
       }
-      return availabilities;
+      return inactiveDates;
     } catch (error) {
       console.error(error);
       return [];
