@@ -29,25 +29,18 @@ const axios = require('axios');
 // FUNCTION TO GET THE COORDINATES BASED ON THE ADDRESS FROM THE THIRD PARTY API 
 async function getCoordinates(addressLine1, addressLine2, zip, city, state) {
     try {
-        const address = `${addressLine1} ${addressLine2} ${city} ${state} ${zip}`;
-        const response = await axios.get('http://api.positionstack.com/v1/forward', {
-            params: {
-                access_key: process.env.GEO_API_KEY,
-                query: address,
-                limit: 1,
-            },
-        });
+        const encodedAddressLine1 = encodeURIComponent(addressLine1);
+        const encodedAddressLine2 = encodeURIComponent(addressLine2);
+        const encodedCity = encodeURIComponent(city);
+        const encodedState = encodeURIComponent(state);
+        const encodedZip = encodeURIComponent(zip);
+        const response = await axios.get(`https://nominatim.openstreetmap.org/search?street=${encodedAddressLine1}&city=${encodedCity}&state=${encodedState}&postalcode=${encodedZip}&format=json`);
         const { data } = response;
-        if (data.data.length === 0) {
-            throw new Error('Address not found');
+        console.log(response)
+        return {
+            latitude: data[0]?.lat,
+            longitude: data[0]?.lon
         }
-        const location = data.data[0];
-        const geo = {
-            latitude: location.latitude,
-            longitude: location.longitude,
-        };
-        console.log(geo);
-        return geo;
     } catch (error) {
         console.log(error);
         throw new Error('Error getting coordinates');
@@ -145,26 +138,30 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
 
         // Check Case 2 : Installer schedule present on that date : Both Weekly and Daily
         const day = new Date(date).toLocaleString('default', { weekday: 'long' });
+        // console.log(day)
 
         const freeInstallers_timeSlots = { 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0 }; // Initialize slots
 
         console.log(availableInstallers);
 
-        for (const installer of availableInstallers) {
+        for (const i of availableInstallers) {
+            const installer = i.installer;
+            console.log(installer._id)
             // Find recurring schedules for the installer on the specific day
-            const schedules = await Schedule.find({ installerId: installer._id, day: day });
+            const schedules = await Schedule.find({ installer_id: installer._id, day: day });
+            console.log(schedules)
 
             // Find availability for the installer on the specific date
-            const availableInstallers_onSpecific_Date = await Availability.find({ installer_id: installer._id, date: date });
+            const availableInstallers_onSpecific_Date = await Availability.find({ installer_id: installer._id, date: date ,type:"DISABLED"});
 
             // If no schedules or availability are found, mark all time slots as available
             if (schedules.length === 0 && availableInstallers_onSpecific_Date.length === 0) {
-                console.log("Inside IF")
+                console.log("Inside 1")
                 for (const timeSlot in freeInstallers_timeSlots) {
                     freeInstallers_timeSlots[timeSlot] = 1; 
                 } // Mark all slots as available (e.g., 1 indicates available)
             } else {
-                console.log("Here")
+                console.log("Inside 2")
                 // Logic to handle schedules and availability for this installer
                 for (const schedule of schedules) {
                     if (schedule.active) {
