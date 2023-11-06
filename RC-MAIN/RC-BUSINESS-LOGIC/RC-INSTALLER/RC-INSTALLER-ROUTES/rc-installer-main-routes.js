@@ -21,7 +21,7 @@ router.put("/update/:installerId",Update_Registration_User);
 
 
 const {getSpecificInstaller} = require("../RC-INSTALLER-OPERATIONS/RC-INSTALLER-HELPER-MAIN/getInstallerById");
-router.get("/get-installer-by-id/:installerId",getSpecificInstaller);
+router.get("/getSpecificIsntaller/:installerId",getSpecificInstaller);
 
 // ********************************************************************************************************************************
 //                                               MODULE 2 : INSTALLER SCHEDULE
@@ -44,9 +44,8 @@ router.get('/inactive-dates/:installerId', scheduleController.getInactiveDates);
 //                                               MODULE 3 : INSTALLER DIRECT CALLS
 // ********************************************************************************************************************************
 
-const {getInstallers,getInstallerById} = require("../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-INSTALLER/rc-installer-controller");
+const {getInstallers} = require("../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-INSTALLER/rc-installer-controller");
 router.get("/getInstallersList",getInstallers);
-router.get("/getSpecificIsntaller/:id",getInstallerById);
 
 
 const {getServiceSpecific} = require("../../RC-ADMIN/RC-ADMIN-OPERATIONS/RC-ADMIN-SERVICE/rc-get-service-specific-details");
