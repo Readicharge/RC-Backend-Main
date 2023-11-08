@@ -1,7 +1,5 @@
 // Importing the Dependent Modules
-const LabourRate = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-LABOR_RATE/rc-labor_rate-model");
-const Service = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-SERVICE/rc-service-model");
-const CustomerRates = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-CUSTOMER-RATE/rc-customer_rate-model");
+
 
 
 // This will also get the list as material code and their value respectively 
@@ -17,7 +15,6 @@ const material_and_additional_price_determiner = async (question_list, available
     console.log(available_materials)
 
     
-    let total_cost = 0;
     let material_cost = 0;
 
     const materials_added = []
@@ -36,7 +33,7 @@ const material_and_additional_price_determiner = async (question_list, available
 
     // Conditonally adding all the materials which are needed for the service
 
-    if ((question_list.r2_a === "true" && service !== "AI80") || (question_list.cd2_2a === "true")) {
+    if ((question_list.r2_a === "true" && service !== "AI80") || (question_list.cd2_2a === "true") || (question_list.r2==="Own" && question_list.cd2_1 === "false" ) || (question_list.cd1_1b === "NEMA 14-50")) {
         materials_added.push(available_materials[`NMEA_14_50_outlet_I_${number_of_installs}`]);
         material_cost += number_of_installs * available_materials[`NMEA_14_50_outlet_I_${number_of_installs}`].price;
     }
@@ -93,13 +90,10 @@ const material_and_additional_price_determiner = async (question_list, available
     }
 
 
-    total_cost = material_cost;
 
 
 
     return {
-        total_cost : total_cost,
-        service : service,
         material_cost : material_cost,
         materials : materials_added
     }

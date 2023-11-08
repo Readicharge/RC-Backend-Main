@@ -43,7 +43,7 @@ const material_cost_determinatoin_from_questions = async (data) => {
         // Retrieve all materials from the database
         const allMaterials = await Materials.find({service_code:service_code,number_of_chargers:1});
         
-        console.log(allMaterials);
+        console.log("materials",allMaterials);
         // Initialize the object to store the materials
         var materialsObject = {};
 
@@ -60,9 +60,6 @@ const material_cost_determinatoin_from_questions = async (data) => {
         // also determine the price for this c
 
         const {
-            total_cost ,
-            labor_rate ,
-            service_rate  ,
             material_cost ,
             materials
         } = await material_and_additional_price_determiner(question_list,materialsObject,service_code,number_of_installs,state);
@@ -70,9 +67,6 @@ const material_cost_determinatoin_from_questions = async (data) => {
 
 
         const data =  {
-            total_cost:total_cost,
-            service_rate:service_rate,
-            labor_rate:labor_rate,
             material_cost:material_cost,
             materials:materials
         }
