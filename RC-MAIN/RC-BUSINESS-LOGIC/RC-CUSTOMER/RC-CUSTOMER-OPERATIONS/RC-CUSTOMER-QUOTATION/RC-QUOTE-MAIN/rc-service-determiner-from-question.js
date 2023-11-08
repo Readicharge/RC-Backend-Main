@@ -47,6 +47,7 @@ const determine_quotation = async (req,res) => {
     const quote = await CustomerRates.findOne({service_id:highestPriorityService._id , number_of_installs:number_of_installs});
 
     const data_to_send_as_response = {
+      main_service:highestPriorityService._id,
       services:determined_service,
       quotation:quote.price
     }
