@@ -84,6 +84,26 @@ const bookingSchema = new mongoose.Schema({
     {
       type: Array
     }],
+  customer_paid :{
+    status : {
+      type: Boolean,
+      default: false
+    },
+    amount : {
+      type: Number,
+      default: 0
+    },
+    payment_id : {
+      type: String
+    },
+    client_secret : {
+      type: String
+    }
+  },
+  rc_payment_id : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Payment'
+  }
   // // Getting the Charger Details
   // charger_details: [
   //   {

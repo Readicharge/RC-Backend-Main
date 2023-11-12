@@ -16,7 +16,6 @@ const paymentSchema = new mongoose.Schema({
   },
   sequence_number:{
     type: Number,
-    required: true
   },
   client_secret:{
     type: String,

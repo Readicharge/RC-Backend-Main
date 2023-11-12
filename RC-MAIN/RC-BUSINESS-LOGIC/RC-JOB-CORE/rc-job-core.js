@@ -24,7 +24,8 @@ const rc_job_creater = async (req, res) => {
             time_start, // This is reterived from the slot section 
             date, // This is reterived from the calender section 
             chargerDetails, // This we will get from the charger details stored earlier
-            number_of_installs
+            number_of_installs,
+            customer_id
         } = req.body;
 
         // #############################################################################################3
@@ -205,8 +206,7 @@ const rc_job_creater = async (req, res) => {
 
         }
 
-        // Step 13 : Getting all the details at once 
-        console.log(getMaterialList)
+        // Step 13 : Getting all the details
 
         const booking_data = {
             // Getting the address Details 
@@ -222,7 +222,7 @@ const rc_job_creater = async (req, res) => {
             time_end : time_end,
 
             // Getting the Price Details 
-            price_installer : laborRates,
+            price_installer : laborRates.price,
             material_cost : getMaterialList[0].material_cost,
             customerShowingCost:quotation,
 
@@ -233,9 +233,21 @@ const rc_job_creater = async (req, res) => {
             // Getting the additional Details and the installer details 
             number_of_installs : number_of_installs,
             material_details : getMaterialList[0],
-            find_installer_details : installer_daily.length>0 ? installer_daily[0]._id : ""
+            find_installer_details : installer_daily.length>0 ? installer_daily[0]._id : "",
+
+            // Assigning the end points of the job 
+            installer : installer_daily[0]._id,
+            customer : customer_id
         }
 
+
+        const installer_parked = new Installer_Parked({
+            installer_id : installer_daily[0]._id,
+            date : date ,
+            installer_parked : true
+        });
+
+        await installer_parked.save(installer_parked);
         const booking = new Booking(booking_data);
         await booking.save();
 

@@ -1,11 +1,14 @@
 const { STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY } = process.env;
+const Booking = require('../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc-booking-model');
 
 const stripe = require('stripe')(STRIPE_SECRET_KEY);
 
 const charge_payment_for_job = async (req, res) => {
     try {
-        const { hold_amount_transaction_id } = req.body;
-        const paymentIntent = await stripe.paymentIntents.capture(hold_amount_transaction_id);
+        const { booking_id } = req.body;
+        const booking = await Booking.findOne({ _id: booking_id });
+
+        const paymentIntent = await stripe.paymentIntents.capture(booking.customer_paid.payment_id);
 
         if (paymentIntent.status === "succeeded") {
             res.status(200).json({ odata: paymentIntent });
