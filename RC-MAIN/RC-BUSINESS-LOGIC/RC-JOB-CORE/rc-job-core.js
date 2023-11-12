@@ -291,6 +291,8 @@ const rc_job_Installer_confirmator = async (req,res)=> {
                 { odata: "No Booking Found" }
             )
         }
+       else
+       {
         const installer_parked = new Installer_Parked({
             installer_id : booking.installer,
             date : date ,
@@ -301,6 +303,7 @@ const rc_job_Installer_confirmator = async (req,res)=> {
             odata: "Installer Parked Successfully"
         })
 
+       }
     }
     catch (error) {
         res.status(500).json({
