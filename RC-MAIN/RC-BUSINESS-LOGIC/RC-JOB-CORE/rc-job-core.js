@@ -208,6 +208,8 @@ const rc_job_creater = async (req, res) => {
 
         // Step 13 : Getting all the details
 
+        console.log(installer_daily.length , "Length for the final Installer List");
+
         // if there is installer present 
         if(installer_daily.length>0) {
 
