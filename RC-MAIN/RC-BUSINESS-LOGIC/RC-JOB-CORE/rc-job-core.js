@@ -239,7 +239,7 @@ const rc_job_creater = async (req, res) => {
             // Getting the additional Details and the installer details 
             number_of_installs : number_of_installs,
             material_details : getMaterialList[0],
-            find_installer_details : installer_daily[0],
+            installer : installer_daily[0],
 
             // Assigning the end points of the job 
             customer : customer_id
