@@ -295,7 +295,7 @@ const rc_job_Installer_confirmator = async (req,res)=> {
        {
         const installer_parked = new Installer_Parked({
             installer_id : booking.installer,
-            date : date ,
+            date : booking.date,
             installer_parked : true
         });
         await installer_parked.save(installer_parked);
@@ -306,6 +306,7 @@ const rc_job_Installer_confirmator = async (req,res)=> {
        }
     }
     catch (error) {
+        console.log(error)
         res.status(500).json({
             odata:"Unable to Proceed further , Please Try Again"
         })
