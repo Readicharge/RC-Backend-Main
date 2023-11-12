@@ -285,7 +285,7 @@ const rc_job_Installer_confirmator = async (req,res)=> {
 
         const booking = await Booking.findById(booking_id);
 
-        if(!booking)
+        if(booking === null || booking === undefined || booking.length === 0)
         {
             res.status(404).json(
                 { odata: "No Booking Found" }
