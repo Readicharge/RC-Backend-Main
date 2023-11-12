@@ -246,13 +246,8 @@ const rc_job_creater = async (req, res) => {
         }
 
 
-        const installer_parked = new Installer_Parked({
-            installer_id : installer_daily[0]._id,
-            date : date ,
-            installer_parked : true
-        });
-
-        await installer_parked.save(installer_parked);
+       
+        
         const booking = new Booking(booking_data);
         await booking.save();
 
@@ -284,9 +279,41 @@ const rc_job_creater = async (req, res) => {
 }
 
 
+const rc_job_Installer_confirmator = async (req,res)=> {
+    try {
+        const booking_id = req.body;
+
+        const booking = await Booking.findById(booking_id);
+
+        if(!booking)
+        {
+            res.status(404).json(
+                { odata: "No Booking Found" }
+            )
+        }
+        const installer_parked = new Installer_Parked({
+            installer_id : booking.installer,
+            date : date ,
+            installer_parked : true
+        });
+        await installer_parked.save(installer_parked);
+        res.status(200).json({
+            odata: "Installer Parked Successfully"
+        })
+
+    }
+    catch (error) {
+        res.status(500).json({
+            odata:"Unable to Proceed further , Please Try Again"
+        })
+    }
+}
+
+
 
 module.exports = {
-    rc_job_creater
+    rc_job_creater,
+    rc_job_Installer_confirmator
 }
 
 
