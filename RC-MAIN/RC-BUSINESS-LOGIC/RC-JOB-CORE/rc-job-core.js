@@ -208,6 +208,10 @@ const rc_job_creater = async (req, res) => {
 
         // Step 13 : Getting all the details
 
+        // if there is installer present 
+        if(installer_daily.length>0) {
+
+
         const booking_data = {
             // Getting the address Details 
             addressLine1 : addressDetails.addressLine1,
@@ -236,7 +240,6 @@ const rc_job_creater = async (req, res) => {
             find_installer_details : installer_daily.length>0 ? installer_daily[0]._id : "",
 
             // Assigning the end points of the job 
-            installer : installer_daily[0]._id,
             customer : customer_id
         }
 
@@ -254,14 +257,19 @@ const rc_job_creater = async (req, res) => {
 
         console.log(installer_weekly)
 
-
-
-
-
-
         res.status(200).json(
             { odata: booking }
         )
+                    
+    }
+    else 
+    {
+        res.status(404).json(
+            {
+                odata: "No Installer Found"
+            }
+        )
+    }
 
     }
     catch (error) {
