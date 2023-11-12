@@ -281,7 +281,7 @@ const rc_job_creater = async (req, res) => {
 
 const rc_job_Installer_confirmator = async (req,res)=> {
     try {
-        const booking_id = req.body;
+        const {booking_id} = req.body;
 
         const booking = await Booking.findById(booking_id);
 
