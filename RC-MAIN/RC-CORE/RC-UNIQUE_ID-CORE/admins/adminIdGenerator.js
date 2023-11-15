@@ -10,6 +10,7 @@ exports.findMostRecentAdmin = async () => {
         console.log("The start for the creation of super admin is here")
         return 0;
       }
+      console.log(mostRecentAdmin)
       return mostRecentAdmin.sequence_number;
     } catch (error) {
        return null;

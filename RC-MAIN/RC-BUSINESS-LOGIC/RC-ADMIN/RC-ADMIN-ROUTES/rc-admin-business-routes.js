@@ -11,6 +11,8 @@ const router = express.Router();
 const {createServiceServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-SERVICE/rc-create-service");
 router.post("/service-create",createServiceServer);
 
+const {createAdminServer} = require('../RC-ADMIN-OPERATIONS/RC-ADMIN-MANAGE/rc-admin-main');
+router.post("/registerAdmin",createAdminServer);
 
 const {sign_in_admin} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-AUTH/rc-admin-sign-in");
 router.post("/sign-in",sign_in_admin);

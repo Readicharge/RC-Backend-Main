@@ -12,8 +12,8 @@ const createAdmin = async (idata) => {
     const current_sequence_number = last_sequence_number + 1;
     const unique_admin_id = `RC-A-${current_sequence_number}`;
 
-    let admin_image = null;
-    let imageMimeType = null;
+    // let admin_image = null;
+    // let imageMimeType = null;
 
     // // Check if there's an image uploaded in the request
     // if (req.file && req.file.buffer) {

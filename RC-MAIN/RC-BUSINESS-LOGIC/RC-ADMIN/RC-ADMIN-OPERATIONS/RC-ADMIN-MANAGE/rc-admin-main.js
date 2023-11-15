@@ -1,7 +1,7 @@
 const {createAdmin} = require("../../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-ADMIN/rc-admin-controller");
 
 
-const createAdmin = async (req,res) => {
+const createAdminServer = async (req,res) => {
     try{
         const idata = req.body;
         const response = await createAdmin(idata);
@@ -22,5 +22,5 @@ const createAdmin = async (req,res) => {
 
 
 module.exports = {
-    createAdmin
+    createAdminServer
 }
