@@ -281,7 +281,7 @@ const rc_job_creater = async (req, res) => {
 
 const rc_job_Installer_confirmator = async (req,res)=> {
     try {
-        const {booking_id} = req.body;
+        const {booking_i,status} = req.body;
 
         const booking = await Booking.findById(booking_id);
 
@@ -293,13 +293,27 @@ const rc_job_Installer_confirmator = async (req,res)=> {
         }
        else
        {
-        const installer_parked = new Installer_Parked({
-            installer_id : booking.installer,
-            date : booking.date,
+          const installer_parked_status = await Installer_Parked.findOne({
+            installer_id:booking.installer,
+            date: booking.date,
             installer_parked : true
-        });
-        await installer_parked.save(installer_parked);
-        res.status(200).json({
+          })
+
+          if(installer_parked_status === null || installer_parked_status === undefined || installer_parked_status.length === 0)
+          {
+            const installer_parked = new Installer_Parked({
+                installer_id : booking.installer,
+                date : booking.date,
+                installer_parked : status
+            });
+            await installer_parked.save(installer_parked);
+          }
+          else 
+          {
+            installer_parked_status.installer_parked = true;
+            await installer_parked_status.save();
+          }
+          res.status(200).json({
             odata: "Installer Parked Successfully"
         })
 

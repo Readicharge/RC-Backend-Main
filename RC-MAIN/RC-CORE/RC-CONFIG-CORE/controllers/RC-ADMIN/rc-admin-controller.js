@@ -4,10 +4,10 @@ const { findMostRecentAdmin } = require('../../../RC-UNIQUE_ID-CORE/admins/admin
 // CRUD operations
 
 // Create a new admin
-const createAdmin = async (req, res) => {
+const createAdmin = async (idata) => {
   try {
-    const { name, email, phoneNumber, address, password, roles } = req.body;
-    console.log(req.body);
+    const { name, email, phoneNumber, address, password, roles } = idata;
+
     const last_sequence_number = await findMostRecentAdmin();
     const current_sequence_number = last_sequence_number + 1;
     const unique_admin_id = `RC-A-${current_sequence_number}`;
@@ -15,17 +15,15 @@ const createAdmin = async (req, res) => {
     let admin_image = null;
     let imageMimeType = null;
 
-    // Check if there's an image uploaded in the request
-    if (req.file && req.file.buffer) {
-      // Set the image data and MIME type
-      admin_image = req.file.buffer;
-      imageMimeType = req.file.mimetype;
-    }
+    // // Check if there's an image uploaded in the request
+    // if (req.file && req.file.buffer) {
+    //   // Set the image data and MIME type
+    //   admin_image = req.file.buffer;
+    //   imageMimeType = req.file.mimetype;
+    // }
 
     const data = {
       readicharge_unique_id: unique_admin_id,
-      admin_image: admin_image,
-      imageMimeType: imageMimeType,
       name,
       email,
       phoneNumber,
@@ -39,9 +37,18 @@ const createAdmin = async (req, res) => {
 
     const admin = await Admin.create(data);
 
-    res.status(201).json(admin);
+    // res.status(201).json(admin);
+    return {
+      status : 200 , 
+      odata : admin 
+    }
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    // res.status(500).json({ error: error.message });
+    return {
+      status : 500 ,
+      odata : error
+    }
   }
 };
 
