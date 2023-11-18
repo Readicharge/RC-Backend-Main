@@ -328,10 +328,40 @@ const rc_job_Installer_confirmator = async (req,res)=> {
 }
 
 
+const get_job_By_customerId = async (req,res)=> {  
+    try {
+        const {customerID} = req.body;
+
+        const booking = await Booking.find({customer:customerID});
+        if(booking === null || booking === undefined || booking.length === 0)
+        {
+            res.status(404).json(
+                { odata: "No Booking Found" }
+            )
+        }
+        else
+        {
+            res.status(200).json(
+                { odata: booking }
+            )
+        }
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({
+            odata:"Unable to Proceed further , Please Try Again"
+        });
+
+    }
+
+}
+
+
 
 module.exports = {
     rc_job_creater,
-    rc_job_Installer_confirmator
+    rc_job_Installer_confirmator,
+    get_job_By_customerId
 }
 
 
