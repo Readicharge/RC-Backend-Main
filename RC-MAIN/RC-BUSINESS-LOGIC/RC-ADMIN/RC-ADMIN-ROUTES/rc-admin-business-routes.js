@@ -18,7 +18,7 @@ router.get("/service/",getServiceListServer);
 
 const {createAdminServer,getAdminServer} = require('../RC-ADMIN-OPERATIONS/RC-ADMIN-MANAGE/rc-admin-main');
 router.post("/registerAdmin",createAdminServer);
-router.get("/getAdmin",getAdminServer);
+router.post("/getAdmin",getAdminServer);
 
 const {sign_in_admin} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-AUTH/rc-admin-sign-in");
 router.post("/sign-in",sign_in_admin);
