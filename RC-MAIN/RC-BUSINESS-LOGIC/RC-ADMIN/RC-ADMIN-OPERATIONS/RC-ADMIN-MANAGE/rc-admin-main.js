@@ -1,4 +1,4 @@
-const {createAdmin} = require("../../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-ADMIN/rc-admin-controller");
+const {createAdmin,getAdmin} = require("../../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-ADMIN/rc-admin-controller");
 
 
 const createAdminServer = async (req,res) => {
