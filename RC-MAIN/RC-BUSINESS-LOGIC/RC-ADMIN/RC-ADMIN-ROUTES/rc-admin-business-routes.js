@@ -9,12 +9,7 @@ const router = express.Router();
 // *************************************************************************************************************************************//
 
 const {createServiceServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-SERVICE/rc-create-service");
-router.post("/service/create",createServiceServer);
-
-const {getServiceListServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-SERVICE/rc-get-service-list");
-router.get("/service/",getServiceListServer);
-
-
+router.post("/service-create",createServiceServer);
 
 const {createAdminServer,getAdminServer} = require('../RC-ADMIN-OPERATIONS/RC-ADMIN-MANAGE/rc-admin-main');
 router.post("/registerAdmin",createAdminServer);
@@ -24,7 +19,8 @@ const {sign_in_admin} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-AUTH/rc-admin-s
 router.post("/sign-in",sign_in_admin);
 
 
-
+const {getServiceListServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-SERVICE/rc-get-service-list");
+router.get("/service-get-all",getServiceListServer);
 
 
 
