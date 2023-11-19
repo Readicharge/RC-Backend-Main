@@ -19,8 +19,20 @@ const createAdminServer = async (req,res) => {
 }
 
 
+const getAdminServer = async (req,res) => {
+    try {
+        const response = await getAdmin();
+        res.status(200).json({odata:response});
+    }
+    catch {
+        res.status(500).json(err)
+    }
+
+}
+
 
 
 module.exports = {
-    createAdminServer
+    createAdminServer,
+    getAdminServer
 }
