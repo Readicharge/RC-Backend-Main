@@ -357,11 +357,39 @@ const get_job_By_customerId = async (req,res)=> {
 }
 
 
+const get_specfic_job_id = async (req,res)=> {
+    const {bookingID} = req.body;
+    try {
+        const booking = await Booking.findById(bookingID);
+        if(booking === null || booking === undefined || booking.length === 0)
+        {
+            res.status(404).json(
+                { odata: "No Booking Found" }
+            )
+        }
+        else
+        {
+            res.status(200).json(
+                { odata: booking }
+            )
+        }
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({
+            odata:"Unable to Proceed further , Please Try Again"
+        });
+}
+}
+
+
+
 
 module.exports = {
     rc_job_creater,
     rc_job_Installer_confirmator,
-    get_job_By_customerId
+    get_job_By_customerId,
+    get_specfic_job_id
 }
 
 
