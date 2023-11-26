@@ -10,7 +10,7 @@ const { findMostRecentInstaller } = require('../../../RC-UNIQUE_ID-CORE/installe
 // This function is used to calculate the installer location ( latitude and longitude ) based out of the address
 // This will take the addressLine1 , state and the zip 
 
-async function getCoordinates(addressLine1, addressLine2,city,zip, state) {
+async function getCoordinates(addressLine1, addressLine2, city, zip, state) {
   try {
     const address = `${addressLine1} ${city} ${state} ${zip}`;
     const response = await axios.get('http://api.positionstack.com/v1/forward', {
@@ -82,104 +82,117 @@ async function getCoordinates(addressLine1, addressLine2,city,zip, state) {
 }
 
 
-  
-   // Create a new installer
-   const createInstaller = async (data) => {
-    try {
-      const { addressLine1, addressLine2, state, zip, city, ...rest } = data;
-      const last_sequence_number = await findMostRecentInstaller();
-      const current_sequence_number = last_sequence_number + 1;
-      const readicharge_unique_id = `RC-I-US-${current_sequence_number}`;
 
-        const { latitude, longitude } = await getCoordinates(addressLine1, addressLine2, city, zip, state);
-        console.log(latitude, longitude);
-   
-      
-      const installer = await Installer.create({ ...rest,readicharge_unique_id,sequence_number:current_sequence_number, addressLine1, addressLine2, state, zip, city, latitude, longitude
-      });
-      console.log(installer)
-      // res.status(201).json(installer);
-      return {
-        status : 200,
-        data: installer
-      }
-    } catch (err) {
-      // res.status(400).json({ error: err });
-      return {
-        status : 500,
-        data : "Not able to create the Installer"
-      }
-    }
-  };
-
-  // ********************************************************************************************************
-
-
-   // Delete an installer by id
-  const deleteInstaller = async (req, res) => {
-    try {
-      await Installer.findByIdAndDelete(req.params.id);
-      res.sendStatus(204);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
-    }
-  };
-  
-//   Update the installer by id
-  const updateInstaller = async (data,installerId) => {
-    try {
-      const { addressLine1, addressLine2, state, zip, city, ...rest } = data;
-  
-      // Get the current installer object
-      const currentInstaller = await Installer.findById(installerId);
-  
-      // If the address fields are provided, get the updated latitude and longitude
-      let latitude = currentInstaller.latitude;
-      let longitude = currentInstaller.longitude;
-      if (addressLine1 || addressLine2 || zip || state) {
-        const coordinates = await getCoordinates(
-          addressLine1 || currentInstaller.addressLine1,
-          zip || currentInstaller.zip,
-          state || currentInstaller.state
-        );
-        latitude = coordinates.latitude;
-        longitude = coordinates.longitude;
-      }
-  
-      // Update the installer with the new values
-      const updatedInstaller = await Installer.findByIdAndUpdate(
-        installerId,
-        { ...rest, addressLine1, addressLine2, state, zip, city, latitude, longitude },
-        { new: true }
-      );
-  
-      // res.status(200).json(updatedInstaller);
-      return {
-        status:200,
-        data:"Installer Successfully Updated"
-      }
-    } catch (err) {
-      // res.status(400).json({ error: err.message });
-      return {
-        status:500,
-        data:"Installer Not Upadated :/"
-      }
-    }
-  };
-
-
-
-   // Get a list of all installers
-const getInstallers = async (req, res) => {
+// Create a new installer
+const createInstaller = async (data) => {
   try {
-    const installers = await Installer.find();
-    res.status(200).json(installers);
+    const { addressLine1, addressLine2, state, zip, city, ...rest } = data;
+    const last_sequence_number = await findMostRecentInstaller();
+    const current_sequence_number = last_sequence_number + 1;
+    const readicharge_unique_id = `RC-I-US-${current_sequence_number}`;
+
+    const { latitude, longitude } = await getCoordinates(addressLine1, addressLine2, city, zip, state);
+    console.log(latitude, longitude);
+
+
+    const installer = await Installer.create({
+      ...rest, readicharge_unique_id, sequence_number: current_sequence_number, addressLine1, addressLine2, state, zip, city, latitude, longitude
+    });
+    console.log(installer)
+    // res.status(201).json(installer);
+    return {
+      status: 200,
+      data: installer
+    }
   } catch (err) {
-    res.status(400).json({ error: err });
+    // res.status(400).json({ error: err });
+    return {
+      status: 500,
+      data: "Not able to create the Installer"
+    }
   }
 };
 
-   // Get installer by Id
+// ********************************************************************************************************
+
+
+// Delete an installer by id
+const deleteInstaller = async (installerId) => {
+  try {
+    await Installer.findByIdAndDelete(installerId);
+    return {
+      status: 204,
+      odata: "Installer Deleted Successfully !!"
+    }
+  } catch (err) {
+    return {
+      status: 500,
+      odata: "Not able to delete the Installer"
+    }
+  }
+};
+
+//   Update the installer by id
+const updateInstaller = async (data, installerId) => {
+  try {
+    const { addressLine1, addressLine2, state, zip, city, ...rest } = data;
+
+    // Get the current installer object
+    const currentInstaller = await Installer.findById(installerId);
+
+    // If the address fields are provided, get the updated latitude and longitude
+    let latitude = currentInstaller.latitude;
+    let longitude = currentInstaller.longitude;
+    if (addressLine1 || addressLine2 || zip || state) {
+      const coordinates = await getCoordinates(
+        addressLine1 || currentInstaller.addressLine1,
+        zip || currentInstaller.zip,
+        state || currentInstaller.state
+      );
+      latitude = coordinates.latitude;
+      longitude = coordinates.longitude;
+    }
+
+    // Update the installer with the new values
+    const updatedInstaller = await Installer.findByIdAndUpdate(
+      installerId,
+      { ...rest, addressLine1, addressLine2, state, zip, city, latitude, longitude },
+      { new: true }
+    );
+
+    // res.status(200).json(updatedInstaller);
+    return {
+      status: 200,
+      data: "Installer Successfully Updated"
+    }
+  } catch (err) {
+    // res.status(400).json({ error: err.message });
+    return {
+      status: 500,
+      data: "Installer Not Upadated :/"
+    }
+  }
+};
+
+
+
+// Get a list of all installers
+const getInstallers = async () => {
+  try {
+    const installers = await Installer.find();
+    return {
+      status: 200,
+      odata: installers
+    }
+  } catch (err) {
+    return {
+      status: 500,
+      odata: "Not able to get the Installers"
+    }
+  }
+};
+
+// Get installer by Id
 const getInstallerById = async (installerId) => {
   try {
     const installers = await Installer.findById(installerId);
@@ -192,12 +205,12 @@ const getInstallerById = async (installerId) => {
 
 
 
-  module.exports = {
-    createInstaller,
-    deleteInstaller,
-    updateInstaller,
-    getInstallers,
-    getInstallerById
-  }
+module.exports = {
+  createInstaller,
+  deleteInstaller,
+  updateInstaller,
+  getInstallers,
+  getInstallerById
+}
 
 

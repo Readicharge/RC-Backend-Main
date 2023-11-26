@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const serviceSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true  
   },
   service_code:{
     type:String,
@@ -10,11 +10,11 @@ const serviceSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true
+    // required: true
   },
   notes: {
     type: String,
-    required: true
+    // required: true
   },
   yearsOfExperience: {
     type: Number,

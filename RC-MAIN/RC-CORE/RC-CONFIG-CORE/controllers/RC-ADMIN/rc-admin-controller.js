@@ -54,12 +54,18 @@ const createAdmin = async (idata) => {
 
 
 
-const getAdmin = async (req, res) => {
+const getAdmin = async () => {
   try {
     const admin = await Admin.find();
-    res.json(admin);
+    return {
+      status : 200,
+      odata : admin
+    }
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while retrieving the admin.' });
+     return {
+      status : 500,
+      odata : error
+     }
   }
 };
 
@@ -92,16 +98,24 @@ const updateAdminById = async (req, res) => {
 };
 
 // Delete admin by ID
-const deleteAdminById = async (req, res) => {
+const deleteAdminById = async (installerId) => {
   try {
-    const admin = await Admin.findByIdAndDelete(req.params.id);
+    const admin = await Admin.findByIdAndDelete(installerId);
     if (!admin) {
-      res.status(404).json({ error: 'Admin not found.' });
-      return;
+      return {
+        status : 404,
+        odata : "Admin Not Found!"
+      }
     }
-    res.json({ message: 'Admin deleted successfully.' });
+    return {
+      status : 302,
+      odata : "Admin Deteled Successfully"
+    };
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while deleting the admin.' });
+    return {
+      status : 500,
+      odata : "Error occured while deleting the Admin"
+    }
   }
 };
 

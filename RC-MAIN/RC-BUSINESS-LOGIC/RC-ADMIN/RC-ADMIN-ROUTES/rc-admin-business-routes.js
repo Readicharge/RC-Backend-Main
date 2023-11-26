@@ -11,9 +11,10 @@ const router = express.Router();
 const {createServiceServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-SERVICE/rc-create-service");
 router.post("/service-create",createServiceServer);
 
-const {createAdminServer,getAdminServer} = require('../RC-ADMIN-OPERATIONS/RC-ADMIN-MANAGE/rc-admin-main');
+const {createAdminServer,getAdminServer,deleteAdminServer} = require('../RC-ADMIN-OPERATIONS/RC-ADMIN-MANAGE/rc-admin-main');
 router.post("/registerAdmin",createAdminServer);
 router.post("/getAdmin",getAdminServer);
+router.delete("/deleteAdmin/:id",deleteAdminServer)
 
 const {sign_in_admin} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-AUTH/rc-admin-sign-in");
 router.post("/sign-in",sign_in_admin);
@@ -59,6 +60,18 @@ router.get("/service-price-get-specific/:id",getSpecificCustomerRateServer);
 
 const {updateCustomerRateServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-SERVICE-PRICE/rc-admin-service-price-update");
 router.put("/service-price-update/:id",updateCustomerRateServer);
+
+
+const {getInstallerServer,deleteInstallerServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-INSTALLER/rc-installer-main");
+router.get("/installer-get-all",getInstallerServer);
+router.delete("/installer-delete/:id",deleteInstallerServer);
+
+
+
+const {getCustomerAll} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-CUSTOMER/rc-customer-main");
+router.get("/customer-get-all",getCustomerAll);
+
+
 
 
 
