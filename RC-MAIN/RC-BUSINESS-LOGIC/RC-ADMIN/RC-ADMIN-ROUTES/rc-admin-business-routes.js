@@ -132,6 +132,15 @@ router.get("/material-get-name/:id",getMaterialName);
 
 
 
+// *************************************************************************************************************************************//
+//                                              MODULE 4 : MATERIALS - DASHBOARD
+// *************************************************************************************************************************************//
+
+
+
+const {getInstaller_headerCard_data,getJobData_Dashboard} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-DASHBOARD/rc-dashboard-main");
+router.get("/dashboard-get-installer-header-card-data",getInstaller_headerCard_data);
+router.get("/dashboard-get-jobs-main-card-data",getJobData_Dashboard);
 
 
 

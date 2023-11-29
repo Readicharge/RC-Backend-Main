@@ -55,6 +55,7 @@ const deleteMaterial = async (id) => {
  // Update a material
 const updateMaterial = async (id,data) => {
   try {
+    console.log("materials",data)
     const material = await Materials.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
