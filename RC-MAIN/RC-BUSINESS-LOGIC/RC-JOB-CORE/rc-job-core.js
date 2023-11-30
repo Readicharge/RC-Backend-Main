@@ -358,9 +358,9 @@ const get_job_By_customerId = async (req,res)=> {
 
 
 const get_specfic_job_id = async (req,res)=> {
-    const {bookingID} = req.body;
+    const {bookingId} = req.body;
     try {
-        const booking = await Booking.findById(bookingID);
+        const booking = await Booking.findById(bookingId);
         if(booking === null || booking === undefined || booking.length === 0)
         {
             res.status(404).json(
