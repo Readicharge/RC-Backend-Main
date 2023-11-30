@@ -23,7 +23,7 @@ const getInstaller_headerCard_data = async (req, res) => {
             $or: [{ installer_parked: true }, { installer_booked: true }]
         })
         // 4. Total Number of Installers Scheduled on that day
-        const bookedInstaller = 10;
+        const bookedInstaller = 6;
 
         console.log(overallInstallersCount, overallActiveInstallersCount, bookedInstaller, installersForToday)
 
