@@ -11,10 +11,12 @@ const router = express.Router();
 const {createServiceServer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-SERVICE/rc-create-service");
 router.post("/service-create",createServiceServer);
 
-const {createAdminServer,getAdminServer,deleteAdminServer} = require('../RC-ADMIN-OPERATIONS/RC-ADMIN-MANAGE/rc-admin-main');
+const {createAdminServer,getAdminServer,deleteAdminServer,updateAdmin} = require('../RC-ADMIN-OPERATIONS/RC-ADMIN-MANAGE/rc-admin-main');
 router.post("/registerAdmin",createAdminServer);
 router.post("/getAdmin",getAdminServer);
-router.delete("/deleteAdmin/:id",deleteAdminServer)
+router.delete("/deleteAdmin/:id",deleteAdminServer);
+router.put("/updateAdmin/:id",updateAdmin);
+
 
 const {sign_in_admin} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-AUTH/rc-admin-sign-in");
 router.post("/sign-in",sign_in_admin);
@@ -68,8 +70,9 @@ router.delete("/installer-delete/:id",deleteInstallerServer);
 
 
 
-const {getCustomerAll} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-CUSTOMER/rc-customer-main");
+const {getCustomerAll,deleteCustomer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-CUSTOMER/rc-customer-main");
 router.get("/customer-get-all",getCustomerAll);
+router.delete("/customer-delete/:id",deleteCustomer);
 
 
 

@@ -164,8 +164,32 @@ const updateCustomer = async (data, customerId) => {
 
 
 
+const deleteCustomerById = async (customerId) => {
+    try {
+      const customer = await Customer.findByIdAndDelete(customerId);
+      if (!customer) {
+        return {
+          status : 404,
+          odata : "Cusotmer Not Found!"
+        }
+      }
+      return {
+        status : 302,
+        odata : "Customer Deteled Successfully"
+      };
+    } catch (error) {
+      return {
+        status : 500,
+        odata : "Error occured while deleting the Customer"
+      }
+    }
+}
+
+
+
 
 module.exports = {
   createCustomer,
   updateCustomer,
+  deleteCustomerById
 }

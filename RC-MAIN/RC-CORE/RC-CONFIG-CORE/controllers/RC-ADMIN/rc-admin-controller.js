@@ -84,23 +84,33 @@ const getAdminById = async (req, res) => {
 };
 
 // Update admin by ID
-const updateAdminById = async (req, res) => {
+const updateAdminById = async (id,idata) => {
   try {
-    const admin = await Admin.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const admin = await Admin.findByIdAndUpdate(id, idata, { new: true });
     if (!admin) {
-      res.status(404).json({ error: 'Admin not found.' });
-      return;
+     
+      return {
+        status : 404,
+        odata : "Admin Not Found!"
+      }
     }
-    res.json(admin);
+    return {
+      status : 200,
+      odata : "Admin updated Successfully"
+    }
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while updating the admin.' });
+    console.log(error)
+    return {
+      status : 500,
+      odata : error
+    }
   }
 };
 
 // Delete admin by ID
-const deleteAdminById = async (installerId) => {
+const deleteAdminById = async (adminId) => {
   try {
-    const admin = await Admin.findByIdAndDelete(installerId);
+    const admin = await Admin.findByIdAndDelete(adminId);
     if (!admin) {
       return {
         status : 404,

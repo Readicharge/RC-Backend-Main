@@ -1,4 +1,4 @@
-const {createAdmin,getAdmin,deleteAdminById} = require("../../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-ADMIN/rc-admin-controller");
+const {createAdmin,getAdmin,deleteAdminById,updateAdminById} = require("../../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-ADMIN/rc-admin-controller");
 
 
 const createAdminServer = async (req,res) => {
@@ -57,10 +57,24 @@ const deleteAdminServer = async (req,res) => {
     }
 }
 
+const updateAdmin = async ( req,res) => {
+    try {
+        const adminId = req.params.id;
+        const response = await updateAdminById(adminId, req.body)
+        console.log("Hi",response)
+        res.status(response.status).json(response.odata)
+    }
+    catch(error){
+        console.log(error)
+        res.status(500).json(error)
+    }
+}
+
 
 
 module.exports = {
     createAdminServer,
     getAdminServer,
-    deleteAdminServer
+    deleteAdminServer,
+    updateAdmin
 }
