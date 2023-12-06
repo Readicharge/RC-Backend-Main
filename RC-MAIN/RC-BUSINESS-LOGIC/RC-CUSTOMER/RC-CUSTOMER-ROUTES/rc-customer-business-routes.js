@@ -15,11 +15,14 @@ const router = express.Router();
 const { zipCode_based_search } = require('../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/ZIPCODE-SEARCH/zipCode_Based_Installers_Determiner');
 const { register_customer } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_regiter");
 const { update_address } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_address");
+const {signIn} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-AUTH/rc-customer-sign-in");
 // *************************************************************************************************************************************//
 router.post('/zipcode', zipCode_based_search);
 router.post("/register", register_customer);
 router.put("/address/:id", update_address);
 
+// *************************************************************************************************************************************//
+router.get('sign-in',signIn);
 
 
 // *************************************************************************************************************************************//

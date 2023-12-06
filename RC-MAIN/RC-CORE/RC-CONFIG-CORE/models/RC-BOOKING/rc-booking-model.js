@@ -104,7 +104,7 @@ const bookingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Payment'
   }
-  // // Getting the Charger Details
+  // Getting the Charger Details
   // charger_details: [
   //   {
   //     model: {
@@ -112,9 +112,6 @@ const bookingSchema = new mongoose.Schema({
   //     },
   //     type: {
   //       type: String
-  //     },
-  //     Charger_received_by: {
-  //       type: Date
   //     },
   //     exsisting_outlet: {
   //       type: String

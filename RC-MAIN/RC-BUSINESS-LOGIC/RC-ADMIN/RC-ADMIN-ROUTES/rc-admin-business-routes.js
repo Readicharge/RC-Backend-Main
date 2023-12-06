@@ -70,9 +70,10 @@ router.delete("/installer-delete/:id",deleteInstallerServer);
 
 
 
-const {getCustomerAll,deleteCustomer} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-CUSTOMER/rc-customer-main");
+const {getCustomerAll,deleteCustomer,getCustomerId} = require("../RC-ADMIN-OPERATIONS/RC-ADMIN-CUSTOMER/rc-customer-main");
 router.get("/customer-get-all",getCustomerAll);
 router.delete("/customer-delete/:id",deleteCustomer);
+router.get("/customer-get-id/:id",getCustomerId);
 
 
 

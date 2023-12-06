@@ -29,4 +29,16 @@ const deleteCustomer = async (req,res) => {
     }
 }
 
-module.exports = {getCustomerAll,deleteCustomer}
+const getCustomerId = async (req,res) => {
+    try{
+        const customerId = req.params.id;
+        const response = await Customer.findById(customerId);
+        res.status(200).json(response);
+    }
+    catch(error)
+    {
+        res.status(500).json(error);
+    }
+}
+
+module.exports = {getCustomerAll,deleteCustomer,getCustomerId}
