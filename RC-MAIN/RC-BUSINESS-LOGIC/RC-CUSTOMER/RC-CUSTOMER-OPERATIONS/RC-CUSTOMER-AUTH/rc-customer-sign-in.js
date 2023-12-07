@@ -4,8 +4,9 @@ const {validateCustomer} = require("../../../../RC-CORE/RC-AUTH-CORE/RC-VALIDATO
 const signIn = async (req,res) => {
     try{
         const idata = req.body;
+        console.log("idata",idata)
         const odata = await validateCustomer(idata);
-        console.log("Odata",odata)
+        console.log("odata",odata)
         res.status(200).json(odata)
 
     }
