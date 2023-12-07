@@ -1,4 +1,4 @@
-const Customer = require('../../RC-CONFIG-CORE/models/RC-ADMIN/rc-customer-model')
+const Customer = require("../../RC-CONFIG-CORE/models/RC-CUSTOMER/rc-customer-model")
 
 const validateCustomer= async (data) => {
 
