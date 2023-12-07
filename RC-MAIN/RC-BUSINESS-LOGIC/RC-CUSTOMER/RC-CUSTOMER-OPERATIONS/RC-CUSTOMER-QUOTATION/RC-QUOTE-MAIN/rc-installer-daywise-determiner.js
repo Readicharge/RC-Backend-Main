@@ -82,7 +82,6 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
 
 
         // Get the current date
-        const currentDate = new Date().toISOString().slice(0, 10);
         const geo = await getCoordinates(addressLine1, addressLine2, zip, city, state);
         const userLatitude = geo.latitude;
         const userLongitude = geo.longitude;
@@ -157,7 +156,7 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
         //     }
         // }
 
-        res.status(200).json(response)
+        res.status(200).json({...response,numberOfInstallers:nearestInstaller.length})
 
     }
     catch (err) {

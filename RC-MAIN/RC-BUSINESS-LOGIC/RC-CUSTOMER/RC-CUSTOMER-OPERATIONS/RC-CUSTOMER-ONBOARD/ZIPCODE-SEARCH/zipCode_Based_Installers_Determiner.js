@@ -67,7 +67,7 @@ const zipCode_based_search = async (req,res) => {
     const installer_list = [];
     for(let i=0;i<installers.length;i++){
         const distance = getDistance(coordinates.latitude,coordinates.longitude,installers[i].latitude,installers[i].longitude);
-        if(distance<1000){
+        if(distance<2000){
             installer_list.push(installers[i]);
         }
     }
