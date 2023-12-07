@@ -5,6 +5,7 @@ const signIn = async (req,res) => {
     try{
         const idata = req.body;
         const odata = await validateCustomer(idata);
+        console.log("Odata",odata)
         res.status(200).json(odata)
 
     }
