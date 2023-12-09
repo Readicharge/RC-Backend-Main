@@ -156,7 +156,8 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
         //     }
         // }
 
-        res.status(200).json({...response,numberOfInstallers:nearestInstaller.length})
+        console.log(response)
+        res.status(200).json({weekly_non_available_dates:response.weekly_non_available_dates,daily_non_available_dates:response.daily_non_available_dates,numberOfInstallers:nearestInstaller.length})
 
     }
     catch (err) {
