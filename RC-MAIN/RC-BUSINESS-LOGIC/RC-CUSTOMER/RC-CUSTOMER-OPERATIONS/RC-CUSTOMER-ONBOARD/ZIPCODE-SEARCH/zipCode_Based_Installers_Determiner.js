@@ -63,15 +63,11 @@ const zipCode_based_search = async (req,res) => {
     const {zipCode} = req.body;
     const coordinates = await getCoordinates(zipCode);
     console.log(coordinates);
-    const installers = await Installer.find({zipCode:zipCode});
-    const installer_list = [];
-    for(let i=0;i<installers.length;i++){
-        const distance = getDistance(coordinates.latitude,coordinates.longitude,installers[i].latitude,installers[i].longitude);
-        if(distance<4000){
-            installer_list.push(installers[i]);
-        }
-    }
+
+    const installer_list = await Installer.find({zipCode:zipCode});
+  
     if(installer_list.length>0){
+        console.log(installer_list.length)
         res.json({
             success:true,
             installer_list:installer_list.length
