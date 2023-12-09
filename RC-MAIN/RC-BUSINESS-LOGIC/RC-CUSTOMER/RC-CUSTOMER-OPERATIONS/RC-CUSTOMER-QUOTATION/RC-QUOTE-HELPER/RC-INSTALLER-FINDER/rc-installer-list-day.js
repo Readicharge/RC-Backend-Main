@@ -59,7 +59,7 @@ const getInactiveDatesForInstaller = async (installerId) => {
 
   function extractUniqueDatesFromArray(datesArray) {
     const dateCounts = new Map();
-    
+
     // Count the occurrence of each date in each subarray
     datesArray.forEach(dateArray => {
         const uniqueDatesInArray = new Set();
@@ -79,12 +79,10 @@ const getInactiveDatesForInstaller = async (installerId) => {
         });
     });
 
-    // Get dates that are present in all subarrays
-    const commonDates = Array.from(dateCounts.keys()).filter(date => dateCounts.get(date) === datesArray.length);
+    // Get dates that are present in at least one subarray
+    const uniqueDates = Array.from(dateCounts.keys()).filter(date => dateCounts.get(date) > 0);
 
-
-
-    return commonDates;
+    return uniqueDates;
 }
 
 
