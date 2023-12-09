@@ -439,7 +439,7 @@ const cancelJobByInstaller = async (req,res) => {
       
         // Refund the Customer Appropriate amount
         await axios.post(
-          `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment4/${jobId}`, 
+          `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment4`, 
           { bookingId: jobId, amount_to_be_charged: amount }
         );
       
