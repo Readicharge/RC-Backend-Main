@@ -410,7 +410,7 @@ const cancelJobByInstaller = async (req, res) => {
         const jobId = req.params.id;
         const job = await Booking.findById(jobId);
 
-        const amount = job.customerShowingCost;
+        const amount = 0;
 
         // Getting the Job and update the job status
         const jobUpdated = await Booking.findByIdAndUpdate(
@@ -477,7 +477,7 @@ const cancelJobByCustomer = async (req, res) => {
         }
 
         // Apply deduction to the amount
-        const finalAmount = job.customerShowingCost * (100 - deductionPercentage) / 100;
+        const finalAmount = job.customerShowingCost * ( deductionPercentage) / 100;
 
 
 
