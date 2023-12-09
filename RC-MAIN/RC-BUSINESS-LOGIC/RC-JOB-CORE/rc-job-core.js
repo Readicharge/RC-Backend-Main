@@ -208,95 +208,94 @@ const rc_job_creater = async (req, res) => {
 
         // Step 13 : Getting all the details
 
-        console.log(installer_daily.length , "Length for the final Installer List");
+        console.log(installer_daily.length, "Length for the final Installer List");
 
         // if there is installer present 
-        if(installer_daily.length>0) {
+        if (installer_daily.length > 0) {
 
 
-        const booking_data = {
-            // Getting the address Details 
-            addressLine1 : addressDetails.addressLine1,
-            addressLine2 : addressDetails.addressLine2,
-            city : addressDetails.city,
-            state : addressDetails.state,
-            zip : addressDetails.zip,
+            const booking_data = {
+                // Getting the address Details 
+                addressLine1: addressDetails.addressLine1,
+                addressLine2: addressDetails.addressLine2,
+                city: addressDetails.city,
+                state: addressDetails.state,
+                zip: addressDetails.zip,
 
-            // Getting the Date and time Details 
-            date : date,
-            time_start : time_start,
-            time_end : time_end,
+                // Getting the Date and time Details 
+                date: date,
+                time_start: time_start,
+                time_end: time_end,
 
-            // Getting the Price Details 
-            price_installer : laborRates.price,
-            material_cost : getMaterialList[0].material_cost,
-            customerShowingCost:quotation,
+                // Getting the Price Details 
+                price_installer: laborRates.price,
+                material_cost: getMaterialList[0].material_cost,
+                customerShowingCost: quotation,
 
-            // Getting the Service Details 
-            primaryService : primaryService,
-            secondaryServiceList : serviceList,
+                // Getting the Service Details 
+                primaryService: primaryService,
+                secondaryServiceList: serviceList,
 
-            // Getting the additional Details and the installer details 
-            number_of_installs : number_of_installs,
-            material_details : getMaterialList[0],
-            installer : installer_daily[0],
+                // Getting the additional Details and the installer details 
+                number_of_installs: number_of_installs,
+                material_details: getMaterialList[0],
+                installer: installer_daily[0],
 
-            // Assigning the end points of the job 
-            customer : customer_id,
+                // Assigning the end points of the job 
+                customer: customer_id,
 
-            // Assigning the Chargers Details 
-            chargers: chargerDetails,
-            
-            // Decleration of steps handler for the job 
-            completion_steps : {
-                stage_0:{
-                    status_installer : false,
-                    status_customer  : false,
-                    rating:0
+                // Assigning the Chargers Details 
+                chargers: chargerDetails,
+
+                // Decleration of steps handler for the job 
+                completion_steps: {
+                    stage_0: {
+                        status_installer: false,
+                        status_customer: false,
+                        rating: 0
+                    },
+                    stage_1: {
+                        status_installer: false,
+                        status_customer: false,
+                        rating: 0
+                    },
+                    stage_2: {
+                        status_installer: false,
+                        status_customer: false,
+                        rating: 0
+                    },
+                    overall_completion: {
+                        status_installer: false,
+                        status_customer: false,
+                        rating: 0
+                    }
                 },
-                stage_1 : {
-                    status_installer : false,
-                    status_customer  : false,
-                    rating:0
-                },
-                stage_2 : {
-                    status_installer : false,
-                    status_customer  : false,
-                    rating:0
-                },
-                overall_completion:{
-                    status_installer : false,
-                    status_customer  : false,
-                    rating:0
-                }
-            },
 
-            // Setting the OverAll Job Status [ enums : LIVE , PENDING , COMPLETED , CANCELLED ]
-            job_status:"LIVE"
-        }
-
-
-       
-        
-        const booking = new Booking(booking_data);
-        await booking.save();
-
-
-        console.log(installer_weekly)
-
-        res.status(200).json(
-            { odata: booking }
-        )
-                    
-    }
-    else 
-    {
-        res.status(404).json(
-            {
-                odata: "No Installer Found"
+                // Setting the OverAll Job Status [ enums : LIVE , PENDING , COMPLETED , CANCELLED ]
+                job_status: "LIVE"
             }
-        )
-    }
+
+
+
+
+            const booking = new Booking(booking_data);
+            await booking.save();
+
+
+            console.log(installer_weekly)
+
+            res.status(200).json(
+                { odata: booking }
+            )
+
+        }
+        else {
+            res.status(404).json(
+                {
+                    odata: "No Installer Found"
+                }
+            )
+        }
 
     }
     catch (error) {
@@ -309,68 +308,62 @@ const rc_job_creater = async (req, res) => {
 }
 
 
-const rc_job_Installer_confirmator = async (req,res)=> {
+const rc_job_Installer_confirmator = async (req, res) => {
     try {
-        const {booking_id,status} = req.body;
+        const { booking_id, status } = req.body;
 
         const booking = await Booking.findById(booking_id);
 
-        if(booking === null || booking === undefined || booking.length === 0)
-        {
+        if (booking === null || booking === undefined || booking.length === 0) {
             res.status(404).json(
                 { odata: "No Booking Found" }
             )
         }
-       else
-       {
-          const installer_parked_status = await Installer_Parked.findOne({
-            installer_id:booking.installer,
-            date: booking.date,
-            installer_parked : true
-          })
+        else {
+            const installer_parked_status = await Installer_Parked.findOne({
+                installer_id: booking.installer,
+                date: booking.date,
+                installer_parked: true
+            })
 
-          if(installer_parked_status === null || installer_parked_status === undefined || installer_parked_status.length === 0)
-          {
-            const installer_parked = new Installer_Parked({
-                installer_id : booking.installer,
-                date : booking.date,
-                installer_parked : status
-            });
-            await installer_parked.save(installer_parked);
-          }
-          else 
-          {
-            installer_parked_status.installer_parked = true;
-            await installer_parked_status.save();
-          }
-          res.status(200).json({
-            odata: "Installer Parked Successfully"
-        })
+            if (installer_parked_status === null || installer_parked_status === undefined || installer_parked_status.length === 0) {
+                const installer_parked = new Installer_Parked({
+                    installer_id: booking.installer,
+                    date: booking.date,
+                    installer_parked: status
+                });
+                await installer_parked.save(installer_parked);
+            }
+            else {
+                installer_parked_status.installer_parked = true;
+                await installer_parked_status.save();
+            }
+            res.status(200).json({
+                odata: "Installer Parked Successfully"
+            })
 
-       }
+        }
     }
     catch (error) {
         console.log(error)
         res.status(500).json({
-            odata:"Unable to Proceed further , Please Try Again"
+            odata: "Unable to Proceed further , Please Try Again"
         })
     }
 }
 
 
-const get_job_By_customerId = async (req,res)=> {  
+const get_job_By_customerId = async (req, res) => {
     try {
-        const {customerID} = req.body;
+        const { customerID } = req.body;
 
-        const booking = await Booking.find({customer:customerID});
-        if(booking === null || booking === undefined || booking.length === 0)
-        {
+        const booking = await Booking.find({ customer: customerID });
+        if (booking === null || booking === undefined || booking.length === 0) {
             res.status(404).json(
                 { odata: "No Booking Found" }
             )
         }
-        else
-        {
+        else {
             res.status(200).json(
                 { odata: booking }
             )
@@ -379,7 +372,7 @@ const get_job_By_customerId = async (req,res)=> {
     catch (error) {
         console.log(error)
         res.status(500).json({
-            odata:"Unable to Proceed further , Please Try Again"
+            odata: "Unable to Proceed further , Please Try Again"
         });
 
     }
@@ -387,18 +380,16 @@ const get_job_By_customerId = async (req,res)=> {
 }
 
 
-const get_specfic_job_id = async (req,res)=> {
-    const {bookingId} = req.body;
+const get_specfic_job_id = async (req, res) => {
+    const { bookingId } = req.body;
     try {
         const booking = await Booking.findById(bookingId);
-        if(booking === null || booking === undefined || booking.length === 0)
-        {
+        if (booking === null || booking === undefined || booking.length === 0) {
             res.status(404).json(
                 { odata: "No Booking Found" }
             )
         }
-        else
-        {
+        else {
             res.status(200).json(
                 { odata: booking }
             )
@@ -407,54 +398,123 @@ const get_specfic_job_id = async (req,res)=> {
     catch (error) {
         console.log(error)
         res.status(500).json({
-            odata:"Unable to Proceed further , Please Try Again"
+            odata: "Unable to Proceed further , Please Try Again"
         });
-}
+    }
 }
 
 
-const cancelJobByInstaller = async (req,res) => {
+const cancelJobByInstaller = async (req, res) => {
     try {
         // Getting the job Id
         const jobId = req.params.id;
         const job = await Booking.findById(jobId);
-      
+
         const amount = job.customerShowingCost;
-      
+
         // Getting the Job and update the job status
         const jobUpdated = await Booking.findByIdAndUpdate(
-          { _id: jobId },
-          { $set: { 'completion_steps.job_status': 'CANCELLED' } },
-          { new: true } // To return the updated document
+            { _id: jobId },
+            { $set: { 'completion_steps.job_status': 'CANCELLED' } },
+            { new: true } // To return the updated document
         );
-      
+
         if (!jobUpdated) {
-          console.error('Error updating job_status: Job not found');
-          return res.status(404).json({
-            error: 'Job not found',
-          });
+            console.error('Error updating job_status: Job not found');
+            return res.status(404).json({
+                error: 'Job not found',
+            });
         }
-      
+
         console.log('Updated document:', jobUpdated);
-      
+
         // Refund the Customer Appropriate amount
         await axios.post(
-          `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment4`, 
-          { bookingId: jobId, amount_to_be_charged: amount }
+            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment4`,
+            { bookingId: jobId, amount_to_be_charged: amount }
         );
-      
+
         // Make an Impact on the Installer Rating
 
         // Sending the response
         res.status(200).json({
-          odata: 'Job Cancelled Successfully',
+            odata: 'Job Cancelled Successfully',
         });
-      } catch (error) {
+    } catch (error) {
         console.error('Error cancelling job:', error);
         res.status(500).json({
-          error: 'Internal Server Error',
+            error: 'Internal Server Error',
         });
-      } 
+    }
+}
+
+
+const cancelJobByCustomer = async (req, res) => {
+    try {
+        // Getting the job Id
+        const jobId = req.params.id;
+        const job = await Booking.findById(jobId);
+
+
+        // Calculate the amount to be charged from the Customer , as Penalty
+        const currentDateTime = moment();
+        const jobDateTime = moment(`${job.date} ${job.time_start}`, 'YYYY-MM-DD HH:mm');
+
+        // Calculate the difference in hours
+        const timeDifferenceHours = jobDateTime.diff(currentDateTime, 'hours');
+
+        let deductionPercentage;
+
+        // Check the time difference and set deduction percentage accordingly
+        if (timeDifferenceHours <= 12 && timeDifferenceHours > 6) {
+            deductionPercentage = 35;
+        } else if (timeDifferenceHours <= 6 && timeDifferenceHours > 3) {
+            deductionPercentage = 57;
+        } else if (timeDifferenceHours <= 3 && timeDifferenceHours >= 0) {
+            deductionPercentage = 89;
+        } else {
+            deductionPercentage = 100;
+        }
+
+        // Apply deduction to the amount
+        const finalAmount = job.customerShowingCost * (100 - deductionPercentage) / 100;
+
+
+
+        // Getting the Job and update the job status
+        const jobUpdated = await Booking.findByIdAndUpdate(
+            { _id: jobId },
+            { $set: { 'completion_steps.job_status': 'CANCELLED' } },
+            { new: true } // To return the updated document
+        );
+
+        if (!jobUpdated) {
+            console.error('Error updating job_status: Job not found');
+            return res.status(404).json({
+                error: 'Job not found',
+            });
+        }
+
+        console.log('Updated document:', jobUpdated);
+
+        // Refund the Customer Appropriate amount
+        await axios.post(
+            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment4`,
+            { bookingId: jobId, amount_to_be_charged: finalAmount }
+        );
+
+       
+
+        // Sending the response
+        res.status(200).json({
+            odata: 'Job Cancelled Successfully',
+        });
+    } catch (error) {
+        console.error('Error cancelling job:', error);
+        res.status(500).json({
+            error: 'Internal Server Error',
+        });
+    }
 }
 
 
