@@ -245,7 +245,31 @@ const rc_job_creater = async (req, res) => {
             customer : customer_id,
 
             // Assigning the Chargers Details 
-            chargers: chargerDetails
+            chargers: chargerDetails,
+            
+            // Decleration of steps handler for the job 
+            completion_steps : {
+                stage_0:{
+                    status_installer : false,
+                    status_customer  : false,
+                    rating:0
+                },
+                stage_1 : {
+                    status_installer : false,
+                    status_customer  : false,
+                    rating:0
+                },
+                stage_2 : {
+                    status_installer : false,
+                    status_customer  : false,
+                    rating:0
+                },
+                overall_completion:{
+                    status_installer : false,
+                    status_customer  : false,
+                    rating:0
+                }
+            }
         }
 
 

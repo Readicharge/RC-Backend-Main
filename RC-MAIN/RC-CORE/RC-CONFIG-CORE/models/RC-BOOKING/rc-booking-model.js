@@ -156,6 +156,64 @@ const bookingSchema = new mongoose.Schema({
     }
   ],
 
+  completion_steps:{
+    stage_0:{
+      status_installer:{
+        type:String,
+        default:0
+      },
+      status_customer:{
+        type:String,
+        default:0
+      },
+      rating:{
+        type:Number,
+        default:0
+      }
+    },
+    stage_1:{
+      status_installer:{
+        type:String,
+        default:0
+      },
+      status_customer:{
+        type:String,
+        default:0
+      },
+      rating:{
+        type:Number,
+        default:0
+      }
+    },
+    stage_2:{
+      status_installer:{
+        type:String,
+        default:0
+      },
+      status_customer:{
+        type:String,
+        default:0
+      },
+      rating:{
+        type:Number,
+        default:0
+      }
+    },
+    overall_completion:{
+      status_installer:{
+        type:String,
+        default:0
+      },
+      status_customer:{
+        type:String,
+        default:0
+      },
+      rating:{
+        type:Number,
+        default:0
+      }
+    }
+  }
 
 });
 
