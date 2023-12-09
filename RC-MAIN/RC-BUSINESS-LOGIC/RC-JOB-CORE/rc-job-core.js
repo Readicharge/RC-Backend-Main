@@ -269,7 +269,10 @@ const rc_job_creater = async (req, res) => {
                     status_customer  : false,
                     rating:0
                 }
-            }
+            },
+
+            // Setting the OverAll Job Status [ enums : LIVE , PENDING , COMPLETED , CANCELLED ]
+            job_status:"LIVE"
         }
 
 
