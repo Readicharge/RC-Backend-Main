@@ -413,13 +413,58 @@ const get_specfic_job_id = async (req,res)=> {
 }
 
 
+const cancelJobByInstaller = async (req,res) => {
+    try {
+        // Getting the job Id
+        const jobId = req.params.id;
+        const job = await Booking.findById(jobId);
+      
+        const amount = job.customerShowingCost;
+      
+        // Getting the Job and update the job status
+        const jobUpdated = await Booking.findByIdAndUpdate(
+          { _id: jobId },
+          { $set: { 'completion_steps.job_status': 'CANCELLED' } },
+          { new: true } // To return the updated document
+        );
+      
+        if (!jobUpdated) {
+          console.error('Error updating job_status: Job not found');
+          return res.status(404).json({
+            error: 'Job not found',
+          });
+        }
+      
+        console.log('Updated document:', jobUpdated);
+      
+        // Refund the Customer Appropriate amount
+        const refundResponse = await axios.post(
+          `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment4/${jobId}`, 
+          { bookingId: jobId, amount_to_be_charged: amount }
+        );
+      
+        // Make an Impact on the Installer Rating
+
+        // Sending the response
+        res.status(200).json({
+          odata: 'Job Cancelled Successfully',
+        });
+      } catch (error) {
+        console.error('Error cancelling job:', error);
+        res.status(500).json({
+          error: 'Internal Server Error',
+        });
+      } 
+}
+
 
 
 module.exports = {
     rc_job_creater,
     rc_job_Installer_confirmator,
     get_job_By_customerId,
-    get_specfic_job_id
+    get_specfic_job_id,
+    cancelJobByInstaller
 }
 
 
