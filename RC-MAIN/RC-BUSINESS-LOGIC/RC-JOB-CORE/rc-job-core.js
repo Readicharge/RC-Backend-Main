@@ -408,9 +408,6 @@ const cancelJobByInstaller = async (req, res) => {
     try {
         // Getting the job Id
         const jobId = req.params.id;
-        const job = await Booking.findById(jobId);
-
-        const amount = 20;
 
         // Getting the Job and update the job status
         const jobUpdated = await Booking.findByIdAndUpdate(
@@ -430,8 +427,8 @@ const cancelJobByInstaller = async (req, res) => {
 
         // Refund the Customer Appropriate amount
         await axios.post(
-            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment4`,
-            { bookingId: jobId, amount_to_be_charged: amount }
+            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment3`,
+            { booking_id: jobId}
         );
 
         // Make an Impact on the Installer Rating
@@ -524,7 +521,8 @@ module.exports = {
     rc_job_Installer_confirmator,
     get_job_By_customerId,
     get_specfic_job_id,
-    cancelJobByInstaller
+    cancelJobByInstaller,
+    cancelJobByCustomer
 }
 
 

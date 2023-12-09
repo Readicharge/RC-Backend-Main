@@ -11,7 +11,7 @@ router.post("/update-job-to-confirm-installer",rc_job_Installer_confirmator);
 router.post("/get-job-by-customerId",get_job_By_customerId);
 router.post("/get-specfic-job-id",get_specfic_job_id);
 router.put('/c-i-j/:id',cancelJobByInstaller)  // c-i-j ~ Cancel Job by Installer
-
+router.put('/c-c-j/:id',cancelJobByCustomer);       // c-c-j ~ Cancel Job by Customer
 
 
 
