@@ -410,7 +410,7 @@ const cancelJobByInstaller = async (req, res) => {
         const jobId = req.params.id;
         const job = await Booking.findById(jobId);
 
-        const amount = 0;
+        const amount = 20;
 
         // Getting the Job and update the job status
         const jobUpdated = await Booking.findByIdAndUpdate(
