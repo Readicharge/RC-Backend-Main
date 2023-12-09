@@ -103,69 +103,58 @@ const bookingSchema = new mongoose.Schema({
   rc_payment_id : {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Payment'
-  }
-  // Getting the Charger Details
-  // charger_details: [
-  //   {
-  //     model: {
-  //       type: String
-  //     },
-  //     type: {
-  //       type: String
-  //     },
-  //     exsisting_outlet: {
-  //       type: String
-  //     },
-  //     upgraded_to_nema: {
-  //       type: String,
-  //       default: false
-  //     },
-  //     charger_location: {
-  //       type: String
-  //     },
-  //     attached_home: {
-  //       type: String,
-  //       default: false
-  //     },
-  //     electrical_panel_location: {
-  //       type: String
-  //     },
-  //     floor: {
-  //       type: String
-  //     },
-  //     interior_wall_finish: {
-  //       type: String
-  //     },
-  //     exterior_wall_finish: {
-  //       type: String
-  //     },
-  //     wall_construction: {
-  //       type: String
-  //     },
-  //     electrical_panel_type: {
-  //       type: String
-  //     },
-  //     panel_brand: {
-  //       type: String
-  //     },
-  //     main_breaker_size: {
-  //       type: String
-  //     },
-  //     gretater_equal: {
-  //       type: String
-  //     },
-  //     open_breakersL: {
-  //       type: String
-  //     },
-  //     recessed_panel: {
-  //       type: String
-  //     },
-  //     distance_panel: {
-  //       type: String
-  //     }
-  //   }
-  // ],
-  // Getting te Completeion Steps 
+  },
+  chargers: [
+    {
+      cd2_1: {
+        type: String
+      },
+      cd2_1a: {
+        type: String
+      },
+      cd2_2a: {
+        type: String,
+        default: false
+      },
+      cd2_4: {
+        type: String
+      },
+      cd2_5d: {
+        type: String,
+        default: false
+      },
+      cd2_8: {
+        type: String
+      },
+      cd2_5c: {
+        type: String
+      },
+      cd2_6: {
+        type: String
+      },
+      cd2_6a: {
+        type: String
+      },
+      cd2_7: {
+        type: String
+      },
+      cd2_10: {
+        type: String
+      },
+      cd2_12: {
+        type: String
+      },
+      cd2_13: {
+        type: String
+      },
+      cd2_9: {
+        type: String
+      },
+      cd2_14: {
+        type: String
+      }
+    }
+  ],
 
 
 });

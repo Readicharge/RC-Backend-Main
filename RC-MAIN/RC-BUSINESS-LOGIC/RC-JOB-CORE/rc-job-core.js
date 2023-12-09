@@ -242,7 +242,10 @@ const rc_job_creater = async (req, res) => {
             installer : installer_daily[0],
 
             // Assigning the end points of the job 
-            customer : customer_id
+            customer : customer_id,
+
+            // Assigning the Chargers Details 
+            chargers: chargerDetails
         }
 
 
