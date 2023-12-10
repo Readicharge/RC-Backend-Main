@@ -516,6 +516,27 @@ const cancelJobByCustomer = async (req, res) => {
 }
 
 
+const customer_marked_pending_complete = async (req,res) => {
+    // Step1 : Getting the Job Id 
+    const jobId = req.params.id;
+
+    // Step2 : Marking the Job as Completed State
+    await Booking.findByIdAndUpdate('completion_steps.job_status', 'PENDING', { new: true });
+
+    // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
+    await axios.post(
+        `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
+        { bookingId: jobId }
+    );
+
+    // Step4 : Releasing the Payment To the Installer Account for the Material 
+
+
+    // Step5 :  Releasing the Installer for that Day , though it is not required  
+
+}
+
+
 
 module.exports = {
     rc_job_creater,
@@ -523,7 +544,8 @@ module.exports = {
     get_job_By_customerId,
     get_specfic_job_id,
     cancelJobByInstaller,
-    cancelJobByCustomer
+    cancelJobByCustomer,
+    customer_marked_pending_complete
 }
 
 
