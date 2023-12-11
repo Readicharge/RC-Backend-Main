@@ -368,7 +368,7 @@ const rc_job_updater = async (req, res) => {
         // Cancel the Last transaction: Payment So that we can get the New Transaction  
            await axios.post(
             `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment3`,
-            { booking_id: jobId }
+            { booking_id: bookingId }
         );
 
         
