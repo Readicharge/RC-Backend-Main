@@ -75,6 +75,7 @@ const rc_job_creater = async (req, res) => {
 
 
         // Step 5 : Getting the Charger Details from the Charger detailed answer 
+        // Done Below 
 
         // #############################################################################################
 
@@ -306,6 +307,77 @@ const rc_job_creater = async (req, res) => {
         );
     }
 
+}
+
+
+
+const rc_job_updater = async (req, res) => {
+
+    try {
+        const bookingId = req.params.id;
+        // Step 1 : Get all the inputs which are required from the request
+        const {
+            quotation, // This is the quotation which we have received for the job
+            addressDetails, // The object which contains the address for the location of the job
+            primaryService, // This is used to Determine the rate for the installer and the mateial
+            serviceList, // This is used to setermine the material List for the installer
+            time_start, // This is reterived from the slot section 
+            date, // This is reterived from the calender section 
+            chargerDetails, // This we will get from the charger details stored earlier
+            number_of_installs,
+            customer_id
+        } = req.body;
+
+        // Step 2 : Getting the labor Rate for the installer 
+        const obj_for_laborRate_for_the_service = await LabourRates.find(
+            {
+                service_id: primaryService,
+                number_of_installs: number_of_installs
+            }
+        )
+        const itest_row = obj_for_laborRate_for_the_service[0].price_statewise;
+        // Interate through the entire array to get the desired state price
+        const laborRates = itest_row.find((itest_cell) => itest_cell.state === addressDetails.state);
+
+
+        // Step 3 : Getting the material list and the corresponding material total cost
+        const getMaterialList = await get_material_list({ question_list: chargerDetails, determined_service: serviceList, state: addressDetails.state });
+
+        console.log(getMaterialList[0].materials)
+
+
+
+
+        // Step 4 : Getting the Existing booking Id and modify the job scope from here 
+        const booking_data = {
+            price_installer : laborRates.price,
+            material_cost: getMaterialList[0].material_cost,
+            customerShowingCost : quotation,
+
+            primaryService: primaryService,
+            secondaryServiceList: serviceList,
+
+
+            number_of_installs: number_of_installs,
+            material_details : getMaterialList[0],
+
+            chargers : chargerDetails
+        }
+
+        const booking = await Booking.findByIdAndUpdate(bookingId, booking_data, { new: true });
+
+        
+        res.status(200).json(
+            { odata: booking }
+        )
+
+
+    }
+    catch(error) {
+        res.status(500).json(
+            { odata: error.message }
+        );
+    }
 }
 
 
@@ -566,7 +638,8 @@ module.exports = {
     cancelJobByInstaller,
     cancelJobByCustomer,
     customer_marked_pending_complete,
-    customer_marked_complete_complete
+    customer_marked_complete_complete,
+    rc_job_updater
 }
 
 
