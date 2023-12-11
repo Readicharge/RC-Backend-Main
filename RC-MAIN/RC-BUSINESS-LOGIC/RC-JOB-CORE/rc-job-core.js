@@ -429,7 +429,7 @@ const cancelJobByInstaller = async (req, res) => {
         // Refund the Customer Appropriate amount
         await axios.post(
             `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment3`,
-            { booking_id: jobId}
+            { booking_id: jobId }
         );
 
         // Make an Impact on the Installer Rating
@@ -461,6 +461,7 @@ const cancelJobByCustomer = async (req, res) => {
         // Calculate the difference in hours
         const timeDifferenceHours = jobDateTime.diff(currentDateTime, 'hours');
 
+        console.log(timeDifferenceHours)
         let deductionPercentage;
 
         // Check the time difference and set deduction percentage accordingly
@@ -475,7 +476,7 @@ const cancelJobByCustomer = async (req, res) => {
         }
 
         // Apply deduction to the amount
-        const finalAmount = job.customerShowingCost * ( deductionPercentage) / 100;
+        const finalAmount = job.customerShowingCost * (deductionPercentage) / 100;
 
 
 
@@ -501,7 +502,7 @@ const cancelJobByCustomer = async (req, res) => {
             { bookingId: jobId, amount_to_be_charged: finalAmount }
         );
 
-       
+
 
         // Sending the response
         res.status(200).json({
@@ -516,7 +517,7 @@ const cancelJobByCustomer = async (req, res) => {
 }
 
 
-const customer_marked_pending_complete = async (req,res) => {
+const customer_marked_pending_complete = async (req, res) => {
     // Step1 : Getting the Job Id 
     const jobId = req.params.id;
 
@@ -536,6 +537,25 @@ const customer_marked_pending_complete = async (req,res) => {
 
 }
 
+const customer_marked_complete_complete = async (req, res) => {
+    // Step1 : Getting the Job Id
+    const jobId = req.params.id;
+
+    // Step2 : Marking the Job as Completed State
+    await Booking.findByIdAndUpdate('completion_steps.job_status', 'COMPLETE', { new: true });
+
+    // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
+    await axios.post(
+        `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
+        { bookingId: jobId }
+    );
+
+    // Step4 : Releasing the Payment To the Installer Account for the Mentire job
+
+    // Step5 :  Releasing the Installer for that Day , though it is not required 
+
+}
+
 
 
 module.exports = {
@@ -545,7 +565,8 @@ module.exports = {
     get_specfic_job_id,
     cancelJobByInstaller,
     cancelJobByCustomer,
-    customer_marked_pending_complete
+    customer_marked_pending_complete,
+    customer_marked_complete_complete
 }
 
 
