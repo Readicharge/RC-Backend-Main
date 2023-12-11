@@ -365,6 +365,12 @@ const rc_job_updater = async (req, res) => {
 
         const booking = await Booking.findByIdAndUpdate(bookingId, booking_data, { new: true });
 
+        // Cancel the Last transaction: Payment So that we can get the New Transaction  
+           await axios.post(
+            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment3`,
+            { booking_id: jobId }
+        );
+
         
         res.status(200).json(
             { odata: booking }
@@ -570,6 +576,8 @@ const cancelJobByCustomer = async (req, res) => {
 
         // Calculate the amount to be charged from the Customer , as Penalty
         const currentDateTime = moment();
+
+
         const jobDateTime = moment(`${job.date} ${job.time_start}`, 'YYYY-MM-DD HH:mm');
 
         // Calculate the difference in hours
@@ -579,14 +587,14 @@ const cancelJobByCustomer = async (req, res) => {
         let deductionPercentage;
 
         // Check the time difference and set deduction percentage accordingly
-        if (timeDifferenceHours <= 12 && timeDifferenceHours > 6) {
+        if (timeDifferenceHours <= 24 && timeDifferenceHours > 12) {
             deductionPercentage = 35;
-        } else if (timeDifferenceHours <= 6 && timeDifferenceHours > 3) {
+        } else if (timeDifferenceHours <= 12 && timeDifferenceHours > 6) {
             deductionPercentage = 57;
-        } else if (timeDifferenceHours <= 3 && timeDifferenceHours >= 0) {
+        } else if (timeDifferenceHours <= 6 && timeDifferenceHours >= 0) {
             deductionPercentage = 89;
         } else {
-            deductionPercentage = 100;
+            deductionPercentage = 20;
         }
 
         // Apply deduction to the amount
