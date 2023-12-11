@@ -311,6 +311,8 @@ const rc_job_creater = async (req, res) => {
 
 
 
+
+
 const rc_job_updater = async (req, res) => {
 
     try {
@@ -516,6 +518,49 @@ const cancelJobByInstaller = async (req, res) => {
 }
 
 
+
+const cancelJobModified = async (req,res) => {
+    try {
+        // Getting the job Id
+        const jobId = req.params.id;
+
+        // Getting the Job and update the job status
+        const jobUpdated = await Booking.findByIdAndUpdate(
+            { _id: jobId },
+            { $set: { 'completion_steps.job_status': 'CANCELLED' } },
+            { new: true } // To return the updated document
+        );
+
+        if (!jobUpdated) {
+            console.error('Error updating job_status: Job not found');
+            return res.status(404).json({
+                error: 'Job not found',
+            });
+        }
+
+        console.log('Updated document:', jobUpdated);
+
+        // Refund the Customer Appropriate amount
+        await axios.post(
+            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment3`,
+            { booking_id: jobId }
+        );
+
+        // Make an Impact on the Installer Rating
+
+        // Sending the response
+        res.status(200).json({
+            odata: 'Job Cancelled Successfully',
+        });
+    } catch (error) {
+        console.error('Error cancelling job:', error);
+        res.status(500).json({
+            error: 'Internal Server Error',
+        });
+    }
+}
+
+
 const cancelJobByCustomer = async (req, res) => {
     try {
         // Getting the job Id
@@ -636,7 +681,8 @@ module.exports = {
     cancelJobByCustomer,
     customer_marked_pending_complete,
     customer_marked_complete_complete,
-    rc_job_updater
+    rc_job_updater,
+    cancelJobModified
 }
 
 
