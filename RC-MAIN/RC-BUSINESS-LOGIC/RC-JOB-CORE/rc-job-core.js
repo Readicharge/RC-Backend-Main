@@ -321,11 +321,8 @@ const rc_job_updater = async (req, res) => {
             addressDetails, // The object which contains the address for the location of the job
             primaryService, // This is used to Determine the rate for the installer and the mateial
             serviceList, // This is used to setermine the material List for the installer
-            time_start, // This is reterived from the slot section 
-            date, // This is reterived from the calender section 
             chargerDetails, // This we will get from the charger details stored earlier
             number_of_installs,
-            customer_id
         } = req.body;
 
         // Step 2 : Getting the labor Rate for the installer 
