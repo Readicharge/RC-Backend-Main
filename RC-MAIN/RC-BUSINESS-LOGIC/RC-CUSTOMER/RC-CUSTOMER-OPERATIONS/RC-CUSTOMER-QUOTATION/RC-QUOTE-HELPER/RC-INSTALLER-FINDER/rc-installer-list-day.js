@@ -16,7 +16,7 @@ const getInactiveDatesForInstaller = async (installerId) => {
       const month = new Date().getMonth();
 
       const startDate = new Date(`${year}-${month}-01`);
-      const endDate = new Date(`${year+1}-${month+3}-01`);
+      const endDate = new Date(`${year+1}-${month}-01`);
 
       console.log(startDate,endDate);
       
