@@ -569,32 +569,41 @@ const cancelJobModified = async (req, res) => {
 
 const cancelJobByCustomer = async (req, res) => {
     try {
-        // Getting the job Id
         const jobId = req.params.id;
         const job = await Booking.findById(jobId);
 
-
-        // Calculate the amount to be charged from the Customer, as Penalty
+        // Get the current date and time
         const currentDateTime = moment();
-        const jobDateTime = moment(`${job.date} ${job.time_start}`, 'YYYY-MM-DD HH:mm');
+        console.log(job.date)
+        console.log(typeof (job.date), typeof (job.time_start))
+
+        const jobDateTime = moment(job.date);
+
+
+        // Combine the date with the time_start to create a new moment object
+        const jobDate = jobDateTime.format('YYYY-MM-DD');
+
+        const jobDateTimeWithTimeStart = moment(`${jobDate} ${job.time_start}`, 'YYYY-MM-DD HH:mm');
+
 
         // Calculate the difference in hours
-        const timeDifferenceHours = jobDateTime.diff(currentDateTime, 'hours');
+        const timeDifferenceHours = jobDateTimeWithTimeStart.diff(currentDateTime, 'hours');
 
-        console.log(timeDifferenceHours);
+        console.log('Time Difference in Hours:', timeDifferenceHours);
+
         let deductionPercentage;
 
         // Check the time difference and set deduction percentage accordingly
-        if (timeDifferenceHours > 24 || currentDateTime.isAfter(jobDateTime)) {
-            // If the date difference is more than 1 day or the current time is greater than the booked date time, then 100% is deducted
+        if (timeDifferenceHours >= 24) {
+            // If the date difference is more than or equal to 24 hours or the current time is greater than the booked date time, then 100% is deducted
             deductionPercentage = 100;
-        } else if (timeDifferenceHours <= 24 && timeDifferenceHours > 12) {
+        } else if (timeDifferenceHours > 12) {
             deductionPercentage = 4;
-        } else if (timeDifferenceHours <= 12 && timeDifferenceHours > 6) {
+        } else if (timeDifferenceHours > 6) {
             deductionPercentage = 40;
-        } else if (timeDifferenceHours <= 6 && timeDifferenceHours >= 3) {
+        } else if (timeDifferenceHours >= 3) {
             deductionPercentage = 75;
-        } else if (timeDifferenceHours < 3 && timeDifferenceHours >= 0) {
+        } else if (timeDifferenceHours >= 0) {
             deductionPercentage = 89;
         } else {
             // Default case, just to be safe
@@ -602,10 +611,15 @@ const cancelJobByCustomer = async (req, res) => {
         }
 
         // Apply deduction to the amount
-        const finalAmount = job.customerShowingCost * (1 - deductionPercentage / 100);
+        const finalAmount = job.customerShowingCost * (deductionPercentage / 100);
+
+        console.log('Deduction Percentage:', deductionPercentage);
+        console.log('Final Amount:', finalAmount);
 
 
-        // Getting the Job and update the job status
+        // console.log("final amount", finalAmount)
+
+        // // Getting the Job and update the job status
         const jobUpdated = await Booking.findByIdAndUpdate(
             { _id: jobId },
             { $set: { 'completion_steps.job_status': 'CANCELLED' } },
@@ -619,7 +633,7 @@ const cancelJobByCustomer = async (req, res) => {
             });
         }
 
-        console.log('Updated document:', jobUpdated);
+        // console.log('Updated document:', jobUpdated);
 
         // Refund the Customer Appropriate amount
         await axios.post(
