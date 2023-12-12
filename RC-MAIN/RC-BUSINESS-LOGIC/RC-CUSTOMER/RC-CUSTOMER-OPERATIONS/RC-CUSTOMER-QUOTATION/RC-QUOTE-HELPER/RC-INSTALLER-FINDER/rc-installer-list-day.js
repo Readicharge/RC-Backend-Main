@@ -14,10 +14,11 @@ const getInactiveDatesForInstaller = async (installerId) => {
     try {
       const year = new Date().getFullYear();
       const month = new Date().getMonth();
-      
-      const startDate = new Date(`${year}-${month + 1}-01`);
-      const endDate = new Date(`${year + 1}-${month + 2}-01`);
-      
+
+      const startDate = new Date(`${year}-${month}-01`);
+      const endDate = new Date(`${year+1}-${month+3}-01`);
+
+      console.log(startDate,endDate);
       
       const schedules = await Schedule.find({ installer_id:installerId, active: false  });
       // console.log(schedules.length)
@@ -69,6 +70,7 @@ const getInactiveDatesForInstaller = async (installerId) => {
         // console.log(parked)
         inactiveDates.push(parked.date.toISOString().substring(0, 10));
       });
+
 
 
       return inactiveDates;
