@@ -5,11 +5,10 @@ const Schedule = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-INS
 const Availability = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-AVAILABILITY/rc-installer-daily-model");
 const Time = require('.././../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-TIME/rc-time-model')
 
-// Importing the Booking Model 
-const Booking = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc-booking-model");
 
 // Importing the Axios Model
 const axios = require('axios');
+const Installer_Parked = require('../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-PARKED/rc-installer-parked-model');
 
 
 
@@ -76,7 +75,7 @@ function toRadians(degrees) {
 // Get coordinates for the given address using OpenStreetMap
 const installerSlots_Availability_for_Service_and_Location_and_date = async (req, res) => {
     try {
-        const { addressLine1, addressLine2, zip, state, city, serviceId, date } = req.body;
+        const { addressLine1, addressLine2, zip, state, city, serviceId, date , number_of_installs } = req.body;
 
         const geo = await getCoordinates(addressLine1, addressLine2, zip, city, state);
         const userLatitude = geo.latitude;
@@ -119,10 +118,13 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
         // Check Case 1 : Installer Not Booked on that day 
         const availableInstallers = [];
         for (const installer of nearestInstaller) {
-            const Booked_Installer_On_Given_Date = await Booking.find({
-                installer: installer._id,
-                date: date
-            });
+            const Booked_Installer_On_Given_Date = await Installer_Parked.find({
+                installer_id: installer._id,
+                $or: [
+                  { installer_parked: true },
+                  { installer_booked: true },
+                ],
+              });
 
             console.log(Booked_Installer_On_Given_Date);
 
@@ -158,16 +160,27 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
             if (schedules.length === 0 && availableInstallers_onSpecific_Date.length === 0) {
                 console.log("Inside 1")
                 for (const timeSlot in freeInstallers_timeSlots) {
-                    freeInstallers_timeSlots[timeSlot] = 1; 
+                    freeInstallers_timeSlots[timeSlot] = freeInstallers_timeSlots[timeSlot] + 1; 
                 } // Mark all slots as available (e.g., 1 indicates available)
             } else {
                 console.log("Inside 2")
                 // Logic to handle schedules and availability for this installer
+
+                  // Check with the Slots Time that if the Slots are available or not as per the Time per Slot decied by the admin 
+                  const time_for_this_service = await Time.find({
+                    service_id:serviceId , 
+                    number_of_installs:number_of_installs
+                });
+
+              
+
                 for (const schedule of schedules) {
                     if (schedule.active) {
                         // Extract start and end times from the schedule
                         const scheduleStartTime = schedule.startTime;
                         const scheduleEndTime = schedule.endTime;
+
+                        
 
                         // Find the corresponding time slots for the schedule
                         console.log("Schedule", scheduleStartTime, scheduleEndTime)
@@ -175,9 +188,15 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
                         //    Check if the start time is inside the Installer Availability 
                         if (scheduleStartTime <= 13) {
                             console.log("Inside IF")
+                          
                             // Mark the time slots as Available
+
                             for (let i = scheduleStartTime; i <= 13; i++) {
-                                freeInstallers_timeSlots[i] = 1;
+
+                                if(19 - i >= time_for_this_service[0].time_max)
+                                {
+                                    freeInstallers_timeSlots[i] = freeInstallers_timeSlots[i] + 1;
+                                }
                             }
                         }
                     }
@@ -197,7 +216,10 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
 
                             // Mark the time slots as Available
                             for (let i = availabilityStartTime; i <= 13; i++) {
-                                freeInstallers_timeSlots[i] = 1;
+                                if(19 - i >= time_for_this_service[0].time_max)
+                                {
+                                    freeInstallers_timeSlots[i] = freeInstallers_timeSlots[i] + 1;
+                                }
                             }
                         }
                     }
