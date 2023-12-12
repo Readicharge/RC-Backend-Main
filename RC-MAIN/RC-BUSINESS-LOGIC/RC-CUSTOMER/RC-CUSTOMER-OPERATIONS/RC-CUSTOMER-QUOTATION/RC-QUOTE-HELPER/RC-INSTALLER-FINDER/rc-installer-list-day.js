@@ -1,6 +1,7 @@
 // This section will find the list of days in the calender month on which any installer is available or not
 const Schedule = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-AVAILABILITY/rc-installer-availability-model");
 const Availability = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-AVAILABILITY/rc-installer-daily-model");
+const Installer_Parked = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-PARKED/rc-installer-parked-model");
 
 // Importing the Booking Model 
 const Booking = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc-booking-model");
@@ -12,8 +13,10 @@ const getInactiveDatesForInstaller = async (installerId) => {
   // console.log(installerId,"Installer")
     try {
       const year = new Date().getFullYear();
-      const startDate = new Date(`${year}-01-01`);
-      const endDate = new Date(`${year}-12-31`);
+      const month = new Date().getMonth();
+
+      const startDate = new Date(`${year}-${month}-01`);
+      const endDate = new Date(`${year+1}-${month+3}-01`);
       
       const schedules = await Schedule.find({ installer_id:installerId, active: false  });
       // console.log(schedules.length)
@@ -37,6 +40,8 @@ const getInactiveDatesForInstaller = async (installerId) => {
   const getDailyModifiedDates = async (installerId) => {
     try {
       console.log(installerId,"Installer")
+
+      // Checking for any particular day booking availability present or not
       const availabilities = await Availability.find({
         installer_id: installerId,
         type:"DISABLED"
@@ -48,6 +53,23 @@ const getInactiveDatesForInstaller = async (installerId) => {
         // console.log(dailyDates)
         inactiveDates.push(dailyDates.date.toISOString().substring(0, 10));
       });
+
+      // Checking for any parked Installer on that day frm the list 
+      const parkedInstaller = await Installer_Parked.find({
+        installer_id: installerId,
+        $or: [
+          { installer_parked: true },
+          { installer_booked: true },
+        ],
+      });
+
+
+      parkedInstaller.forEach( parked => {
+        // console.log(parked)
+        inactiveDates.push(parked.date.toISOString().substring(0, 10));
+      });
+
+
       return inactiveDates;
     } catch (error) {
       console.error(error);
