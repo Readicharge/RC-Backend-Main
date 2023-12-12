@@ -349,36 +349,36 @@ const rc_job_updater = async (req, res) => {
 
         // Step 4 : Getting the Existing booking Id and modify the job scope from here 
         const booking_data = {
-            price_installer : laborRates.price,
+            price_installer: laborRates.price,
             material_cost: getMaterialList[0].material_cost,
-            customerShowingCost : quotation,
+            customerShowingCost: quotation,
 
             primaryService: primaryService,
             secondaryServiceList: serviceList,
 
 
             number_of_installs: number_of_installs,
-            material_details : getMaterialList[0],
+            material_details: getMaterialList[0],
 
-            chargers : chargerDetails
+            chargers: chargerDetails
         }
 
         const booking = await Booking.findByIdAndUpdate(bookingId, booking_data, { new: true });
 
         // Cancel the Last transaction: Payment So that we can get the New Transaction  
-           await axios.post(
+        await axios.post(
             `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment3`,
             { booking_id: bookingId }
         );
 
-        
+
         res.status(200).json(
             { odata: booking }
         )
 
 
     }
-    catch(error) {
+    catch (error) {
         res.status(500).json(
             { odata: error.message }
         );
@@ -525,7 +525,7 @@ const cancelJobByInstaller = async (req, res) => {
 
 
 
-const cancelJobModified = async (req,res) => {
+const cancelJobModified = async (req, res) => {
     try {
         // Getting the job Id
         const jobId = req.params.id;
@@ -574,32 +574,35 @@ const cancelJobByCustomer = async (req, res) => {
         const job = await Booking.findById(jobId);
 
 
-        // Calculate the amount to be charged from the Customer , as Penalty
+        // Calculate the amount to be charged from the Customer, as Penalty
         const currentDateTime = moment();
-
-
         const jobDateTime = moment(`${job.date} ${job.time_start}`, 'YYYY-MM-DD HH:mm');
 
         // Calculate the difference in hours
         const timeDifferenceHours = jobDateTime.diff(currentDateTime, 'hours');
 
-        console.log(timeDifferenceHours)
+        console.log(timeDifferenceHours);
         let deductionPercentage;
 
         // Check the time difference and set deduction percentage accordingly
-        if (timeDifferenceHours <= 24 && timeDifferenceHours > 12) {
-            deductionPercentage = 35;
+        if (timeDifferenceHours > 24 || currentDateTime.isAfter(jobDateTime)) {
+            // If the date difference is more than 1 day or the current time is greater than the booked date time, then 100% is deducted
+            deductionPercentage = 100;
+        } else if (timeDifferenceHours <= 24 && timeDifferenceHours > 12) {
+            deductionPercentage = 4;
         } else if (timeDifferenceHours <= 12 && timeDifferenceHours > 6) {
-            deductionPercentage = 57;
-        } else if (timeDifferenceHours <= 6 && timeDifferenceHours >= 0) {
+            deductionPercentage = 40;
+        } else if (timeDifferenceHours <= 6 && timeDifferenceHours >= 3) {
+            deductionPercentage = 75;
+        } else if (timeDifferenceHours < 3 && timeDifferenceHours >= 0) {
             deductionPercentage = 89;
         } else {
-            deductionPercentage = 20;
+            // Default case, just to be safe
+            deductionPercentage = 100;
         }
 
         // Apply deduction to the amount
-        const finalAmount = job.customerShowingCost * (deductionPercentage) / 100;
-
+        const finalAmount = job.customerShowingCost * (1 - deductionPercentage / 100);
 
 
         // Getting the Job and update the job status
