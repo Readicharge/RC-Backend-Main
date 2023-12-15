@@ -11,19 +11,25 @@ const { getInactiveDates } = require("../../../../../RC-INSTALLER/RC-INSTALLER-O
 const getInactiveDatesForInstaller = async (installerId) => {
 
   // console.log(installerId,"Installer")
-    try {
-      const year = new Date().getFullYear();
-      const month = new Date().getMonth();
+  try {
+    const year = new Date().getFullYear();
+    const month = new Date().getMonth();
 
-      const startDate = new Date(`${year}-${month}-01`);
-      const endDate = new Date(`${year+1}-${month}-01`);
+    const startDate = new Date(`${year}-${month}-01`);
+    const endDate = new Date(`${year + 1}-${month}-01`);
 
-      console.log(startDate,endDate);
-      
-      const schedules = await Schedule.find({ installer_id:installerId, active: false  });
-      // console.log(schedules.length)
-      var inactiveDates = [];
-      for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+    console.log(startDate, endDate);
+
+    const schedules = await Schedule.find({ installer_id: installerId, active: false });
+    // console.log(schedules.length)
+    var inactiveDates = [];
+    for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+
+      const unavailableDatesBookedOrParked = await getBookedOrParkedDates(installerId, date);
+      if (unavailableDatesBookedOrParked.length > 0) {
+        inactiveDates.push(date.toISOString().substring(0, 10));
+      }
+      else {
         var day = date.toLocaleString('default', { weekday: 'long' });
         var schedule = schedules.find(s => s.day === day);
         var isDisabled = schedule ? true : false;
@@ -31,83 +37,110 @@ const getInactiveDatesForInstaller = async (installerId) => {
           inactiveDates.push(date.toISOString().substring(0, 10));
         }
       }
-      
-      return inactiveDates;
-    } catch (err) {
-      return []
+
+
     }
-  };
+
+    return inactiveDates;
+  } catch (err) {
+    return []
+  }
+};
 
 
-  const getDailyModifiedDates = async (installerId) => {
-    try {
-      console.log(installerId,"Installer")
+const getDailyModifiedDates = async (installerId) => {
+  try {
+    console.log(installerId, "Installer")
 
-      // Checking for any particular day booking availability present or not
-      const availabilities = await Availability.find({
-        installer_id: installerId,
-        type:"DISABLED"
-      });
-      // console.log(availabilities)
-      
-      var inactiveDates = [];
-      availabilities.forEach( dailyDates => {
-        // console.log(dailyDates)
-        inactiveDates.push(dailyDates.date.toISOString().substring(0, 10));
-      });
+    // Checking for any particular day booking availability present or not
+    const availabilities = await Availability.find({
+      installer_id: installerId,
+      type: "DISABLED"
+    });
+    // console.log(availabilities)
 
-      // Checking for any parked Installer on that day frm the list 
-      const parkedInstaller = await Installer_Parked.find({
-        installer_id: installerId,
-        $or: [
-          { installer_parked: true },
-          { installer_booked: true },
-        ],
-      });
-
-
-      parkedInstaller.forEach( parked => {
-        // console.log(parked)
-        inactiveDates.push(parked.date.toISOString().substring(0, 10));
-      });
-
-
-
-      return inactiveDates;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  };
-
-
-
-  function extractUniqueDatesFromArray(datesArray) {
-    const dateCounts = new Map();
-
-    // Count the occurrence of each date in each subarray
-    datesArray.forEach(dateArray => {
-        const uniqueDatesInArray = new Set();
-        dateArray.forEach(date => {
-            if (date) {
-                uniqueDatesInArray.add(date);
-            }
-        });
-
-        // Increment the count for each unique date
-        uniqueDatesInArray.forEach(date => {
-            if (dateCounts.has(date)) {
-                dateCounts.set(date, dateCounts.get(date) + 1);
-            } else {
-                dateCounts.set(date, 1);
-            }
-        });
+    var inactiveDates = [];
+    availabilities.forEach(dailyDates => {
+      // console.log(dailyDates)
+      inactiveDates.push(dailyDates.date.toISOString().substring(0, 10));
     });
 
-    // Get dates that are present in at least one subarray
-    const uniqueDates = Array.from(dateCounts.keys()).filter(date => dateCounts.get(date) > 0);
+    // Checking for any parked Installer on that day frm the list 
+    const parkedInstaller = await Installer_Parked.find({
+      installer_id: installerId,
+      $or: [
+        { installer_parked: true },
+        { installer_booked: true },
+      ],
+    });
 
-    return uniqueDates;
+
+    parkedInstaller.forEach(parked => {
+      // console.log(parked)
+      inactiveDates.push(parked.date.toISOString().substring(0, 10));
+    });
+
+
+
+    return inactiveDates;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+
+const getBookedOrParkedDates = async (installerId, date) => {
+  try {
+    const Booked_Installer_On_Given_Date = await Installer_Parked.find({
+      installer_id: installerId,
+      date: date,
+      $or: [
+        { installer_parked: true },
+        { installer_booked: true },
+      ],
+    });
+    if (Booked_Installer_On_Given_Date.length > 0) {
+      return true;
+    }
+    else {
+      return false;
+    }
+
+  }
+  catch (error) {
+    return false;
+  }
+}
+
+
+
+function extractUniqueDatesFromArray(datesArray) {
+  const dateCounts = new Map();
+
+  // Count the occurrence of each date in each subarray
+  datesArray.forEach(dateArray => {
+    const uniqueDatesInArray = new Set();
+    dateArray.forEach(date => {
+      if (date) {
+        uniqueDatesInArray.add(date);
+      }
+    });
+
+    // Increment the count for each unique date
+    uniqueDatesInArray.forEach(date => {
+      if (dateCounts.has(date)) {
+        dateCounts.set(date, dateCounts.get(date) + 1);
+      } else {
+        dateCounts.set(date, 1);
+      }
+    });
+  });
+
+  // Get dates that are present in at least one subarray
+  const uniqueDates = Array.from(dateCounts.keys()).filter(date => dateCounts.get(date) > 0);
+
+  return uniqueDates;
 }
 
 
@@ -118,37 +151,38 @@ const getInactiveDatesForInstaller = async (installerId) => {
 
 const days_fully_blocked = async (installers) => {
 
-    // Getting the required Inputs 
-    var dataWeekly = [];
-    var dataDaily = [];
+  // Getting the required Inputs 
+  var dataWeekly = [];
+  var dataDaily = [];
+  var dateBookedOrParked = [];
 
-    // console.log(installers.length);
+  // console.log(installers.length);
 
-    for(const installer of installers)
-    {
-        const installerDetail = installer.installer;
-        const installerId = installerDetail._id;
+  for (const installer of installers) {
+    const installerDetail = installer.installer;
+    const installerId = installerDetail._id;
 
-        const unavailableDatesWeekly = await getInactiveDatesForInstaller(installerId);
-        const unavailableDatesDaily = await getDailyModifiedDates(installerId);
-
-        console.log(unavailableDatesWeekly.length,unavailableDatesDaily.length);
-        dataWeekly.push(unavailableDatesWeekly);
-        dataDaily.push(unavailableDatesDaily);
-    }
-
-    
-    const weekly_non_available_dates =  extractUniqueDatesFromArray(dataWeekly);
-    const daily_non_available_dates =  extractUniqueDatesFromArray(dataDaily);
+    const unavailableDatesWeekly = await getInactiveDatesForInstaller(installerId);
+    const unavailableDatesDaily = await getDailyModifiedDates(installerId);
 
 
-    const data_output = {
-        weekly_non_available_dates: weekly_non_available_dates,
-        daily_non_available_dates: daily_non_available_dates
-    }
+    console.log(unavailableDatesWeekly.length, unavailableDatesDaily.length);
+    dataWeekly.push(unavailableDatesWeekly);
+    dataDaily.push(unavailableDatesDaily);
+  }
 
 
-    return data_output;
+  const weekly_non_available_dates = extractUniqueDatesFromArray(dataWeekly);
+  const daily_non_available_dates = extractUniqueDatesFromArray(dataDaily);
+
+
+  const data_output = {
+    weekly_non_available_dates: weekly_non_available_dates,
+    daily_non_available_dates: daily_non_available_dates
+  }
+
+
+  return data_output;
 
 
 }
@@ -156,5 +190,5 @@ const days_fully_blocked = async (installers) => {
 
 
 module.exports = {
-    days_fully_blocked
+  days_fully_blocked
 }

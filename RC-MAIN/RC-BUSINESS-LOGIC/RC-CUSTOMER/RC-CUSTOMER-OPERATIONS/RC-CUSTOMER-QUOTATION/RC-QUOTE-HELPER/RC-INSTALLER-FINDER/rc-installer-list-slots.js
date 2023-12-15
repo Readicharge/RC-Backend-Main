@@ -104,7 +104,7 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
             console.log(installer.longitude);
             if (distance <= installer.miles_distance) {
                 nearestInstaller.push({
-                    installer: installer,
+                    installer: installer, 
                     distance: distance
                 });
 
@@ -172,7 +172,6 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
                     number_of_installs:number_of_installs
                 });
 
-              
 
                 for (const schedule of schedules) {
                     if (schedule.active) {
