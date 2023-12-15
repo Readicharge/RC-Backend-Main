@@ -26,7 +26,7 @@ const getInactiveDatesForInstaller = async (installerId) => {
     for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
 
       const unavailableDatesBookedOrParked = await getBookedOrParkedDates(installerId, date);
-      if (unavailableDatesBookedOrParked.length > 0) {
+      if (unavailableDatesBookedOrParked) {
         inactiveDates.push(date.toISOString().substring(0, 10));
       }
       else {
