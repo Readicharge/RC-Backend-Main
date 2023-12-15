@@ -182,6 +182,7 @@ const days_fully_blocked = async (installers) => {
     daily_non_available_dates: daily_non_available_dates
   }
 
+  console.log(data_output);
 
   return data_output;
 
