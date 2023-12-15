@@ -38,7 +38,7 @@ const getInactiveDatesForInstaller = async (installerId) => {
         }
       }
 
-
+      console.log(inactiveDates)
     }
 
     return inactiveDates;
