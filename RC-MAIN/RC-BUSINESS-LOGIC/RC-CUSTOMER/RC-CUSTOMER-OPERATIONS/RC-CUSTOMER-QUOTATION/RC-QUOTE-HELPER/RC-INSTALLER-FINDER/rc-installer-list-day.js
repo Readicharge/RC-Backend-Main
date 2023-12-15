@@ -38,7 +38,7 @@ const getInactiveDatesForInstaller = async (installerId) => {
         }
       }
 
-      console.log(inactiveDates)
+      // console.log(inactiveDates)
     }
 
     return inactiveDates;
@@ -100,7 +100,8 @@ const getBookedOrParkedDates = async (installerId, date) => {
         { installer_booked: true },
       ],
     });
-    if (Booked_Installer_On_Given_Date.length > 0) {
+    console.log(Booked_Installer_On_Given_Date.length, "Booked_Installer_On_Given_Date");
+ if (Booked_Installer_On_Given_Date.length > 0) {
       return true;
     }
     else {
