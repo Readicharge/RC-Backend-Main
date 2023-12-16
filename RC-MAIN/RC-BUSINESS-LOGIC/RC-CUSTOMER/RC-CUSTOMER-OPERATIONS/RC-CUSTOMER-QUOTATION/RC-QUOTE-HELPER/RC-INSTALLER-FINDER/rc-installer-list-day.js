@@ -25,18 +25,15 @@ const getInactiveDatesForInstaller = async (installerId) => {
     var inactiveDates = [];
     for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
 
-      const unavailableDatesBookedOrParked = await getBookedOrParkedDates(installerId, date);
-      if (unavailableDatesBookedOrParked) {
-        inactiveDates.push(date.toISOString().substring(0, 10));
-      }
-      else {
+
+        console.log("inside false")
         var day = date.toLocaleString('default', { weekday: 'long' });
         var schedule = schedules.find(s => s.day === day);
         var isDisabled = schedule ? true : false;
         if (isDisabled) {
           inactiveDates.push(date.toISOString().substring(0, 10));
         }
-      }
+      
 
       // console.log(inactiveDates)
     }
@@ -90,29 +87,7 @@ const getDailyModifiedDates = async (installerId) => {
 };
 
 
-const getBookedOrParkedDates = async (installerId, date) => {
-  try {
-    const Booked_Installer_On_Given_Date = await Installer_Parked.find({
-      installer_id: installerId,
-      date: date,
-      $or: [
-        { installer_parked: true },
-        { installer_booked: true },
-      ],
-    });
-    console.log(Booked_Installer_On_Given_Date.length, "Booked_Installer_On_Given_Date");
- if (Booked_Installer_On_Given_Date.length > 0) {
-      return true;
-    }
-    else {
-      return false;
-    }
 
-  }
-  catch (error) {
-    return false;
-  }
-}
 
 
 
@@ -167,6 +142,7 @@ const days_fully_blocked = async (installers) => {
     const unavailableDatesDaily = await getDailyModifiedDates(installerId);
 
 
+
     console.log(unavailableDatesWeekly.length, unavailableDatesDaily.length);
     dataWeekly.push(unavailableDatesWeekly);
     dataDaily.push(unavailableDatesDaily);
@@ -182,7 +158,7 @@ const days_fully_blocked = async (installers) => {
     daily_non_available_dates: daily_non_available_dates
   }
 
-  console.log(data_output);
+  // console.log(data_output);
 
   return data_output;
 
