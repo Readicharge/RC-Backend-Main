@@ -33,8 +33,6 @@ const getInactiveDatesForInstaller = async (installerId) => {
         if (isDisabled) {
           inactiveDates.push(date.toISOString().substring(0, 10));
         }
-      
-
       // console.log(inactiveDates)
     }
 
@@ -130,7 +128,6 @@ const days_fully_blocked = async (installers) => {
   // Getting the required Inputs 
   var dataWeekly = [];
   var dataDaily = [];
-  var dateBookedOrParked = [];
 
   // console.log(installers.length);
 

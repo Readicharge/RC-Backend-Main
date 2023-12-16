@@ -172,6 +172,8 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
                     number_of_installs:number_of_installs
                 });
 
+                console.log("time for this service",time_for_this_service)
+
 
                 for (const schedule of schedules) {
                     if (schedule.active) {
