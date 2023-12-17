@@ -8,6 +8,7 @@ const validateCustomer= async (data) => {
       const customer = await Customer.findOne({ email, password });
       if (customer) {
         // res.json({ valid: true , roles:admin.roles });
+        await Customer.findByIdAndUpdate(customer._id,{isLogged_in:true},{new:true});
         return {
           status:200,
           data:{valid:true,customer:customer}

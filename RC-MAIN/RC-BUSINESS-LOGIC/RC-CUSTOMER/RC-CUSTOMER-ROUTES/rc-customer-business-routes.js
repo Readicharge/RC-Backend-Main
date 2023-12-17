@@ -16,13 +16,17 @@ const { zipCode_based_search } = require('../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-
 const { register_customer } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_regiter");
 const { update_address } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_address");
 const {signIn} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-AUTH/rc-customer-sign-in");
+const {logoffCustomer} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-AUTH/rc-customer-sign-out");
 // *************************************************************************************************************************************//
 router.post('/zipcode', zipCode_based_search);
 router.post("/register", register_customer);
 router.put("/address/:id", update_address);
 
 // *************************************************************************************************************************************//
+// ******************************************************Authentiacation Module*********************************************************//
 router.post('/sign-in',signIn);
+router.put("/sign-out/:id",logoffCustomer);
+
 
 
 // *************************************************************************************************************************************//
