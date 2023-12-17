@@ -4,11 +4,10 @@ const Availability = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC
 const Installer_Parked = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-PARKED/rc-installer-parked-model");
 
 // Importing the Booking Model 
-const Booking = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc-booking-model");
-const { getInactiveDates } = require("../../../../../RC-INSTALLER/RC-INSTALLER-OPERATIONS/RC-INSTALLER-SCHEDULE-MAIN/rc-installer-weekly-schedule");
+const Time = require("../../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-TIME/rc-time-model");
 
 // Declaring the Helper functions
-const getInactiveDatesForInstaller = async (installerId) => {
+const getInactiveDatesForInstaller = async (installerId,serviceId,number_of_installs) => {
 
   // console.log(installerId,"Installer")
   try {
@@ -19,6 +18,13 @@ const getInactiveDatesForInstaller = async (installerId) => {
     const endDate = new Date(`${year + 1}-${month}-01`);
 
     console.log(startDate, endDate);
+
+    const time_for_this_service = await Time.find({
+      service_id:serviceId , 
+      number_of_installs:number_of_installs
+  });
+
+
 
     const schedules = await Schedule.find({ installer_id: installerId, active: false });
     // console.log(schedules.length)
@@ -31,7 +37,30 @@ const getInactiveDatesForInstaller = async (installerId) => {
         var schedule = schedules.find(s => s.day === day);
         var isDisabled = schedule ? true : false;
         if (isDisabled) {
-          inactiveDates.push(date.toISOString().substring(0, 10));
+        
+
+          const scheduleStartTime = schedule.startTime;
+          const scheduleEndTime = schedule.endTime;
+
+          
+
+          // Find the corresponding time slots for the schedule
+          console.log("Schedule", scheduleStartTime, scheduleEndTime)
+
+          //    Check if the start time is inside the Installer Availability 
+          if (scheduleStartTime <= 13) {
+              console.log("Inside IF")
+            
+              // Mark the time slots as Available
+
+              for (let i = scheduleStartTime; i <= 13; i++) {
+
+                  if(19 - i >= time_for_this_service[0].time_max)
+                  {
+                    inactiveDates.push(date.toISOString().substring(0, 10));
+                  }
+              }
+          }
         }
       // console.log(inactiveDates)
     }
@@ -123,7 +152,7 @@ function extractUniqueDatesFromArray(datesArray) {
 // *************************************************************************************************
 
 
-const days_fully_blocked = async (installers) => {
+const days_fully_blocked = async (installers,serviceId,number_of_installs) => {
 
   // Getting the required Inputs 
   var dataWeekly = [];
@@ -135,7 +164,7 @@ const days_fully_blocked = async (installers) => {
     const installerDetail = installer.installer;
     const installerId = installerDetail._id;
 
-    const unavailableDatesWeekly = await getInactiveDatesForInstaller(installerId);
+    const unavailableDatesWeekly = await getInactiveDatesForInstaller(installerId,serviceId,number_of_installs);
     const unavailableDatesDaily = await getDailyModifiedDates(installerId);
 
 

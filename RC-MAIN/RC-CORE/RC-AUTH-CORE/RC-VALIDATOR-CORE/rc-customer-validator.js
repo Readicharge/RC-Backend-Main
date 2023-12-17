@@ -10,7 +10,7 @@ const validateCustomer= async (data) => {
         // res.json({ valid: true , roles:admin.roles });
         return {
           status:200,
-          data:{valid:true}
+          data:{valid:true,customer:customer}
         }
       } else {
         // res.json({ valid: false });
