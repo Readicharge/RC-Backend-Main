@@ -19,7 +19,7 @@ const getInactiveDatesForInstaller = async (installerId,serviceId,number_of_inst
 
     console.log(startDate, endDate);
 
-    const time_for_this_service = await Time.find({
+    const timeSlot = await Time.findOne({
       service_id:serviceId , 
       number_of_installs:number_of_installs
   });
@@ -42,27 +42,22 @@ const getInactiveDatesForInstaller = async (installerId,serviceId,number_of_inst
           const scheduleStartTime = schedule.startTime;
           const scheduleEndTime = schedule.endTime;
 
-          
-
-          // Find the corresponding time slots for the schedule
-          console.log("Schedule", scheduleStartTime, scheduleEndTime)
-
-          //    Check if the start time is inside the Installer Availability 
-          if (scheduleStartTime <= 13) {
-              console.log("Inside IF")
-            
-              // Mark the time slots as Available
-
-              for (let i = scheduleStartTime; i <= 13; i++) {
-
-                  if(19 - i >= time_for_this_service[0].time_max)
-                  {
-                    inactiveDates.push(date.toISOString().substring(0, 10));
-                  }
+          if(!schedule.active)
+          {
+            inactiveDates.push(date.toISOString().substring(0, 10));
+          }
+          else
+          {
+           
+              const timeMax = timeSlot.time_max;
+              if((scheduleEndTime-scheduleStartTime) < timeMax)
+              {
+                inactiveDates.push(date.toISOString().substring(0, 10));
               }
+            
           }
         }
-      // console.log(inactiveDates)
+      console.log(inactiveDates)
     }
 
     return inactiveDates;
