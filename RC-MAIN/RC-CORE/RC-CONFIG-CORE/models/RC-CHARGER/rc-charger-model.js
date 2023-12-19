@@ -17,7 +17,27 @@ const mongoose = require('mongoose');
     type:Number,
     required:true
   },
-  charger_reference_id:{
+  charger_reference_id:[{
+    type:String,
+    required:true
+  }],
+  addressLine1:{
+    type:String,
+    required:true
+  },
+  addressLine2:{
+    type:String,
+    required:true
+  },
+  city:{
+    type:String,
+    required:true
+  },
+  state:{
+    type:String,
+    required:true
+  },
+  zip:{
     type:String,
     required:true
   }
