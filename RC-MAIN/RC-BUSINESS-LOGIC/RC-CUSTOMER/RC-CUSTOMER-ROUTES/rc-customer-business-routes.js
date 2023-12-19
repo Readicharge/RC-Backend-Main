@@ -63,6 +63,13 @@ router.post("/get-installer-slots-availability",installerSlots_Availability_for_
 
 
 
+const {chargerBuy} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-CHARGER-ECOM/rc-charger-purchase");
+router.post("/charger-buy",chargerBuy);
+
+
+
+
+
 
 
 
