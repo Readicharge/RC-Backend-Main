@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const paymentSchema = new mongoose.Schema({
   payment_type: {
     type: String,
-    enum: ['booking', 'subscription_referral','subscription_priority', 'purchase'],
+    enum: ['booking', 'Referral_Monthly','Referral_Annual','Priority_Monthly','Priority_Annual', 'purchase'],
     required: true,
   },
   seen:{
