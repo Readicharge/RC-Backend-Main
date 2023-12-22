@@ -657,41 +657,86 @@ const cancelJobByCustomer = async (req, res) => {
 
 
 const customer_marked_pending_complete = async (req, res) => {
-    // Step1 : Getting the Job Id 
-    const jobId = req.params.id;
+ try{
+   // Step1 : Getting the Job Id 
+   const jobId = req.params.id;
 
-    // Step2 : Marking the Job as Completed State
-    await Booking.findByIdAndUpdate('completion_steps.job_status', 'PENDING', { new: true });
+   // Step2 : Marking the Job as Completed State
+   await Booking.findByIdAndUpdate(
+       { _id: jobId },
+       { $set: { 'completion_steps.job_status': 'PENDING' } },
+       { new: true } // To return the updated document
+   );
 
-    // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
-    await axios.post(
-        `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
-        { bookingId: jobId }
-    );
+   // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
+   await axios.post(
+       `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
+       { bookingId: jobId }
+   );
 
-    // Step4 : Releasing the Payment To the Installer Account for the Material 
+   // Step4 : Releasing the Payment To the Installer Account for the Material 
 
 
-    // Step5 :  Releasing the Installer for that Day , though it is not required  
+   // Step5 :  Releasing the Installer for that Day , though it is not required  
+   res.status(200).json("Successfully Marked as Complete");
+}
+catch (error) {
+    res.status(500).json(error)
+}
 
 }
 
 const customer_marked_complete_complete = async (req, res) => {
-    // Step1 : Getting the Job Id
-    const jobId = req.params.id;
+    try {
+        // Step1 : Getting the Job Id
+        const jobId = req.params.id;
 
-    // Step2 : Marking the Job as Completed State
-    await Booking.findByIdAndUpdate('completion_steps.job_status', 'COMPLETE', { new: true });
+        // Step2 : Marking the Job as Completed State
+        await Booking.findByIdAndUpdate(
+            { _id: jobId },
+            { $set: { 'completion_steps.job_status': 'COMPLETE' } },
+            { new: true } // To return the updated document
+        );
 
-    // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
-    await axios.post(
-        `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
-        { bookingId: jobId }
-    );
+        // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
+        await axios.post(
+            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
+            { bookingId: jobId }
+        );
 
-    // Step4 : Releasing the Payment To the Installer Account for the Mentire job
+        // Step4 : Releasing the Payment To the Installer Account for the entire job
 
-    // Step5 :  Releasing the Installer for that Day , though it is not required 
+        // Step5 :  Releasing the Installer for that Day , though it is not required 
+
+        // Returning the Response 
+        res.status(200).json("Successfully Marked as Complete");
+    }
+    catch (error) {
+        res.status(500).json(error)
+    }
+
+}
+
+
+
+
+// Installer Perspective *******************************************************************************
+
+const installer_marked_pending_complete = async (req, res) => {
+    try {
+        // Step 1: Getting the Booking Id
+        const jobId = req.params.id;
+
+        // Step2: Marking the Job Stage 2 complete By the Installer
+        await Booking.findByIdAndUpdate(
+            { _id: jobId },
+            { $set: { 'completion_steps.stage_2': 'COMPLETE' } },
+            { new: true } // To return the updated document
+        );
+    }
+    catch (error) {
+        res.status(500).json(error)
+    }
 
 }
 
@@ -707,7 +752,8 @@ module.exports = {
     customer_marked_pending_complete,
     customer_marked_complete_complete,
     rc_job_updater,
-    cancelJobModified
+    cancelJobModified,
+    installer_marked_pending_complete
 }
 
 
@@ -723,20 +769,32 @@ module.exports = {
 // FUNCTION TO GET THE COORDINATES BASED ON THE ADDRESS FROM THE THIRD PARTY API 
 async function getCoordinates(addressLine1, addressLine2, zip, city, state) {
     try {
+        const apiKey = 'AIzaSyAlr7wiWbiPhgKpWAN7lNSAxgwhujouyc4'; // Replace with your actual API key
+
         const encodedAddressLine1 = encodeURIComponent(addressLine1);
         const encodedAddressLine2 = encodeURIComponent(addressLine2);
         const encodedCity = encodeURIComponent(city);
         const encodedState = encodeURIComponent(state);
         const encodedZip = encodeURIComponent(zip);
-        const response = await axios.get(`https://nominatim.openstreetmap.org/search?street=${encodedAddressLine1}&city=${encodedCity}&state=${encodedState}&postalcode=${encodedZip}&format=json`);
+
+        const response = await axios.get(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddressLine1},${encodedAddressLine2},${encodedCity},${encodedState},${encodedZip}&key=${apiKey}`
+        );
+
         const { data } = response;
-        console.log(response)
-        return {
-            latitude: data[0]?.lat,
-            longitude: data[0]?.lon
+
+        if (data.status === 'OK') {
+            const location = data.results[0].geometry.location;
+            return {
+                latitude: location.lat,
+                longitude: location.lng
+            };
+        } else {
+            console.error('Error in geocoding:', data.status);
+            throw new Error('Error getting coordinates');
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw new Error('Error getting coordinates');
     }
 }

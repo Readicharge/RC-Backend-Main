@@ -15,7 +15,8 @@ const {
     customer_marked_pending_complete,
     customer_marked_complete_complete,
     rc_job_updater,
-    cancelJobModified
+    cancelJobModified,
+    installer_marked_pending_complete
 } = require("./rc-job-core");
 
 
@@ -28,7 +29,8 @@ router.put('/c-i-j/:id', cancelJobByInstaller)  // c-i-j ~ Cancel Job by Install
 router.put('/c-c-j/:id', cancelJobByCustomer);       // c-c-j ~ Cancel Job by Customer
 router.put('/c-j-p-c/:id', customer_marked_pending_complete)
 router.put('/c-j-c-c/:id', customer_marked_complete_complete);
-router.put('/update-existing/:id',rc_job_updater)
+router.put('/update-existing/:id',rc_job_updater);
+router.put('/m-p-j/:id', installer_marked_pending_complete);
 
 
 

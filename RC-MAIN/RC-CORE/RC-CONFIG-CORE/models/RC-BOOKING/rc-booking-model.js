@@ -156,6 +156,8 @@ const bookingSchema = new mongoose.Schema({
     }
   ],
 
+
+  // This is for the I have Arrived
   completion_steps:{
     stage_0:{
       status_installer:{
@@ -171,6 +173,8 @@ const bookingSchema = new mongoose.Schema({
         default:0
       }
     },
+
+// This is for the I have Started the Job 
     stage_1:{
       status_installer:{
         type:String,
@@ -185,6 +189,7 @@ const bookingSchema = new mongoose.Schema({
         default:0
       }
     },
+  // This is for the Mark As Pending Complete 
     stage_2:{
       status_installer:{
         type:String,
@@ -199,6 +204,7 @@ const bookingSchema = new mongoose.Schema({
         default:0
       }
     },
+// This are for the two cases , where Job gets either Prooted from  Pending Complete to Complete Complte , or the Job is directly Completed 
     overall_completion:{
       status_installer:{
         type:String,
@@ -215,7 +221,7 @@ const bookingSchema = new mongoose.Schema({
     },
     job_status:{
       type:String,
-      enums : ["LIVE","PENDING","PENDING","CANCELLED"],
+      enums : ["LIVE","PENDING","COMPLETE","CANCELLED"],
       default:"LIVE"
     }
   }
