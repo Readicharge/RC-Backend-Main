@@ -88,7 +88,7 @@ function getDaysInMonth(month, year) {
 const get_those_days_which_are_not_fully_available = async (req, res) => {
     try {
         // Get input data from the request body
-        const { addressLine1, serviceId, addressLine2, city, state, zip,number_of_installers, ...rest } = req.body;
+        const { addressLine1, serviceId, addressLine2, city, state, zip,number_of_installs, ...rest } = req.body;
 
 
 
@@ -126,7 +126,7 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
 
 
 
-        const response = await days_fully_blocked(nearestInstaller,serviceId,number_of_installers);
+        const response = await days_fully_blocked(nearestInstaller,serviceId,number_of_installs);
 
         // ############################################################################################################
         // Old Logic : Kept for Reference 
