@@ -26,22 +26,35 @@ const Installer_Parked = require('../../../../../../RC-CORE/RC-CONFIG-CORE/model
 
 
 // FUNCTION TO GET THE COORDINATES BASED ON THE ADDRESS FROM THE THIRD PARTY API 
+// FUNCTION TO GET THE COORDINATES BASED ON THE ADDRESS FROM THE THIRD PARTY API 
 async function getCoordinates(addressLine1, addressLine2, zip, city, state) {
     try {
+        const apiKey = 'AIzaSyAlr7wiWbiPhgKpWAN7lNSAxgwhujouyc4'; // Replace with your actual API key
+
         const encodedAddressLine1 = encodeURIComponent(addressLine1);
         const encodedAddressLine2 = encodeURIComponent(addressLine2);
         const encodedCity = encodeURIComponent(city);
         const encodedState = encodeURIComponent(state);
         const encodedZip = encodeURIComponent(zip);
-        const response = await axios.get(`https://nominatim.openstreetmap.org/search?street=${encodedAddressLine1}&city=${encodedCity}&state=${encodedState}&postalcode=${encodedZip}&format=json`);
+
+        const response = await axios.get(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddressLine1},${encodedAddressLine2},${encodedCity},${encodedState},${encodedZip}&key=${apiKey}`
+        );
+
         const { data } = response;
-        console.log(response)
-        return {
-            latitude: data[0]?.lat,
-            longitude: data[0]?.lon
+
+        if (data.status === 'OK') {
+            const location = data.results[0].geometry.location;
+            return {
+                latitude: location.lat,
+                longitude: location.lng
+            };
+        } else {
+            console.error('Error in geocoding:', data.status);
+            throw new Error('Error getting coordinates');
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw new Error('Error getting coordinates');
     }
 }
