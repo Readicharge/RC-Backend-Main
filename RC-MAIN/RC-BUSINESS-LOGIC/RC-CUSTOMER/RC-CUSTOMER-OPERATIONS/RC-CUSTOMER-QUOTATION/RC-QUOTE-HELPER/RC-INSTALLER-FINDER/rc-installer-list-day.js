@@ -72,21 +72,38 @@ const getInactiveDatesForInstaller = async (installerId, serviceId, number_of_in
 };
 
 
-const getDailyModifiedDates = async (installerId) => {
+const getDailyModifiedDates = async (installerId, serviceId, number_of_installs) => {
   try {
     console.log(installerId, "Installer")
 
     // Checking for any particular day booking availability present or not
     const availabilities = await Availability.find({
-      installer_id: installerId,
-      type: "DISABLED"
+      installer_id: installerId
     });
+
+    const timeSlot = await Time.findOne({
+      service_id: serviceId,
+      number_of_installs: number_of_installs
+    });
+
+
     // console.log(availabilities)
 
     var inactiveDates = [];
     availabilities.forEach(dailyDates => {
       // console.log(dailyDates)
-      inactiveDates.push(dailyDates.date.toISOString().substring(0, 10));
+      if(dailyDates.type=== "DISABLED")
+      {
+        inactiveDates.push(dailyDates.date.toISOString().substring(0, 10));
+      }
+      else {
+        const timeMax = timeSlot.time_max;
+        if(dailyDates.time_end - dailyDates.time_start < timeMax)
+        {
+          inactiveDates.push(dailyDates.date.toISOString().substring(0, 10));
+        }
+      }
+     
     });
 
     // Checking for any parked Installer on that day frm the list 
@@ -165,7 +182,7 @@ const days_fully_blocked = async (installers, serviceId, number_of_installs) => 
     const installerId = installerDetail._id;
 
     const unavailableDatesWeekly = await getInactiveDatesForInstaller(installerId, serviceId, number_of_installs);
-    const unavailableDatesDaily = await getDailyModifiedDates(installerId);
+    const unavailableDatesDaily = await getDailyModifiedDates(installerId,serviceId, number_of_installs);
 
 
 
