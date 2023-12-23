@@ -60,9 +60,9 @@ const getInactiveDatesForInstaller = async (installerId, serviceId, number_of_in
         inactiveDates.push(date.toISOString().substring(0, 10));
       }
 
-      // console.log(inactiveDates)
+    
     }
-
+    console.log(inactiveDates)
     return inactiveDates;
   } catch (err) {
     return []
@@ -155,10 +155,10 @@ function extractUniqueDatesFromArray(datesArray) {
     });
   });
 
-  // Get dates that are present in at least one subarray
-  const uniqueDates = Array.from(dateCounts.keys()).filter(date => dateCounts.get(date) > 0);
+  // Get dates that are present in all subarrays
+  const commonDates = Array.from(dateCounts.keys()).filter(date => dateCounts.get(date) === datesArray.length);
 
-  return uniqueDates;
+  return commonDates;
 }
 
 
