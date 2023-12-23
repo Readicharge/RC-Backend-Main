@@ -17,10 +17,13 @@ const { register_customer } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/
 const { update_address } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_address");
 const {signIn} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-AUTH/rc-customer-sign-in");
 const {logoffCustomer} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-AUTH/rc-customer-sign-out");
+const {getAddressByLatLong} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-CHARGER-ECOM/rc-charger-shipping-address")
 // *************************************************************************************************************************************//
 router.post('/zipcode', zipCode_based_search);
 router.post("/register", register_customer);
 router.put("/address/:id", update_address);
+router.post("/getAddress",getAddressByLatLong);
+
 
 // *************************************************************************************************************************************//
 // ******************************************************Authentiacation Module*********************************************************//
