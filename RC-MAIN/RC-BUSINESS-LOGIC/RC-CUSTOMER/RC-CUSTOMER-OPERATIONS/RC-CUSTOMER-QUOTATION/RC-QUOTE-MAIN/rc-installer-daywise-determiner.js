@@ -105,12 +105,16 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
             services: { $all: serviceId } // Using $in to find installers with all services in the array
         }).exec();
 
+        console.log(state,serviceId)
+        console.log(installers)
+
         const nearestInstaller = [];
 
         // Finding those installers which are avaiable under the area of the customer address
         installers.forEach((installer) => {
             const distance = getDistance(userLatitude, userLongitude, installer.latitude, installer.longitude);
 
+            
             if (distance <= installer.miles_distance) {
                 nearestInstaller.push({
                     installer: installer,
@@ -169,7 +173,7 @@ const get_those_days_which_are_not_fully_available = async (req, res) => {
         // }
 
         
-        console.log(response)
+        // console.log(response)
         res.status(200).json({weekly_non_available_dates:response.weekly_non_available_dates,daily_non_available_dates:response.daily_non_available_dates,numberOfInstallers:nearestInstaller.length})
 
     }

@@ -14,8 +14,9 @@ const getInactiveDatesForInstaller = async (installerId, serviceId, number_of_in
     const year = new Date().getFullYear();
     const month = new Date().getMonth();
 
-    const startDate = new Date(`${year}-${month}-01`);
-    const endDate = new Date(`${year + 1}-${month}-01`);
+    const startDate = new Date(`${year}-${month+1}-01`);
+    
+    const endDate = new Date(`${year+1}-${month+4>12?(month+4)-12:month+4}-01`);
 
     console.log(startDate, endDate);
 
@@ -24,17 +25,16 @@ const getInactiveDatesForInstaller = async (installerId, serviceId, number_of_in
       number_of_installs: number_of_installs
     });
 
-    console.log(timeSlot,number_of_installs,)
+    // console.log(timeSlot,number_of_installs,)
 
-
+    const d = startDate
 
     const schedules = await Schedule.find({ installer_id: installerId });
+
     // console.log(schedules.length)
     var inactiveDates = [];
     for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
 
-
-      console.log(date)
       var day = date.toLocaleString('default', { weekday: 'long' });
       var schedule = schedules.find(s => s.day === day);
 
@@ -43,12 +43,12 @@ const getInactiveDatesForInstaller = async (installerId, serviceId, number_of_in
       const scheduleStartTime = schedule.startTime;
       const scheduleEndTime = schedule.endTime;
 
-      console.log(typeof(schedule.active))
+      // console.log(typeof(schedule.active))
 
       if (schedule.active) {
-        console.log(timeSlot)
+        // console.log(timeSlot)
         const timeMax = timeSlot.time_max;
-        console.log("hello", timeMax, scheduleStartTime)
+        // console.log("hello", timeMax, scheduleStartTime)
 
         if ((scheduleEndTime - scheduleStartTime) < timeMax) {
           inactiveDates.push(date.toISOString().substring(0, 10));
@@ -58,8 +58,6 @@ const getInactiveDatesForInstaller = async (installerId, serviceId, number_of_in
       else {
 
         inactiveDates.push(date.toISOString().substring(0, 10));
-       
-
       }
 
       // console.log(inactiveDates)
@@ -92,7 +90,7 @@ const getDailyModifiedDates = async (installerId, serviceId, number_of_installs)
     var inactiveDates = [];
     availabilities.forEach(dailyDates => {
       // console.log(dailyDates)
-      if(dailyDates.type=== "DISABLED")
+      if(dailyDates.type === "DISABLED")
       {
         inactiveDates.push(dailyDates.date.toISOString().substring(0, 10));
       }
@@ -201,7 +199,7 @@ const days_fully_blocked = async (installers, serviceId, number_of_installs) => 
     daily_non_available_dates: daily_non_available_dates
   }
 
-  // console.log(data_output);
+  console.log(data_output);
 
   return data_output;
 
