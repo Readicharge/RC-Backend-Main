@@ -1,7 +1,7 @@
 
 
 
-const getAddressByLatLong = async () => {
+const getAddressByLatLong = async (req,res) => {
     try {
         const { latitude, longitude } = req.body;
         const response = await fetch(
