@@ -9,7 +9,7 @@ const getAddressByLatLong = async (req,res) => {
         );
     
         const data = await response.json();
-        const address = data.results[0].formatted_address;
+        const address = data.results[0];
         res.json({ address });
       } catch (error) {
         console.error('Error fetching address:', error);
