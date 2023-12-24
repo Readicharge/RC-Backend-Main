@@ -26,7 +26,11 @@ const rc_job_creater = async (req, res) => {
             date, // This is reterived from the calender section 
             chargerDetails, // This we will get from the charger details stored earlier
             number_of_installs,
-            customer_id
+            customer_id,
+            houseBuilt,
+            isOwner,
+            upgradeToNema,
+            vehicle_details
         } = req.body;
 
         // #############################################################################################3
@@ -248,6 +252,14 @@ const rc_job_creater = async (req, res) => {
 
                 // Assigning the Chargers Details 
                 chargers: chargerDetails,
+
+                // Assigning the General Details 
+                houseBuiltYear : houseBuilt,
+                upgradeToNema :upgradeToNema,
+                isOwner : isOwner,
+
+                // Assigning the Veichle Details 
+                vehicle_details : vehicle_details,
 
                 // Decleration of steps handler for the job 
                 completion_steps: {

@@ -104,6 +104,28 @@ const bookingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Payment'
   },
+  houseBuiltYear:{
+    type:String
+  },
+  upgradeToNema:{
+    type:Boolean
+  },
+  isOwner:{
+    type:Boolean
+  },
+  veichle_details:[
+    {
+      make:{
+        type:String
+      },
+      model:{
+        type:String
+      },
+      yearOfManufacturing:{
+        type:String
+      }
+    }
+  ],
   chargers: [
     {
       cd2_1: {
