@@ -16,7 +16,8 @@ const {
     customer_marked_complete_complete,
     rc_job_updater,
     cancelJobModified,
-    installer_marked_pending_complete
+    installer_marked_pending_complete,
+    get_installer_specific_jobs
 } = require("./rc-job-core");
 
 
@@ -32,6 +33,8 @@ router.put('/c-j-c-c/:id', customer_marked_complete_complete);
 router.put('/update-existing/:id',rc_job_updater);
 router.put('/m-p-j/:id', installer_marked_pending_complete);
 
+// Installer Spcific routes 
+router.post('/get-jobs-installer',get_installer_specific_jobs);
 
 
 

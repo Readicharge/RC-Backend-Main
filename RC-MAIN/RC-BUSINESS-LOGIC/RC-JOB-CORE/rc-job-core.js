@@ -753,6 +753,32 @@ const installer_marked_pending_complete = async (req, res) => {
 }
 
 
+const get_installer_specific_jobs = async(req,res) => {
+    try {
+        const { installerId } = req.body;
+
+        const booking = await Booking.find({ installer: installerId });
+        if (booking === null || booking === undefined || booking.length === 0) {
+            res.status(404).json(
+                { odata: "No Booking Found" }
+            )
+        }
+        else {
+            res.status(200).json(
+                { odata: booking }
+            )
+        }
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({
+            odata: "Unable to Proceed further , Please Try Again"
+        });
+
+    }
+}
+
+
 
 module.exports = {
     rc_job_creater,
@@ -765,7 +791,8 @@ module.exports = {
     customer_marked_complete_complete,
     rc_job_updater,
     cancelJobModified,
-    installer_marked_pending_complete
+    installer_marked_pending_complete,
+    get_installer_specific_jobs
 }
 
 
