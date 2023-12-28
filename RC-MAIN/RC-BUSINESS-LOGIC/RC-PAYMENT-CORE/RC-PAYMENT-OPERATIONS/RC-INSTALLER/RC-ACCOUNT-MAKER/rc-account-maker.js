@@ -1,5 +1,5 @@
 require('dotenv').config();
-const Installer = require('../../models/installer.model');
+const Installer = require('../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/rc-installer-model');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const addBankAccount = async (req, res) => {
