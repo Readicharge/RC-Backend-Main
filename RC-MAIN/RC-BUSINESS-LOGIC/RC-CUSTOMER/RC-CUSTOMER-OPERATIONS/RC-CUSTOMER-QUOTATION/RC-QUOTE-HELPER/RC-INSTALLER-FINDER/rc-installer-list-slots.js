@@ -207,7 +207,7 @@ const installerSlots_Availability_for_Service_and_Location_and_date = async (req
 
                             for (let i = scheduleStartTime; i <= 13; i++) {
 
-                                if(19 - i >= time_for_this_service[0].time_max)
+                                if((19 - i >= time_for_this_service[0].time_max) &&( 19-i >= scheduleEndTime))
                                 {
                                     freeInstallers_timeSlots[i] = freeInstallers_timeSlots[i] + 1;
                                 }
