@@ -15,8 +15,8 @@ router.put("/getPriceBYState",getPriceByState);
 const {Register_the_Installer} = require("../RC-INSTALLER-OPERATIONS/RC-INSTALLER-REGISTER-MAIN/rc-installer-register-main");
 router.post("/register",Register_the_Installer);
 
-const {validateInstaller} = require("../../../RC-CORE/RC-AUTH-CORE/RC-VALIDATOR-CORE/rc-installer-validator");
-router.post("/validate",validateInstaller);
+const {signIn} = require("../RC-INSTALLER-OPERATIONS/RC-INSTALLER-AUTH/rc-installer-sign-in");
+router.post("/validate",signIn);
 
 
 
