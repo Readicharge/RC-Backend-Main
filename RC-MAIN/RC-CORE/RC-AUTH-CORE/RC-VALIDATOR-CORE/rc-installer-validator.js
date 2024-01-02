@@ -8,7 +8,7 @@ const validateInstaller= async (data) => {
       const installer = await Installer.findOne({ email, password });
       if (installer) {
         // res.json({ valid: true , roles:admin.roles });
-        await installer.findByIdAndUpdate(installer._id,{isLogged_in:true},{new:true});
+        await Installer.findByIdAndUpdate(installer._id,{isLogged_in:true},{new:true});
         return {
           status:200,
           data:{valid:true,installer:installer}
