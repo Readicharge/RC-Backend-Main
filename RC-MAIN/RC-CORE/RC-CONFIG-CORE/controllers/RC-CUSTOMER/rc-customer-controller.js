@@ -193,7 +193,7 @@ const getSpecificCustomer = async(req,res) => {
 
     // Getting the Details of the Customer from it's ID 
     const customer = await Customer.findById(customerId);
-    if(!customer)
+    if(customer)
     {
       res.status(200).json({
         odata:customer
