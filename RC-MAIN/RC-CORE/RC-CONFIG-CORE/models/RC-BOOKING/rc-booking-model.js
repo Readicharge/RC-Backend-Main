@@ -243,7 +243,7 @@ const bookingSchema = new mongoose.Schema({
     },
     job_status:{
       type:String,
-      enums : ["LIVE","PENDING","COMPLETE","CANCELLED"],
+      enums : ["LIVE","PENDING","COMPLETE","CANCELLED","MODIFIED"],
       default:"LIVE"
     }
   }
