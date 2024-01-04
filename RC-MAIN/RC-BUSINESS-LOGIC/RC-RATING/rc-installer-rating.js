@@ -5,13 +5,12 @@ const Time = require("../../RC-CORE/RC-CONFIG-CORE/models/RC-TIME/rc-time-model"
 
 
 // Getting the Rating for Stage 0
-const updateStage0Rating = async (req, res) => {
+const updateStage0Rating = async (bookingId,time,date) => {
     try {
-        const booking = await Booking.findById(req.params.bookingId);
+        const booking = await Booking.findById(bookingId);
         if (!booking) {
-            return res.status(404).json({ message: 'Booking not found' });
+            return false
         }
-        const { time, date } = req.body;
         const bookingDate = new Date(booking.date);
         const requestDate = new Date(date);
         if (bookingDate.toDateString() !== requestDate.toDateString()) {
@@ -38,24 +37,20 @@ const updateStage0Rating = async (req, res) => {
         }
         booking.completion_steps.stage_0.status_customer = true;
         booking.save();
-        res.status(200).json({
-            message: 'Stage 0 rating updated successfully',
-            rating: booking.completion_steps.stage_0.rating,
-        });
+        return true
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Internal server error' });
+        return false
     }
 };
 
 
 
 // Getting the Rating for Stage 1
-const updateStage1Rating = async (req, res) => {
+const updateStage1Rating = async (bookingId) => {
     try {
-        const booking = await Booking.findById(req.params.bookingId);
+        const booking = await Booking.findById(bookingId);
         if (!booking) {
-            return res.status(404).json({ message: 'Booking not found' });
+            return false;
         }
         const { time, date } = req.body;
         const bookingDate = new Date(booking.date);
@@ -80,24 +75,21 @@ const updateStage1Rating = async (req, res) => {
         }
         booking.completion_steps.stage_1.status_customer = true;
         booking.save();
-        res.status(200).json({
-            message: 'Stage 1 rating updated successfully',
-            rating: booking.completion_steps.stage_1.rating,
-        });
+       return true
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: 'Internal server error' });
+        return false
     }
 };
 
 
 
 // Getting the Rating for Stage 2
-const updateStage2Rating = async (req, res) => {
+const updateStage2Rating = async (bookingId) => {
     try {
-        const booking = await Booking.findById(req.params.bookingId);
+        const booking = await Booking.findById(bookingId);
         if (!booking) {
-            return res.status(404).json({ message: 'Booking not found' });
+            return false
         }
         const { time, date } = req.body;
         const bookingDate = new Date(booking.date);
@@ -128,13 +120,10 @@ const updateStage2Rating = async (req, res) => {
         }
         booking.completion_steps.stage_0.status_customer = true;
         booking.save();
-        res.status(200).json({
-            message: 'Stage 2 rating updated successfully',
-            rating: booking.completion_steps.stage_2.rating,
-        });
+      return true
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: 'Internal server error' });
+      return false
     }
 };
 
@@ -142,16 +131,15 @@ const updateStage2Rating = async (req, res) => {
 
 // Calculating the Installer Rating
 
-const calculateInstallerRating = async (req, res) => {
+const calculateInstallerRating = async (bookingId) => {
     try {
-        const bookingId = req.params.bookingId;
         const booking = await Booking.findById(bookingId);
         if (!booking) {
-            return res.status(404).json({ message: 'Booking not found' });
+            return false;
         }
         const { stage_0, stage_1, stage_2 } = booking.completion_steps;
         if (!stage_0.status_customer || !stage_1.status_customer || !stage_2.status_customer) {
-            return res.status(400).json({ message: 'Booking stages are not completed yet' });
+            return false;
         }
         const totalRating = stage_0.rating + stage_1.rating + stage_2.rating;
         const installerRating = Math.round(totalRating / 3);
@@ -159,10 +147,10 @@ const calculateInstallerRating = async (req, res) => {
         booking.completion_steps.overall_completion.rating = installerRating;
         booking.completion_steps.stage_0.status_customer = true;
         await booking.save();
-        res.status(200).json({ message: 'Installer rating calculated successfully', installerRating });
+        return true
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+      return true
     }
 };
 

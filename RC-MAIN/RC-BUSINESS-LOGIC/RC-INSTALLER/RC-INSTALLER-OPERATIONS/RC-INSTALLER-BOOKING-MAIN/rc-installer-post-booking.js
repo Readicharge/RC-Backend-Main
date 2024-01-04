@@ -15,7 +15,7 @@ const getCurrentTimeWithSixDecimals = async ()=> {
   
     return parseFloat(currentTimeWithSixDecimals);
   }
-  
+
 
 
 
@@ -30,10 +30,7 @@ const handle_I_have_arrived = async (req,res) => {
     const date = new Date();
     const time = await getCurrentTimeWithSixDecimals();
 
-    await axios.put(`${process.env.BASE_BACKEND_URL}/rating/updateStage0-Rating/${booking_id}`,{
-       time: time,
-       date: date
-    });
+    await updateStage0Rating(booking_id, time, date);
      
     console.log(booking)
     // Update the ability for the customer to modify the job scope 
