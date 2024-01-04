@@ -84,13 +84,12 @@ const updateStage1Rating = async (bookingId,time,date) => {
 
 
 // Getting the Rating for Stage 2
-const updateStage2Rating = async (bookingId) => {
+const updateStage2Rating = async (bookingId , time , date) => {
     try {
         const booking = await Booking.findById(bookingId);
         if (!booking) {
             return false
         }
-        const { time, date } = req.body;
         const bookingDate = new Date(booking.date);
         const requestDate = new Date(date);
         if (bookingDate.toDateString() !== requestDate.toDateString()) {

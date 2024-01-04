@@ -1,7 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
 const Booking = require("../../../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc-booking-model");
-const {updateStage0Rating , updateStage1Rating  } = require("../../../RC-RATING/rc-installer-rating")
+const {updateStage0Rating , updateStage1Rating ,updateStage2Rating } = require("../../../RC-RATING/rc-installer-rating")
 
 
 
@@ -84,10 +84,7 @@ const handle_Complete_Pending_Job = async (req,res) =>{
     const date = new Date();
     const time = await getCurrentTimeWithSixDecimals();
 
-    await axios.put(`${process.env.BASE_BACKEND_URL}/rating/updateStage2-Rating/${booking_id}`,{
-        time: time,
-        date: date
-     });
+    await updateStage2Rating(booking_id,time,date);
 
     // const UserhasVerified = false //This is going to use this for the customer to verify || if the update is not coming since last 24 hours then automatically set to true
     // // Api call for releasing the material charge to the Installer
