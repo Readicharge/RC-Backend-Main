@@ -33,7 +33,7 @@ router.put('/c-j-p-c/:id', customer_marked_pending_complete)
 router.put('/c-j-c-c/:id', customer_marked_complete_complete);
 router.put('/update-existing/:id',rc_job_updater);
 router.put('/m-p-j/:id', installer_marked_pending_complete);
-router.put('/job-modified',installer_customer_marked_modified);
+router.put('/job-modified/:bookingId',installer_customer_marked_modified);
 
 // Installer Spcific routes 
 router.post('/get-jobs-installer',get_installer_specific_jobs);
