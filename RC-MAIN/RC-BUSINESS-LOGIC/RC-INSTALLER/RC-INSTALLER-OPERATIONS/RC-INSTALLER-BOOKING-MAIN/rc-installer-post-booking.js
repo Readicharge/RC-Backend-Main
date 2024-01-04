@@ -113,10 +113,8 @@ const handle_Complete_Complete_job = async ( req,res ) => {
     const date = new Date();
     const time = await getCurrentTimeWithSixDecimals();
 
-    await axios.put(`${process.env.BASE_BACKEND_URL}/rating/updateStage2-Rating/${booking_id}`,{
-        time: time,
-        date: date
-     });
+    await updateStage2Rating(booking_id,time,date);
+    await calculateInstallerRating(booking_id);
 
     // await axios.put(`${process.env.BASE_BACKEND_URL}/rating/calculate_installer_rating/${booking_id}`,{
     //     userGivenRating:user_given_rating
