@@ -30,7 +30,7 @@ router.post("/getAddress",getAddressByLatLong);
 // ******************************************************Authentiacation Module*********************************************************//
 router.post('/sign-in',signIn);
 router.put("/sign-out/:id",logoffCustomer);
-router.get("/get-customer/:id",getSpecificCustomer);
+router.get("/get-customer/:customerId",getSpecificCustomer);
 
 
 
