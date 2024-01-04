@@ -71,10 +71,10 @@ const {
 } = require("../RC-INSTALLER-OPERATIONS/RC-INSTALLER-BOOKING-MAIN/rc-installer-post-booking");
 
 
-router.put("/handle-Installer-arrived",handle_I_have_arrived);
-router.put("/handle-started-job",handle_I_have_Started_the_Job);
-router.put("/handle-complete-pending",handle_Complete_Pending_Job);
-router.put("/handle-complete-complete",handle_Complete_Complete_job);
+router.put("/handle-Installer-arrived/:bookingId",handle_I_have_arrived);
+router.put("/handle-started-job/:bookingId",handle_I_have_Started_the_Job);
+router.put("/handle-complete-pending/:bookingId",handle_Complete_Pending_Job);
+router.put("/handle-complete-complete/:bookingId",handle_Complete_Complete_job);
 
 
 
