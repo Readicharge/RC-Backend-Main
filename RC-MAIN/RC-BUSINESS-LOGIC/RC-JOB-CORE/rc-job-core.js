@@ -254,12 +254,12 @@ const rc_job_creater = async (req, res) => {
                 chargers: chargerDetails,
 
                 // Assigning the General Details 
-                houseBuiltYear : houseBuilt,
-                upgradeToNema :upgradeToNema,
-                isOwner : isOwner,
+                houseBuiltYear: houseBuilt,
+                upgradeToNema: upgradeToNema,
+                isOwner: isOwner,
 
                 // Assigning the Veichle Details 
-                vehicle_details : vehicle_details,
+                vehicle_details: vehicle_details,
 
                 // Decleration of steps handler for the job 
                 completion_steps: {
@@ -396,6 +396,9 @@ const rc_job_updater = async (req, res) => {
         );
     }
 }
+
+
+
 
 
 const rc_job_Installer_confirmator = async (req, res) => {
@@ -669,32 +672,32 @@ const cancelJobByCustomer = async (req, res) => {
 
 
 const customer_marked_pending_complete = async (req, res) => {
- try{
-   // Step1 : Getting the Job Id 
-   const jobId = req.params.id;
+    try {
+        // Step1 : Getting the Job Id 
+        const jobId = req.params.id;
 
-   // Step2 : Marking the Job as Completed State
-   await Booking.findByIdAndUpdate(
-       { _id: jobId },
-       { $set: { 'completion_steps.job_status': 'PENDING' } },
-       { new: true } // To return the updated document
-   );
+        // Step2 : Marking the Job as Completed State
+        await Booking.findByIdAndUpdate(
+            { _id: jobId },
+            { $set: { 'completion_steps.job_status': 'PENDING' } },
+            { new: true } // To return the updated document
+        );
 
-   // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
-   await axios.post(
-       `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
-       { bookingId: jobId }
-   );
+        // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
+        await axios.post(
+            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
+            { bookingId: jobId }
+        );
 
-   // Step4 : Releasing the Payment To the Installer Account for the Material 
+        // Step4 : Releasing the Payment To the Installer Account for the Material 
 
 
-   // Step5 :  Releasing the Installer for that Day , though it is not required  
-   res.status(200).json("Successfully Marked as Complete");
-}
-catch (error) {
-    res.status(500).json(error)
-}
+        // Step5 :  Releasing the Installer for that Day , though it is not required  
+        res.status(200).json("Successfully Marked as Complete");
+    }
+    catch (error) {
+        res.status(500).json(error)
+    }
 
 }
 
@@ -731,6 +734,26 @@ const customer_marked_complete_complete = async (req, res) => {
 
 
 
+const installer_customer_marked_modified = async (req, res) => {
+    try {
+        const bookingId = req.params.bookingId;
+        const { idata } = req.body;
+
+        // Step2 : Marking the Job as Completed State
+        await Booking.findByIdAndUpdate(
+            { _id: bookingId },
+            { $set: { 'completion_steps.job_status': idata } },
+            { new: true } // To return the updated document
+        );
+        // Returning the Response 
+        res.status(200).json("Successfully Marked as Complete");
+    }
+    catch (error) {
+        res.status(500).json(error)
+    }
+}
+
+
 
 // Installer Perspective *******************************************************************************
 
@@ -753,7 +776,7 @@ const installer_marked_pending_complete = async (req, res) => {
 }
 
 
-const get_installer_specific_jobs = async(req,res) => {
+const get_installer_specific_jobs = async (req, res) => {
     try {
         const { installerId } = req.body;
 
@@ -792,7 +815,8 @@ module.exports = {
     rc_job_updater,
     cancelJobModified,
     installer_marked_pending_complete,
-    get_installer_specific_jobs
+    get_installer_specific_jobs,
+    installer_customer_marked_modified
 }
 
 
