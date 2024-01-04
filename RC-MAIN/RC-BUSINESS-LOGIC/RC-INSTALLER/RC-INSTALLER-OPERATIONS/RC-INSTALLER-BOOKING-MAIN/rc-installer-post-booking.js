@@ -1,7 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
 const Booking = require("../../../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc-booking-model");
-const {updateStage0Rating , updateStage1Rating ,updateStage2Rating } = require("../../../RC-RATING/rc-installer-rating")
+const {updateStage0Rating , updateStage1Rating ,updateStage2Rating,calculateInstallerRating } = require("../../../RC-RATING/rc-installer-rating")
 
 
 
