@@ -17,7 +17,8 @@ const { register_customer } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/
 const { update_address } = require("../../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-ONBOARD/REGISTER_&_ADDRESS/customer_address");
 const {signIn} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-AUTH/rc-customer-sign-in");
 const {logoffCustomer} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-AUTH/rc-customer-sign-out");
-const {getAddressByLatLong} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-CHARGER-ECOM/rc-charger-shipping-address")
+const {getAddressByLatLong} = require("../RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-CHARGER-ECOM/rc-charger-shipping-address");
+const {getSpecificCustomer} = require("../../../RC-CORE/RC-CONFIG-CORE/controllers/RC-CUSTOMER/rc-customer-controller")
 // *************************************************************************************************************************************//
 router.post('/zipcode', zipCode_based_search);
 router.post("/register", register_customer);
@@ -29,6 +30,11 @@ router.post("/getAddress",getAddressByLatLong);
 // ******************************************************Authentiacation Module*********************************************************//
 router.post('/sign-in',signIn);
 router.put("/sign-out/:id",logoffCustomer);
+router.get("/get-customer/:id",getSpecificCustomer);
+
+
+
+
 
 
 

@@ -186,10 +186,40 @@ const deleteCustomerById = async (customerId) => {
 }
 
 
+const getSpecificCustomer = async(req,res) => {
+  try {
+    // Gettting the Customer Id 
+    const customerId = req.params.customerId;
+
+    // Getting the Details of the Customer from it's ID 
+    const customer = await Customer.findById(customerId);
+    if(!customer)
+    {
+      res.status(200).json({
+        odata:customer
+      })
+    }
+    else 
+    {
+      res.status(404).json({
+        odata:[]
+      })
+    }
+  }
+  catch(err)
+  {
+    res.status(500).json({
+      odata:"Some Error occured"
+    })
+  }
+}
+
+
 
 
 module.exports = {
   createCustomer,
   updateCustomer,
-  deleteCustomerById
+  deleteCustomerById,
+  getSpecificCustomer
 }
