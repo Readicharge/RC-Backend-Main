@@ -684,10 +684,10 @@ const customer_marked_pending_complete = async (req, res) => {
         );
 
         // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
-        await axios.post(
-            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
-            { bookingId: jobId }
-        );
+        // await axios.post(
+        //     `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
+        //     { bookingId: jobId }
+        // );
 
         // Step4 : Releasing the Payment To the Installer Account for the Material 
 
