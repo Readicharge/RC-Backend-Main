@@ -1,7 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
 const Booking = require("../../../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc-booking-model");
-const {updateStage0Rating} = require("../../../RC-RATING/rc-installer-rating")
+const {updateStage0Rating , updateStage1Rating  } = require("../../../RC-RATING/rc-installer-rating")
 
 
 
@@ -60,10 +60,7 @@ const handle_I_have_Started_the_Job = async (req,res) => {
      const date = new Date();
      const time = await getCurrentTimeWithSixDecimals();
 
-     await axios.put(`${process.env.BASE_BACKEND_URL}/rating/updateStage1-Rating/${booking_id}`,{
-        time: time,
-        date: date
-     });
+     await updateStage1Rating(booking_id, time, date);
 
     // //  The particular amount is charged from the bank account of the user
     // await axios.put(`${process.env.BASE_BACKEND_URL}/payments/complete-hold-transaction/${booking_id}/Job-ticket-booking`,{
@@ -75,8 +72,6 @@ const handle_I_have_Started_the_Job = async (req,res) => {
      res.status(200).json({
         message: 'Installer has started his job'
     });
-
-    
 }
 
 
