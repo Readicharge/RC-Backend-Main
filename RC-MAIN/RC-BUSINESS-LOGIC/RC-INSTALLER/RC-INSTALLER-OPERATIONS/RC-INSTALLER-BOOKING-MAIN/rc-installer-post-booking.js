@@ -4,6 +4,19 @@ const Booking = require("../../../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc
 
 
 
+// helper Function for getting the Curent Time in the required format 
+const getCurrentTimeWithSixDecimals = async ()=> {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    
+    // Combine hours and minutes with six decimal places
+    const currentTimeWithSixDecimals = hours + (minutes / 60).toFixed(6).substr(1);
+  
+    return parseFloat(currentTimeWithSixDecimals);
+  }
+  
+
 
 
 // Case 1 : Handle I have arrived 
