@@ -722,7 +722,7 @@ const customer_marked_complete_complete = async (req, res) => {
         // If LIVE, then dispatch all payment else only dispatch the labor rates 
         if (booking_initial_status === "LIVE") {
             // Step3 :Releasing the Material + Labor allowance to the Installer 
-            const response = await transfer_payment(booking.installer, ((booking.material_cost + booking.price_installer)));
+            const response = await transfer_payment(booking.installer, ((parseInt(booking.material_cost) + parseInt(booking.price_installer))));
 
             if (response !== null) {
                 // Step4 : Marking the Job as Completed State
@@ -738,7 +738,7 @@ const customer_marked_complete_complete = async (req, res) => {
                 res.status(500).json("Error in Payment");
             }
         }
-        else if (booking_initial_status === "PENDING-UNAPPROVED") {
+        else {
             // Step3 :Releasing the Material allowance to the Installer 
             const response = await transfer_payment(booking.installer, (booking.price_installer));
             if (response !== null) {
