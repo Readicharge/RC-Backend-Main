@@ -5,11 +5,13 @@ const Booking = require("../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc-booki
 const Installer_Parked = require("../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-PARKED/rc-installer-parked-model");
 const Schedule = require("../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-AVAILABILITY/rc-installer-availability-model");
 const Availability = require("../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-AVAILABILITY/rc-installer-daily-model");
+const {transfer_payment} = require("../RC-PAYMENT-CORE/RC-PAYMENT-OPERATIONS/RC-INSTALLER/RC-BOOKING-PAYMENTS/rc-payment-release");
 
 const axios = require("axios");
 const moment = require("moment");
 
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const { get_material_list } = require("../RC-CUSTOMER/RC-CUSTOMER-OPERATIONS/RC-CUSTOMER-QUOTATION/RC-QUOTE-MAIN/rc-material-list-determiner-from-questions");
 
 
@@ -694,10 +696,7 @@ const customer_marked_pending_complete = async (req, res) => {
 
         // Step3 :Releasing the Material allowance to the Installer 
 
-        await axios.post(
-            `https://rc-backend-main-f9u1.vercel.app/api/payments-installer/installerPayment5/${booking.installer}`,
-            { amount: booking.material_cost }
-        );
+        await transfer_payment(booking.installer,booking.material_cost);
 
         // Step4 :Calculation of Rating here is needed
 
@@ -723,18 +722,13 @@ const customer_marked_complete_complete = async (req, res) => {
         // If LIVE, then dispatch all payment else only dispatch the labor rates 
         if (booking_initial_status === "LIVE") {
             // Step3 :Releasing the Material + Labor allowance to the Installer 
-            await axios.post(
-                `https://rc-backend-main-f9u1.vercel.app/api/payments-installer/installerPayment5/${booking.installer}`,
-                { amount: (booking.material_cost + booking.price_installer) }
-            );
+            await  transfer_payment(booking.installer,(booking.material_cost + booking.price_installer))
+            
         }
         else
         {
              // Step3 :Releasing the Material allowance to the Installer 
-             await axios.post(
-                `https://rc-backend-main-f9u1.vercel.app/api/payments-installer/installerPayment5/${booking.installer}`,
-                { amount: booking.price_installer }
-            );
+             await  transfer_payment(booking.installer,(booking.price_installer))
         }
 
         // Step4 : Marking the Job as Completed State

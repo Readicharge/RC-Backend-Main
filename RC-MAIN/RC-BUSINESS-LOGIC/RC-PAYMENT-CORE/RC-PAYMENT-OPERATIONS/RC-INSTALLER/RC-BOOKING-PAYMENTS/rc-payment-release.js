@@ -56,9 +56,8 @@ async function initiatePayment(amount, installerDetails) {
   
 
 
-const transfer_paymnet =  async (req, res) => {
-    const { amount } = req.body;
-    const userId = req.params.installerId;
+const transfer_payment =  async (userId,amount) => {
+   
         try {
             // Retrieve the installer details from the database
             const installerDetails = await Installer.findById(userId);
@@ -86,15 +85,14 @@ const transfer_paymnet =  async (req, res) => {
             await paymentObj.save();
         
             // Return the payment result
-            res.status(200).json({ paymentResult });
+            return paymentResult;
           } catch (error) {
-            console.error('Failed to initiate payment:', error);
-            res.status(500).json({ error: 'Failed to initiate payment' });
+           return null;
           }
   };
 
 
 
   module.exports = {
-    transfer_paymnet
+    transfer_payment
   }
