@@ -19,7 +19,8 @@ const {
     installer_marked_pending_complete,
     installer_marked_complete_complete,
     get_installer_specific_jobs,
-    installer_customer_marked_modified
+    installer_customer_marked_modified,
+    resheduleJob
 } = require("./rc-job-core");
 
 
@@ -37,8 +38,10 @@ router.put('/m-p-j/:id', installer_marked_pending_complete);
 router.put('/m-c-j/:id', installer_marked_complete_complete);
 router.put('/job-modified/:bookingId',installer_customer_marked_modified);
 
+
 // Installer Spcific routes 
 router.post('/get-jobs-installer',get_installer_specific_jobs);
+router.put("reshedule-job/:id",resheduleJob);
 
 
 

@@ -861,8 +861,39 @@ const get_installer_specific_jobs = async (req, res) => {
 }
 
 
+const resheduleJob = async (req,res)  => {
+    try {
+        const { date } = req.body;
+        const jobId = req.params.id;
+        const booking = await Booking.findById(jobId);
+        if(booking === null || booking === undefined){
+            res.status(404).json({
+                odata: "No Booking Found"
+            })
+        }
+        else{
+            await Booking.findByIdAndUpdate(
+                { _id: jobId },
+                {date:date},
+                { new: true } // To return the updated document
+            );
+            res.status(200).json({
+                odata: "Successfully Resheduled"
+            })
+        }
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({
+            odata: "Unable to Proceed further , Please Try Again"
+        });
+    }
+}
+
+
 
 module.exports = {
+    resheduleJob,
     rc_job_creater,
     rc_job_Installer_confirmator,
     get_job_By_customerId,
