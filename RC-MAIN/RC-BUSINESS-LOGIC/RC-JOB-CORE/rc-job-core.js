@@ -715,9 +715,11 @@ const customer_marked_complete_complete = async (req, res) => {
         const jobId = req.params.id;
 
         // Step2 : Checking The Initial State of the Job Status i.e. LIVE or PENDING
-        const booking = Booking.findById(jobId);
-        const booking_initial_status = booking.completion_steps.status;
+        const booking =await Booking.findById(jobId);
+        console.log(booking)
+        const booking_initial_status = booking.completion_steps.job_status;
 
+        console.log(booking_initial_status)
 
         // If LIVE, then dispatch all payment else only dispatch the labor rates 
         if (booking_initial_status === "LIVE") {
@@ -762,6 +764,7 @@ const customer_marked_complete_complete = async (req, res) => {
 
     }
     catch (error) {
+        console.log(error)
         res.status(500).json(error)
     }
 
