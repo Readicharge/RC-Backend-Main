@@ -724,34 +724,34 @@ const customer_marked_complete_complete = async (req, res) => {
             // Step3 :Releasing the Material + Labor allowance to the Installer 
             const response = await transfer_payment(booking.installer, (booking.material_cost + booking.price_installer));
 
-            if(response!==null)
-            {
-                            // Step4 : Marking the Job as Completed State
-            await Booking.findByIdAndUpdate(
-                { _id: jobId },
-                { $set: { 'completion_steps.job_status': 'COMPLETE' } },
-                { new: true } // To return the updated document
-            );
+            if (response !== null) {
+                // Step4 : Marking the Job as Completed State
+                await Booking.findByIdAndUpdate(
+                    { _id: jobId },
+                    { $set: { 'completion_steps.job_status': 'COMPLETE' } },
+                    { new: true } // To return the updated document
+                );
+                // Returning the Response 
+                res.status(200).json("Successfully Marked as Complete");
             }
-            else
-            {
+            else {
                 res.status(500).json("Error in Payment");
             }
         }
-        else  if (booking_initial_status === "PENDING-UNAPPROVED") {
+        else if (booking_initial_status === "PENDING-UNAPPROVED") {
             // Step3 :Releasing the Material allowance to the Installer 
             const response = await transfer_payment(booking.installer, (booking.price_installer));
-            if(response!==null)
-            {
-                            // Step4 : Marking the Job as Completed State
-            await Booking.findByIdAndUpdate(
-                { _id: jobId },
-                { $set: { 'completion_steps.job_status': 'COMPLETE' } },
-                { new: true } // To return the updated document
-            );
+            if (response !== null) {
+                // Step4 : Marking the Job as Completed State
+                await Booking.findByIdAndUpdate(
+                    { _id: jobId },
+                    { $set: { 'completion_steps.job_status': 'COMPLETE' } },
+                    { new: true } // To return the updated document
+                );
+                // Returning the Response 
+                res.status(200).json("Successfully Marked as Complete");
             }
-            else
-            {
+            else {
                 res.status(500).json("Error in Payment");
             }
         }
@@ -759,8 +759,7 @@ const customer_marked_complete_complete = async (req, res) => {
 
         // Step5 : Rating Section Goes here
 
-        // Returning the Response 
-        res.status(200).json("Successfully Marked as Complete");
+
     }
     catch (error) {
         res.status(500).json(error)
