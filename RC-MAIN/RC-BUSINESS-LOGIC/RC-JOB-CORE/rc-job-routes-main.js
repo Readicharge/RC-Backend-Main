@@ -41,7 +41,7 @@ router.put('/job-modified/:bookingId',installer_customer_marked_modified);
 
 // Installer Spcific routes 
 router.post('/get-jobs-installer',get_installer_specific_jobs);
-router.put("reshedule-job/:id",resheduleJob);
+router.put("/reshedule-job/:id",resheduleJob);
 
 
 
