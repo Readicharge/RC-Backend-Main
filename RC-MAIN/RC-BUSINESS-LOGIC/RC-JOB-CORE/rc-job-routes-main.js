@@ -17,6 +17,7 @@ const {
     rc_job_updater,
     cancelJobModified,
     installer_marked_pending_complete,
+    installer_marked_complete_complete,
     get_installer_specific_jobs,
     installer_customer_marked_modified
 } = require("./rc-job-core");
@@ -29,10 +30,11 @@ router.post("/get-specfic-job-id", get_specfic_job_id);
 router.put('/c-j-m/:id', cancelJobModified)      // c-j-c ~ Cancel Job by Modified Scope
 router.put('/c-i-j/:id', cancelJobByInstaller)  // c-i-j ~ Cancel Job by Installer
 router.put('/c-c-j/:id', cancelJobByCustomer);       // c-c-j ~ Cancel Job by Customer
-router.put('/m-c-j/:id', customer_marked_pending_complete)
-router.put('/c-j-c-c/:id', customer_marked_complete_complete);
+router.put('/m-p-j-c/:id', customer_marked_pending_complete)
+router.put('/m-c-j-c/:id', customer_marked_complete_complete);
 router.put('/update-existing/:id',rc_job_updater);
 router.put('/m-p-j/:id', installer_marked_pending_complete);
+router.put('/m-c-j/:id', installer_marked_complete_complete);
 router.put('/job-modified/:bookingId',installer_customer_marked_modified);
 
 // Installer Spcific routes 

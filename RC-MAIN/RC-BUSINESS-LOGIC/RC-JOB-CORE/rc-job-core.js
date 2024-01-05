@@ -286,7 +286,10 @@ const rc_job_creater = async (req, res) => {
                 },
 
                 // Setting the OverAll Job Status [ enums : LIVE , PENDING , COMPLETED , CANCELLED ]
-                job_status: "LIVE"
+                job_status: "LIVE",
+
+                // Setting the Job Reschedule Status 
+                job_rescheduled : false
             }
 
 
@@ -673,26 +676,32 @@ const cancelJobByCustomer = async (req, res) => {
 
 const customer_marked_pending_complete = async (req, res) => {
     try {
+
         // Step1 : Getting the Job Id 
         const jobId = req.params.id;
 
-        // Step2 : Marking the Job as Completed State
+
+        // Step2 : Getting the installer Id from the Job Id :
+        const booking = await Booking.findById(jobId);
+
+        console.log(booking)
+        // Step3 : Marking the Job as Completed State : PENDING
         await Booking.findByIdAndUpdate(
             { _id: jobId },
             { $set: { 'completion_steps.job_status': 'PENDING' } },
-            { new: true } // To return the updated document
+            { new: true }
         );
 
-        // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
-        // await axios.post(
-        //     `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
-        //     { bookingId: jobId }
-        // );
+        // Step3 :Releasing the Material allowance to the Installer 
 
-        // Step4 : Releasing the Payment To the Installer Account for the Material 
+        await axios.post(
+            `https://rc-backend-main-f9u1.vercel.app/api/payments-installer/installerPayment5/${booking.installer}`,
+            { amount: booking.material_cost }
+        );
 
+        // Step4 :Calculation of Rating here is needed
 
-        // Step5 :  Releasing the Installer for that Day , though it is not required  
+        // Step5 : Return of Response
         res.status(200).json("Successfully Marked as Complete");
     }
     catch (error) {
@@ -706,22 +715,36 @@ const customer_marked_complete_complete = async (req, res) => {
         // Step1 : Getting the Job Id
         const jobId = req.params.id;
 
-        // Step2 : Marking the Job as Completed State
+        // Step2 : Checking The Initial State of the Job Status i.e. LIVE or PENDING
+        const booking = Booking.findById(jobId);
+        const booking_initial_status = booking.completion_steps.status;
+
+
+        // If LIVE, then dispatch all payment else only dispatch the labor rates 
+        if (booking_initial_status === "LIVE") {
+            // Step3 :Releasing the Material + Labor allowance to the Installer 
+            await axios.post(
+                `https://rc-backend-main-f9u1.vercel.app/api/payments-installer/installerPayment5/${booking.installer}`,
+                { amount: (booking.material_cost + booking.price_installer) }
+            );
+        }
+        else
+        {
+             // Step3 :Releasing the Material allowance to the Installer 
+             await axios.post(
+                `https://rc-backend-main-f9u1.vercel.app/api/payments-installer/installerPayment5/${booking.installer}`,
+                { amount: booking.price_installer }
+            );
+        }
+
+        // Step4 : Marking the Job as Completed State
         await Booking.findByIdAndUpdate(
             { _id: jobId },
             { $set: { 'completion_steps.job_status': 'COMPLETE' } },
             { new: true } // To return the updated document
         );
 
-        // Step3 : Charging the amount from the customer side ( the Entire Amount is charged )
-        await axios.post(
-            `https://rc-backend-main-f9u1.vercel.app/api/payments/customerPayment2`,
-            { bookingId: jobId }
-        );
-
-        // Step4 : Releasing the Payment To the Installer Account for the entire job
-
-        // Step5 :  Releasing the Installer for that Day , though it is not required 
+        // Step5 : Rating Section Goes here
 
         // Returning the Response 
         res.status(200).json("Successfully Marked as Complete");
@@ -765,7 +788,26 @@ const installer_marked_pending_complete = async (req, res) => {
         // Step2: Marking the Job Stage 2 complete By the Installer
         await Booking.findByIdAndUpdate(
             { _id: jobId },
-            { $set: { 'completion_steps.stage_2': 'COMPLETE' } },
+            { $set: { 'completion_steps.job_status': 'PENDING-UNAPPROVED' } },
+            { new: true } // To return the updated document
+        );
+    }
+    catch (error) {
+        res.status(500).json(error)
+    }
+
+}
+
+
+const installer_marked_complete_complete = async (req, res) => {
+    try {
+        // Step 1: Getting the Booking Id
+        const jobId = req.params.id;
+
+        // Step2: Marking the Job Stage 2 complete By the Installer
+        await Booking.findByIdAndUpdate(
+            { _id: jobId },
+            { $set: { 'completion_steps.job_status': 'COMPLETE-UNAPPROVED' } },
             { new: true } // To return the updated document
         );
     }
@@ -815,6 +857,7 @@ module.exports = {
     rc_job_updater,
     cancelJobModified,
     installer_marked_pending_complete,
+    installer_marked_complete_complete,
     get_installer_specific_jobs,
     installer_customer_marked_modified
 }

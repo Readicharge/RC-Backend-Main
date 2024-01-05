@@ -241,10 +241,15 @@ const bookingSchema = new mongoose.Schema({
         default:0
       }
     },
+    // Here Pending-Unapproved and Complete-Unapproved are those two staes which are Invoked by the Installer when they have completed the job
     job_status:{
       type:String,
-      enums : ["LIVE","PENDING","COMPLETE","CANCELLED","MODIFIED"],
+      enums : ["LIVE","PENDING","COMPLETE","CANCELLED","MODIFIED","PENDING-UNAPPROVED" ,"COMPLETE-UNAPPROVED"],
       default:"LIVE"
+    },
+    job_rescheduled:{
+      type:String,
+      default:false
     }
   }
 

@@ -4,6 +4,7 @@
 
 require('dotenv').config();
 const Installer = require('../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/rc-installer-model');
+const Payment = require("../../../../../RC-CORE/RC-CONFIG-CORE/models/RC-PAYMENT/rc-payment-model")
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 
@@ -67,8 +68,22 @@ const transfer_paymnet =  async (req, res) => {
               return res.status(404).json({ error: 'Installer details not found' });
             }
         
+            const today = new Date()
             // Initiate the payment
             const paymentResult = await initiatePayment(amount, installerDetails.stripePaymentDetails);
+
+            const idata = {
+              payment_type:"booking",
+              seen:"false",
+              isIncoming:"true",
+              payment_id:paymentResult,
+              installer_id:userId,
+              amount:amount,
+              date:today
+            }
+
+            const paymentObj = new Payment(idata);
+            await paymentObj.save();
         
             // Return the payment result
             res.status(200).json({ paymentResult });
