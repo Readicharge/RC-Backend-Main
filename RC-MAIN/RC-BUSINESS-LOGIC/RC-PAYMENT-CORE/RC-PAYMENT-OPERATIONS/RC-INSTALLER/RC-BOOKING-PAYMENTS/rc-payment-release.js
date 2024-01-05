@@ -31,12 +31,12 @@ async function initiatePayment(amount, installerDetails) {
   
       // Create a payment intent
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: amount,
+        amount: amount*100,
         currency: 'usd',
         payment_method_types: ['card'],
         transfer_data: {
           destination: installerDetails.id,
-          amount: amount,
+          amount: amount*100,
         },
         payment_method: paymentMethod.id, // Attach the payment method to the PaymentIntent
       });
