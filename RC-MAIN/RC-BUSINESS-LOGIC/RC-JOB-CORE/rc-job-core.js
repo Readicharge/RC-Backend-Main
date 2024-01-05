@@ -5,7 +5,7 @@ const Booking = require("../../RC-CORE/RC-CONFIG-CORE/models/RC-BOOKING/rc-booki
 const Installer_Parked = require("../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-PARKED/rc-installer-parked-model");
 const Schedule = require("../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-AVAILABILITY/rc-installer-availability-model");
 const Availability = require("../../RC-CORE/RC-CONFIG-CORE/models/RC-INSTALLER/RC-INSTALLER-AVAILABILITY/rc-installer-daily-model");
-const {transfer_payment} = require("../RC-PAYMENT-CORE/RC-PAYMENT-OPERATIONS/RC-INSTALLER/RC-BOOKING-PAYMENTS/rc-payment-release");
+const { transfer_payment } = require("../RC-PAYMENT-CORE/RC-PAYMENT-OPERATIONS/RC-INSTALLER/RC-BOOKING-PAYMENTS/rc-payment-release");
 
 const axios = require("axios");
 const moment = require("moment");
@@ -291,7 +291,7 @@ const rc_job_creater = async (req, res) => {
                 job_status: "LIVE",
 
                 // Setting the Job Reschedule Status 
-                job_rescheduled : false
+                job_rescheduled: false
             }
 
 
@@ -696,7 +696,7 @@ const customer_marked_pending_complete = async (req, res) => {
 
         // Step3 :Releasing the Material allowance to the Installer 
 
-        await transfer_payment(booking.installer,booking.material_cost);
+        await transfer_payment(booking.installer, booking.material_cost);
 
         // Step4 :Calculation of Rating here is needed
 
@@ -722,21 +722,40 @@ const customer_marked_complete_complete = async (req, res) => {
         // If LIVE, then dispatch all payment else only dispatch the labor rates 
         if (booking_initial_status === "LIVE") {
             // Step3 :Releasing the Material + Labor allowance to the Installer 
-            await  transfer_payment(booking.installer,(booking.material_cost + booking.price_installer))
-            
+            const response = await transfer_payment(booking.installer, (booking.material_cost + booking.price_installer));
+
+            if(response!==null)
+            {
+                            // Step4 : Marking the Job as Completed State
+            await Booking.findByIdAndUpdate(
+                { _id: jobId },
+                { $set: { 'completion_steps.job_status': 'COMPLETE' } },
+                { new: true } // To return the updated document
+            );
+            }
+            else
+            {
+                res.status(500).json("Error in Payment");
+            }
         }
-        else
-        {
-             // Step3 :Releasing the Material allowance to the Installer 
-             await  transfer_payment(booking.installer,(booking.price_installer))
+        else  if (booking_initial_status === "PENDING-UNAPPROVED") {
+            // Step3 :Releasing the Material allowance to the Installer 
+            const response = await transfer_payment(booking.installer, (booking.price_installer));
+            if(response!==null)
+            {
+                            // Step4 : Marking the Job as Completed State
+            await Booking.findByIdAndUpdate(
+                { _id: jobId },
+                { $set: { 'completion_steps.job_status': 'COMPLETE' } },
+                { new: true } // To return the updated document
+            );
+            }
+            else
+            {
+                res.status(500).json("Error in Payment");
+            }
         }
 
-        // Step4 : Marking the Job as Completed State
-        await Booking.findByIdAndUpdate(
-            { _id: jobId },
-            { $set: { 'completion_steps.job_status': 'COMPLETE' } },
-            { new: true } // To return the updated document
-        );
 
         // Step5 : Rating Section Goes here
 
