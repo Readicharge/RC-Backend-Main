@@ -60,6 +60,7 @@ const transfer_payment =  async (userId,amount) => {
    
         try {
             // Retrieve the installer details from the database
+            console.log(amount,"amount")
             const installerDetails = await Installer.findById(userId);
             console.log(installerDetails.stripePaymentDetails)
             // Check if installer details exist
@@ -75,7 +76,8 @@ const transfer_payment =  async (userId,amount) => {
               payment_type:"booking",
               seen:"false",
               isIncoming:"true",
-              payment_id:paymentResult,
+              client_secret:installerDetails.stripePaymentDetails.id,
+              payment_id:paymentResult.id,
               installer_id:userId,
               amount:amount,
               date:today
@@ -87,6 +89,7 @@ const transfer_payment =  async (userId,amount) => {
             // Return the payment result
             return paymentResult;
           } catch (error) {
+            console.log(error)
            return null;
           }
   };

@@ -719,12 +719,14 @@ const customer_marked_complete_complete = async (req, res) => {
         console.log(booking)
         const booking_initial_status = booking.completion_steps.job_status;
 
-        console.log(booking_initial_status)
+        console.log(booking_initial_status,(parseInt(booking.material_cost) + parseInt(booking.price_installer)))
 
         // If LIVE, then dispatch all payment else only dispatch the labor rates 
+       
         if (booking_initial_status === "LIVE") {
             // Step3 :Releasing the Material + Labor allowance to the Installer 
-            const response = await transfer_payment(booking.installer, ((parseInt(booking.material_cost) + parseInt(booking.price_installer))));
+            const price=((parseInt(booking.material_cost) + parseInt(booking.price_installer)))
+            const response = await transfer_payment(booking.installer,price );
 
             if (response !== null) {
                 // Step4 : Marking the Job as Completed State
@@ -741,8 +743,9 @@ const customer_marked_complete_complete = async (req, res) => {
             }
         }
         else {
+            console.log("else statement")
             // Step3 :Releasing the Material allowance to the Installer 
-            const response = await transfer_payment(booking.installer, (booking.price_installer));
+            const response = await transfer_payment(booking.installer, parseInt(booking.price_installer));
             if (response !== null) {
                 // Step4 : Marking the Job as Completed State
                 await Booking.findByIdAndUpdate(
@@ -764,7 +767,6 @@ const customer_marked_complete_complete = async (req, res) => {
 
     }
     catch (error) {
-        console.log(error)
         res.status(500).json(error)
     }
 
