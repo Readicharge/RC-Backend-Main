@@ -29,6 +29,38 @@ const validateInstaller= async (data) => {
     }
   };
 
+
+
+
+  const validateCompanyInstaller= async (data) => {
+
+    try {
+      const { userId } = data;
+      const installer = await Installer.findOne({company_installer:userId });
+      if (installer) {
+        // res.json({ valid: true , roles:admin.roles });
+        await Installer.findByIdAndUpdate(installer._id,{isLogged_in:true},{new:true});
+        return {
+          status:200,
+          data:{valid:true,installer:installer}
+        }
+      } else {
+        // res.json({ valid: false });
+        return {
+          status:200,
+          data:{valid:false}
+        }
+      }
+    } catch (error) {
+      // res.status(500).json({ error: 'An error occurred while validating the admin.' });
+      return {
+        status:500,
+        data:"Not able to validate the Company Installer"
+      }
+    }
+  };
+
   module.exports = {
-    validateInstaller
+    validateInstaller,
+    validateCompanyInstaller
   };
