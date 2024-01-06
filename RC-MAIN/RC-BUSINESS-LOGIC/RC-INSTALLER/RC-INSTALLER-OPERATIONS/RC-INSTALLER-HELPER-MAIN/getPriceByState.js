@@ -7,8 +7,8 @@ async function getPriceByState(req, res) {
 
   try {
     // console.log(labourRates)
-    const price = labourRates[0].price_statewise
-    const selectedServiceId = labourRates[0].service_id;
+    const price = labourRates[2].price_statewise
+    const selectedServiceId = labourRates[2].service_id;
     const selectedService = await Services.findById(selectedServiceId);
     const serviceName = selectedService.name
     return res.status(200).json({price,serviceName});
