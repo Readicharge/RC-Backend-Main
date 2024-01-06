@@ -93,6 +93,7 @@ const handle_Complete_Pending_Job = async (req,res) =>{
     // });
     
     booking.completion_steps.stage_2.status_installer = true;
+    booking.completion_steps.job_status = "PENDING-UNAPPROVED";
     await booking.save();
 
     res.status(200).json({
@@ -108,6 +109,7 @@ const handle_Complete_Complete_job = async ( req,res ) => {
     // const {user_given_rating} = req.body;
 
     booking.completion_steps.stage_2.status_installer = true;
+    booking.completion_steps.job_status = "COMPLETE-UNAPPROVED";
 
 
     const date = new Date();
