@@ -2,15 +2,13 @@ const LabourRates = require('../../../../RC-CORE/RC-CONFIG-CORE/models/RC-LABOR_
 const Services = require('../../../../RC-CORE/RC-CONFIG-CORE/models/RC-SERVICE/rc-service-model');
 
 async function getPriceByState(req, res) {
-  
-  const labourRates = await LabourRates.find();
-
   try {
-    // console.log(labourRates)
-    const price = labourRates[2].price_statewise
-    const selectedServiceId = labourRates[2].service_id;
-    const selectedService = await Services.findById(selectedServiceId);
+    const labourRates = await LabourRates.find({service_id:"65374fe8f735dd38a821bd38"});
+    const price = labourRates[0].price_statewise
+    const selectedService = await Services.findById("65374fe8f735dd38a821bd38");
     const serviceName = selectedService.name
+    console.log(serviceName,price)
+
     return res.status(200).json({price,serviceName});
   } catch (error) {
    return res.json(error)
